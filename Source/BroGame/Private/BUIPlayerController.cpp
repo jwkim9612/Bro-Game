@@ -49,3 +49,8 @@ TSubclassOf<UUserWidget> ABUIPlayerController::GetMainMenuWidgetClass() const
 {
 	return MainMenuWidgetClass;
 }
+
+TSubclassOf<UUserWidget> ABUIPlayerController::GetSelectCharacterWidgetClass() const
+{
+	return SelectCharacterWidgetClass;
+}

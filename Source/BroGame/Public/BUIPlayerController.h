@@ -23,6 +23,7 @@ public:
 
 	TSubclassOf<UUserWidget> GetSelectModeWidgetClass() const;
 	TSubclassOf<UUserWidget> GetMainMenuWidgetClass() const;
+	TSubclassOf<UUserWidget> GetSelectCharacterWidgetClass() const;
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "UI")
@@ -31,10 +32,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UUserWidget> SelectModeWidgetClass;
 
-private:/*
-	UPROPERTY()
-	UUserWidget* MainMenuWidget;*/
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UUserWidget> SelectCharacterWidgetClass;
 
+private:
 	UPROPERTY()
 	UUserWidget* CurrentWidget;
 };

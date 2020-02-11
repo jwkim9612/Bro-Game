@@ -25,12 +25,20 @@ void UBSelectModeWidget::NativeConstruct()
 
 void UBSelectModeWidget::OnSingleClicked()
 {
-	BLOG(Warning, TEXT("Single"));
+	ABUIPlayerController* BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
+	if (BUIPlayerController != nullptr)
+	{
+		BUIPlayerController->ChangeMenuWidget(BUIPlayerController->GetSelectCharacterWidgetClass());
+	}
 }
 
 void UBSelectModeWidget::OnDuoClicked()
 {
-	BLOG(Warning, TEXT("Duo"));
+	ABUIPlayerController* BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
+	if (BUIPlayerController != nullptr)
+	{
+		BUIPlayerController->ChangeMenuWidget(BUIPlayerController->GetSelectCharacterWidgetClass());
+	}
 }
 
 void UBSelectModeWidget::OnBackClicked()
