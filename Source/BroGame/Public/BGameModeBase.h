@@ -18,12 +18,5 @@ public:
 	void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 
 protected:
-
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<UUserWidget> StartingWidgetClass;
-
-	UPROPERTY()
-	UUserWidget* CurrentWidget;
 };

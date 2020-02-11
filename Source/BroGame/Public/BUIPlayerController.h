@@ -16,4 +16,25 @@ class BROGAME_API ABUIPlayerController : public APlayerController
 	
 protected:
 	virtual void BeginPlay() override;
+
+public:
+	UFUNCTION()
+	void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
+
+	TSubclassOf<UUserWidget> GetSelectModeWidgetClass() const;
+	TSubclassOf<UUserWidget> GetMainMenuWidgetClass() const;
+
+protected:
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UUserWidget> MainMenuWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UUserWidget> SelectModeWidgetClass;
+
+private:/*
+	UPROPERTY()
+	UUserWidget* MainMenuWidget;*/
+
+	UPROPERTY()
+	UUserWidget* CurrentWidget;
 };

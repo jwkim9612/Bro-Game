@@ -3,6 +3,7 @@
 
 #include "BMainMenuWidget.h"
 #include "BGameModeBase.h"
+#include "BUIPlayerController.h"
 #include "Components/Button.h"
 #include "GenericPlatform/GenericPlatformMisc.h"
 #include "..\..\Public\UI\BMainMenuWidget.h"
@@ -27,7 +28,13 @@ void UBMainMenuWidget::NativeConstruct()
 
 void UBMainMenuWidget::OnPlayClicked()
 {
-	UGameplayStatics::OpenLevel(GetWorld(), TEXT("test1"), true);
+	ABUIPlayerController* BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
+	if (BUIPlayerController != nullptr)
+	{
+		BUIPlayerController->ChangeMenuWidget(BUIPlayerController->GetSelectModeWidgetClass());
+	}
+
+	//UGameplayStatics::OpenLevel(GetWorld(), TEXT("test1"), true);
 }
 
 void UBMainMenuWidget::OnOptionsClicked()
