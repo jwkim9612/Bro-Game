@@ -3,6 +3,7 @@
 
 #include "BPlayer.h"
 
+
 // Sets default values
 ABPlayer::ABPlayer()
 {
@@ -43,5 +44,15 @@ void ABPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+UTexture2D * ABPlayer::GetTexture() const
+{
+	return Texture;
+}
+
+FName ABPlayer::GetName() const
+{
+	return Name;
 }
 

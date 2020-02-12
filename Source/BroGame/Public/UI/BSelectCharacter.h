@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(config=Game)
 class BROGAME_API UBSelectCharacter : public UUserWidget
 {
 	GENERATED_BODY()
@@ -22,7 +22,18 @@ private:
 	void OnBackClicked();
 
 private:
+	UPROPERTY(config)
+	TArray<FStringClassReference> Characters;
+
+	UPROPERTY()
+	TArray<class UBSelectCharacterButton*> Buttons;
+
+	UPROPERTY(meta = (BindWidget))
+	class UUniformGridPanel* GridPanel;
+
 	UPROPERTY(meta = (BindWidget))
 	class UButton* BackButton;
 
+	UPROPERTY(EditDefaultsOnly ,BlueprintReadWrite, meta = (AllowPrivateAccess = true, UIMin = 0, UIMax = 7))
+	int32 MaxCharacterIndex = 0;
 };

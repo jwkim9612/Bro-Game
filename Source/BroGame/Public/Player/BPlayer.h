@@ -26,10 +26,20 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public:
+	UTexture2D* GetTexture() const;
+	FName GetName() const;
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera", meta = (AllowPrivateAccess = true))
 	UCameraComponent* Camera;
 
 	UPROPERTY(VisibleAnywhere, Category = "Camera", meta = (AllowPrivateAccess = true))
 	USpringArmComponent* SpringArm;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	UTexture2D* Texture;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	FName Name;
 };
