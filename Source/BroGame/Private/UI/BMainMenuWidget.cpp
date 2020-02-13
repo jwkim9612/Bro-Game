@@ -33,13 +33,15 @@ void UBMainMenuWidget::OnPlayClicked()
 	{
 		BUIPlayerController->ChangeMenuWidget(BUIPlayerController->GetSelectModeWidgetClass());
 	}
-
-	//UGameplayStatics::OpenLevel(GetWorld(), TEXT("test1"), true);
 }
 
 void UBMainMenuWidget::OnOptionsClicked()
 {
-	BLOG(Warning, TEXT("Options!"));
+	ABUIPlayerController* BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
+	if (BUIPlayerController != nullptr)
+	{
+		BUIPlayerController->ChangeMenuWidget(BUIPlayerController->GetOptionsWidgetClass());
+	}
 }
 
 void UBMainMenuWidget::OnQuitClicked()
