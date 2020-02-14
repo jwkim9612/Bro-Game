@@ -3,14 +3,14 @@
 #pragma once
 
 #include "BroGame.h"
-#include "Blueprint/UserWidget.h"
+#include "BBaseWidget.h"
 #include "BOptionsWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BROGAME_API UBOptionsWidget : public UUserWidget
+class BROGAME_API UBOptionsWidget : public UBBaseWidget
 {
 	GENERATED_BODY()
 	

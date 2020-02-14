@@ -7,6 +7,8 @@
 
 void UBSelectModeWidget::NativeConstruct()
 {	
+	BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
+
 	if (SingleButton != nullptr)
 	{
 		SingleButton->OnClicked.AddDynamic(this, &UBSelectModeWidget::OnSingleClicked);
@@ -25,7 +27,6 @@ void UBSelectModeWidget::NativeConstruct()
 
 void UBSelectModeWidget::OnSingleClicked()
 {
-	ABUIPlayerController* BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
 	if (BUIPlayerController != nullptr)
 	{
 		BUIPlayerController->ChangeMenuWidget(BUIPlayerController->GetSelectCharacterWidgetClass());
@@ -34,7 +35,6 @@ void UBSelectModeWidget::OnSingleClicked()
 
 void UBSelectModeWidget::OnDuoClicked()
 {
-	ABUIPlayerController* BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
 	if (BUIPlayerController != nullptr)
 	{
 		BUIPlayerController->ChangeMenuWidget(BUIPlayerController->GetSelectCharacterWidgetClass());
@@ -43,7 +43,6 @@ void UBSelectModeWidget::OnDuoClicked()
 
 void UBSelectModeWidget::OnBackClicked()
 {
-	ABUIPlayerController* BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
 	if (BUIPlayerController != nullptr)
 	{
 		BUIPlayerController->ChangeMenuWidget(BUIPlayerController->GetMainMenuWidgetClass());

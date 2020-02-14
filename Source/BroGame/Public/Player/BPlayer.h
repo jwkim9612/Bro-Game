@@ -31,6 +31,12 @@ public:
 	FName GetName() const;
 
 private:
+	void SetControlMode();
+
+	void MoveForward(float AxisValue);
+	void MoveRight(float AxisValue);
+
+private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera", meta = (AllowPrivateAccess = true))
 	UCameraComponent* Camera;
 
@@ -42,4 +48,6 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	FName Name;
+
+	FVector DirectionToMove = FVector::ZeroVector;
 };

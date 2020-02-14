@@ -28,8 +28,8 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class ABPlayer> PlayerClass;
 
-	UPROPERTY()
-	class ABPlayer* Player;
+	//UPROPERTY()
+	//class ABPlayer* Player;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Button;

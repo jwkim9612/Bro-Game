@@ -18,5 +18,8 @@ public:
 	void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 
 protected:
+	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+	virtual void StartPlay() override;
 };

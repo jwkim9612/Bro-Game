@@ -17,6 +17,7 @@ class BROGAME_API ABPlayerController : public APlayerController
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
+	virtual void OnPossess(APawn* aPawn) override;
 
 public:
 	// bGameMode = true is FInputModeGameOnly and ShowMouseCursor

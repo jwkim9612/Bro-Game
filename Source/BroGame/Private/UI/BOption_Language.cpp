@@ -8,6 +8,8 @@
 
 void UBOption_Language::NativeConstruct()
 {
+	BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
+
 	if (EnglishButton != nullptr)
 	{
 		EnglishButton->OnClicked.AddDynamic(this, &UBOption_Language::OnEnglishClicked);
@@ -37,7 +39,6 @@ void UBOption_Language::OnKoreanClicked()
 
 void UBOption_Language::OnBackClicked()
 {
-	ABUIPlayerController* BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
 	if (BUIPlayerController != nullptr)
 	{
 		BUIPlayerController->ChangeMenuWidget(BUIPlayerController->GetOptionsWidgetClass());

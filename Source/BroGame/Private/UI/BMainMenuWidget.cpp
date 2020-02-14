@@ -10,6 +10,8 @@
 
 void UBMainMenuWidget::NativeConstruct()
 {
+	BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
+
 	if (PlayButton != nullptr)
 	{
 		PlayButton->OnClicked.AddDynamic(this, &UBMainMenuWidget::OnPlayClicked);
@@ -28,7 +30,6 @@ void UBMainMenuWidget::NativeConstruct()
 
 void UBMainMenuWidget::OnPlayClicked()
 {
-	ABUIPlayerController* BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
 	if (BUIPlayerController != nullptr)
 	{
 		BUIPlayerController->ChangeMenuWidget(BUIPlayerController->GetSelectModeWidgetClass());
@@ -37,7 +38,6 @@ void UBMainMenuWidget::OnPlayClicked()
 
 void UBMainMenuWidget::OnOptionsClicked()
 {
-	ABUIPlayerController* BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
 	if (BUIPlayerController != nullptr)
 	{
 		BUIPlayerController->ChangeMenuWidget(BUIPlayerController->GetOptionsWidgetClass());

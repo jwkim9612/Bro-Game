@@ -3,18 +3,28 @@
 
 #include "BPlayerController.h"
 #include "BGamePauseWidget.h"
+#include "BPlayer.h"
+#include "BSaveGame.h"
 #include "Blueprint/UserWidget.h"
 
 void ABPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	SetInputMode(FInputModeGameOnly());
+
 }
 
 void ABPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 	InputComponent->BindAction(TEXT("GamePause"), EInputEvent::IE_Pressed, this, &ABPlayerController::OnGamePuase);
+}
+
+void ABPlayerController::OnPossess(APawn * aPawn)
+{
+	Super::OnPossess(aPawn);
+	
+	BLOG(Warning, TEXT("OnPossess"));
 }
 
 void ABPlayerController::ChangeInputMode(bool bGameMode)

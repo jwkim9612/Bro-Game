@@ -14,6 +14,8 @@
 
 void UBSelectCharacter::NativeConstruct()
 {
+	BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
+
 	if (BackButton != nullptr)
 	{
 		BackButton->OnClicked.AddDynamic(this, &UBSelectCharacter::OnBackClicked);
@@ -59,7 +61,6 @@ void UBSelectCharacter::NativeConstruct()
 
 void UBSelectCharacter::OnBackClicked()
 {
-	ABUIPlayerController* BUIPlayerController = Cast<ABUIPlayerController>(GetOwningPlayer());
 	if (BUIPlayerController != nullptr)
 	{
 		BUIPlayerController->ChangeMenuWidget(BUIPlayerController->GetSelectModeWidgetClass());
