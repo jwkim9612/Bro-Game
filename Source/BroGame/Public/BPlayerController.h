@@ -26,10 +26,14 @@ public:
 
 private:
 	void OnGamePuase();
+	void OnClear();
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<class UBGamePauseWidget> GamePauseWidgetClass;
+	TSubclassOf<UUserWidget> HUDWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UUserWidget> GamePauseWidgetClass;
 
 private:
 	UPROPERTY()

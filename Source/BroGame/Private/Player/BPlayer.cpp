@@ -67,7 +67,7 @@ FName ABPlayer::GetName() const
 void ABPlayer::SetControlMode()
 {
 	SpringArm->SetRelativeRotation(FRotator(-60.0f, 0.0f, 0.0f));
-	SpringArm->TargetArmLength = 800.0f;
+	SpringArm->TargetArmLength = 1200.0f;
 	SpringArm->bUsePawnControlRotation = false;
 	SpringArm->bInheritPitch = false;
 	SpringArm->bInheritRoll = false;
