@@ -20,8 +20,7 @@ ABPlayer::ABPlayer()
 	SpringArm->SetupAttachment(RootComponent);
 	Camera->SetupAttachment(SpringArm);
 
-	SpringArm->TargetArmLength = 800.0f;
-	SpringArm->SetRelativeRotation(FRotator(-60.0f, 0.0f, 0.0f));
+
 
 	SetControlMode();
 }
@@ -67,6 +66,8 @@ FName ABPlayer::GetName() const
 
 void ABPlayer::SetControlMode()
 {
+	SpringArm->SetRelativeRotation(FRotator(-60.0f, 0.0f, 0.0f));
+	SpringArm->TargetArmLength = 800.0f;
 	SpringArm->bUsePawnControlRotation = false;
 	SpringArm->bInheritPitch = false;
 	SpringArm->bInheritRoll = false;
@@ -75,7 +76,7 @@ void ABPlayer::SetControlMode()
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 120.0f, 0.0f);
 }
 
 void ABPlayer::MoveForward(float AxisValue)
