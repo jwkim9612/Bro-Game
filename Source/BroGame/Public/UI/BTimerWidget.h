@@ -18,12 +18,13 @@ protected:
 	virtual void NativeConstruct() override;
 
 private:
-	void UpdateTimerWidget();
+	void Update();
 
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Timer;
 
+	UPROPERTY()
 	class ABGameStateBase* BGameStateBase = nullptr;
 
 	int32 Min = 0;

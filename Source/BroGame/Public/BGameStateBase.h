@@ -28,6 +28,7 @@ public:
 	void SetIsClear(bool IsClear);
 	int32 GetCurrentTimeMin() const;
 	int32 GetCurrentTimeSec() const;
+	int32 GetCurrentWave() const;
 
 	// 잠시 옮겨둠 다시 private로 가는것이 좋아보임.
 	void StartTimer();
@@ -47,8 +48,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Stage")
 	bool bIsClear = true;
 
-	UPROPERTY()
-	int32 CurrentWave;
+	UPROPERTY(VisibleAnywhere, Category = "Stage")
+	int32 CurrentWave = 0;
 
 	int32 CurrentTimeMin;
 	int32 CurrentTimeSec;

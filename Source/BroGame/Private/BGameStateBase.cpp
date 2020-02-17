@@ -58,6 +58,11 @@ int32 ABGameStateBase::GetCurrentTimeSec() const
 	return CurrentTimeSec;
 }
 
+int32 ABGameStateBase::GetCurrentWave() const
+{
+	return CurrentWave;
+}
+
 void ABGameStateBase::StartTimer()
 {
 	// if( 보스탄이 아니면 )
@@ -93,6 +98,7 @@ void ABGameStateBase::TickPerSecond()
 	{
 		bIsClear = false;
 		GetWorld()->GetTimerManager().ClearTimer(CountDownTimerHandle);
+		++CurrentWave;
 		OnCountDownDone.Broadcast();
 	}
 }

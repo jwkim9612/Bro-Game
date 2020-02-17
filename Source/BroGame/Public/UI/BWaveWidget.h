@@ -4,13 +4,13 @@
 
 #include "BroGame.h"
 #include "Blueprint/UserWidget.h"
-#include "BHUDWidget.generated.h"
+#include "BWaveWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BROGAME_API UBHUDWidget : public UUserWidget
+class BROGAME_API UBWaveWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
@@ -18,9 +18,14 @@ protected:
 	virtual void NativeConstruct() override;
 
 private:
-	UPROPERTY(meta = (BindWidget))
-	class UBTimerWidget* TimerWidget;
+	void Update();
 
+private:
 	UPROPERTY(meta = (BindWidget))
-	class UBWaveWidget* WaveWidget;
+	class UTextBlock* Wave;
+
+	UPROPERTY()
+	class ABGameStateBase* BGameStateBase = nullptr;
+
+	int32 CurrentWave = 0;
 };

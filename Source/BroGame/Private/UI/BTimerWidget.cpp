@@ -10,16 +10,17 @@ void UBTimerWidget::NativeConstruct()
 	Super::NativeConstruct();
 	
 	BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
-	BGameStateBase->OnCountDown.AddUObject(this, &UBTimerWidget::UpdateTimerWidget);
-	UpdateTimerWidget();
+	BGameStateBase->OnCountDown.AddUObject(this, &UBTimerWidget::Update);
+	Update();
 }
 
-void UBTimerWidget::UpdateTimerWidget()
+void UBTimerWidget::Update()
 {
+	BCHECK(BGameStateBase != nullptr);
 	Min = BGameStateBase->GetCurrentTimeMin();
 	Sec = BGameStateBase->GetCurrentTimeSec();
 
-	FString str = FString::Printf(TEXT("%02d:%02d"), Min, Sec);
+	FText TextTimer = FText::FromString(FString::Printf(TEXT("%02d:%02d"), Min, Sec));
 
-	Timer->SetText(FText::FromString(str));
+	Timer->SetText(TextTimer);
 }
