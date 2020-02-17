@@ -2,22 +2,22 @@
 
 
 #include "BTimerWidget.h"
-#include "BGameModeBase.h"
+#include "BGameStateBase.h"
 #include "Components/TextBlock.h"
 
 void UBTimerWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 	
-	BGameModeBase = Cast<ABGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	BGameModeBase->OnCountDown.AddUObject(this, &UBTimerWidget::UpdateTimerWidget);
+	BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+	BGameStateBase->OnCountDown.AddUObject(this, &UBTimerWidget::UpdateTimerWidget);
 	UpdateTimerWidget();
 }
 
 void UBTimerWidget::UpdateTimerWidget()
 {
-	Min = BGameModeBase->GetCurrentTimeMin();
-	Sec = BGameModeBase->GetCurrentTimeSec();
+	Min = BGameStateBase->GetCurrentTimeMin();
+	Sec = BGameStateBase->GetCurrentTimeSec();
 
 	FString str = FString::Printf(TEXT("%02d:%02d"), Min, Sec);
 

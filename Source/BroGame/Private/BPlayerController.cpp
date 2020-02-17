@@ -3,7 +3,7 @@
 
 #include "BPlayerController.h"
 #include "BGamePauseWidget.h"
-#include "BGameModeBase.h"
+#include "BGameStateBase.h"
 #include "BPlayer.h"
 #include "BSaveGame.h"
 #include "Blueprint/UserWidget.h"
@@ -67,10 +67,10 @@ void ABPlayerController::OnGamePuase()
 
 void ABPlayerController::OnClear()
 {
-	ABGameModeBase* BGameModeBase = Cast<ABGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (!(BGameModeBase->IsStageClear()))
+	ABGameStateBase* BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+	if (!(BGameStateBase->IsStageClear()))
 	{
-		BGameModeBase->SetIsClear(true);
-		BGameModeBase->StartTimer();
+		BGameStateBase->SetIsClear(true);
+		BGameStateBase->StartTimer();
 	}
 }

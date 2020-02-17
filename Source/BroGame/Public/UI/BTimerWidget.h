@@ -24,7 +24,7 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Timer;
 
-	class ABGameModeBase* BGameModeBase = nullptr;
+	class ABGameStateBase* BGameStateBase = nullptr;
 
 	int32 Min = 0;
 	int32 Sec = 0;

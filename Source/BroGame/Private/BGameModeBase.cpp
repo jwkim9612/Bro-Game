@@ -22,10 +22,6 @@ void ABGameModeBase::PostInitializeComponents()
 	}
 	
 	DefaultPawnClass = BSaveGame->BPlayerClass;
-
-	TimerDeltaSeconds = 1.0f;
-
-	StartTimer();
 }
 
 void ABGameModeBase::BeginPlay()
@@ -47,86 +43,12 @@ void ABGameModeBase::StartPlay()
 	BLOG(Warning, TEXT("Start Play"));
 }
 
-void ABGameModeBase::Tick(float DeltaSeconds)
+int32 ABGameModeBase::GetDefaultTimeMin() const
 {
-	Super::Tick(DeltaSeconds);
-
+	return DefaultTimeMin;
 }
 
-int32 ABGameModeBase::GetCurrentTimeMin() const
+int32 ABGameModeBase::GetDefaultTimeSec() const
 {
-	return CurrentTimeMin;
-}
-
-int32 ABGameModeBase::GetCurrentTimeSec() const
-{
-	return CurrentTimeSec;
-}
-
-bool ABGameModeBase::IsCountDownDone() const
-{
-	if (CurrentTimeMin == 0 && CurrentTimeSec == -1)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-bool ABGameModeBase::IsStageClear() const
-{
-	if (bIsClear)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-void ABGameModeBase::SetIsClear(bool IsClear)
-{
-	bIsClear = IsClear;
-}
-
-void ABGameModeBase::StartTimer()
-{
-	// if( 보스탄이 아니면 )
-		CurrentTimeMin = DefaultTimeMin;
-		CurrentTimeSec = DefaultTimeSec;
-		GetWorld()->GetTimerManager().SetTimer(CountDownTimerHandle, this, &ABGameModeBase::MinusSeconds, TimerDeltaSeconds, true);
-	// else
-		
-	OnCountDown.Broadcast();
-	OnCountDownStart.Broadcast();
-}
-
-void ABGameModeBase::MinusSeconds()
-{
-	// 00 : 00까지 뜨게 하기 위해 만들어준 if문
-	if (CurrentTimeMin == 0 && CurrentTimeSec <= 0)
-	{
-		CurrentTimeSec -= 1;
-	}
-	else if (CurrentTimeSec <= 0)
-	{
-		CurrentTimeMin -= 1;
-		CurrentTimeSec = 59;
-	}
-	else
-	{
-		CurrentTimeSec -= 1;
-	}
-
-	OnCountDown.Broadcast();
-
-	if (IsCountDownDone())
-	{
-		bIsClear = false;
-		GetWorld()->GetTimerManager().ClearTimer(CountDownTimerHandle);
-		OnCountDownDone.Broadcast();
-	}
+	return DefaultTimeSec;
 }
