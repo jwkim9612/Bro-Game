@@ -6,15 +6,15 @@
 #include "GameFramework/Actor.h"
 #include "BMonsterSpawner.generated.h"
 
-//USTRUCT()
-//struct FBSpawnInfo
-//{
-//	GENERATED_BODY()
-//
-//public:
-//	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-//	TMap<TSubclassOf<class ABMonster>, int32> MonsterInfo;
-//};
+USTRUCT()
+struct FBSpawnInfo
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+	TMap<TSubclassOf<class ABMonster>, int32> MonsterInfo;
+};
 
 UCLASS()
 class BROGAME_API ABMonsterSpawner : public AActor
@@ -43,17 +43,9 @@ private:
 	UBoxComponent* SpawnVolume;
 
 	UPROPERTY(EditAnywhere, Category = "Spawn")	
-	TArray<TMap<TSubclassOf<class ABMonster>, int32>> Monsters;
-	//TArray<FBSpawnInfo> SpawnInfo;
-	//struct FBSpawnData* CurrentSpawnData;
+	TArray<struct FBSpawnInfo> Monsters;
 	
 private:
 	UPROPERTY()
 	class ABGameStateBase* BGameStateBase = nullptr;
-
-	//UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	//TSubclassOf<class ACharacter> MonsterToSpawn;
-
-	//UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	//int32 Quantity;
 };

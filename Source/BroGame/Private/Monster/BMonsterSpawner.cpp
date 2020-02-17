@@ -14,7 +14,7 @@ ABMonsterSpawner::ABMonsterSpawner()
 	PrimaryActorTick.bCanEverTick = false;
 
 	SpawnVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("SpawnVolume"));
-	SpawnVolume->SetupAttachment(RootComponent);
+	RootComponent = SpawnVolume;
 
 	SpawnVolume->SetBoxExtent(FVector(200.0f, 200.0f, 32.0f));
 }
@@ -23,15 +23,7 @@ ABMonsterSpawner::ABMonsterSpawner()
 void ABMonsterSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	//UBGameInstance* BGameInstance = Cast<UBGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	//if (BGameInstance != nullptr)
-	//{
-	//	CurrentSpawnData = BGameInstance->GetSpawnData(BGameStateBase->GetCurrentWave() + 1);
-	//}
 
-	
-	//Spawn();
 }
 
 void ABMonsterSpawner::PostInitializeComponents()
@@ -55,7 +47,6 @@ void ABMonsterSpawner::Tick(float DeltaTime)
 
 void ABMonsterSpawner::Spawn()
 {
-	//UBGameInstance* BGameInstance = Cast<UBGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	for (auto Monster : Monsters[BGameStateBase->GetCurrentWave()-1].MonsterInfo)
 	{
 		for (int i = 0; i < Monster.Value; ++i)
