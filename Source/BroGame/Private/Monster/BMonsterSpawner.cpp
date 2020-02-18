@@ -5,7 +5,6 @@
 #include "BMonster.h"
 #include "BGameStateBase.h"
 #include "BGameInstance.h"
-#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ABMonsterSpawner::ABMonsterSpawner()
@@ -47,54 +46,60 @@ void ABMonsterSpawner::Tick(float DeltaTime)
 
 void ABMonsterSpawner::Spawn()
 {
+	const int MaxSpawnNum = 9;
+
+	int count = 1;
+
 	for (auto Monster : Monsters[BGameStateBase->GetCurrentWave()-1].MonsterInfo)
 	{
+		ABMonster* SpawnMonster = Monster.Key->GetDefaultObject<ABMonster>();
+		float MonsterSize = SpawnMonster->GetCapsuleComponent()->GetScaledCapsuleRadius() * 2;
+
 		for (int i = 0; i < Monster.Value; ++i)
 		{
-			FVector vec = UKismetMathLibrary::RandomPointInBoundingBox(SpawnVolume->Bounds.Origin, SpawnVolume->GetScaledBoxExtent());
+			FVector vec = GetSnailVector(GetActorLocation(), count / MaxSpawnNum, MonsterSize + 20);
 			FRotator rot = FRotator::ZeroRotator;
 
 			GetWorld()->SpawnActor<ACharacter>(Monster.Key, vec, rot);
+
+			++count;
 		}
 	}
+}
 
-	//CurrentSpawnData = BGameInstance->GetSpawnData(BGameStateBase->GetCurrentWave()+1);
+FVector ABMonsterSpawner::GetSnailVector(FVector CenterVec, int32 Idx, float Size)
+{
+	if (Idx == 0)
+		return CenterVec;
 
-	//for (int i = 0; i < CurrentSpawnData->ClassName.Num(); ++i)
-	//{
-	//	//ConstructorHelpers::FClassFinder<ACharacter> MyMonster((*CurrentSpawnData->ClassName[i]));
-	//	ConstructorHelpers::FClassFinder<ACharacter> MyMonster(TEXT("Blueprint'/Game/Character/Monster/BMonster_BP.BMonster_BP_C'"));
+	int32 IndexCounter = 0;
+	int32 Sign = 1;
+	int32 Snailcounter = 1;
 
-	//	if (MyMonster.Succeeded())
-	//	{
-	//		SpawnInfo.MonsterToSpawn = MyMonster.Class;
-	//	}
+	//ÈÄ¿¡ ¹Ù²Ü°Í
+	Size = Size * 3;
 
-	//	for (int j = 0; j < CurrentSpawnData->Quantity[j]; ++j)
-	//	{
-	//		FVector vec = UKismetMathLibrary::RandomPointInBoundingBox(SpawnVolume->Bounds.Origin, SpawnVolume->GetScaledBoxExtent());
-	//		FRotator rot = FRotator::ZeroRotator;
+	while (1)
+	{
+		for (int32 i = 0; i < Snailcounter; ++i)
+		{
+			CenterVec += FVector(0.0f, Size*Sign, 0.0f);
 
-	//		GetWorld()->SpawnActor<ACharacter>(SpawnInfo.MonsterToSpawn, vec, rot);
-	//	}
-	//}
+			++IndexCounter;
+			if (Idx == IndexCounter)
+				return CenterVec;
+		}
 
-	//for (auto Monster : SpawnInfo)
-	//{
-	//	for (int i = 0; i < Monster.Quantity; ++i)
-	//	{
-	//		FVector vec = UKismetMathLibrary::RandomPointInBoundingBox(SpawnVolume->Bounds.Origin, SpawnVolume->GetScaledBoxExtent());
-	//		FRotator rot = FRotator::ZeroRotator;
+		for (int32 j = 0; j < Snailcounter; ++j)
+		{
+			CenterVec += FVector(Size*Sign, 0.0f, 0.0f);
 
-	//		GetWorld()->SpawnActor<ACharacter>(Monster.MonsterToSpawn, vec, rot);
-	//	}
-	//}
+			++IndexCounter;
+			if (Idx == IndexCounter)
+				return CenterVec;
+		}
 
-	//for (int i = 0; i < Quantity; ++i)
-	//{
-	//	FVector vec = UKismetMathLibrary::RandomPointInBoundingBox(SpawnVolume->Bounds.Origin, SpawnVolume->GetScaledBoxExtent());
-	//	FRotator rot = FRotator::ZeroRotator;
-
-	//	GetWorld()->SpawnActor<ACharacter>(MonsterToSpawn, vec, rot);
-	//}
+		Sign *= -1;
+		Snailcounter++;
+	}
 }

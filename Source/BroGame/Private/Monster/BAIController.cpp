@@ -7,12 +7,12 @@
 #include "BehaviorTree/BlackboardData.h"
 #include "Navigation/CrowdFollowingComponent.h"
 
-const FName ABAIController::HomePosKey(TEXT("HomePos"));
+const FName ABAIController::DestinationPosKey(TEXT("DestinationPos"));
 const FName ABAIController::PatrolPosKey(TEXT("PatrolPos"));
 const FName ABAIController::TargetKey(TEXT("Target"));
 
-ABAIController::ABAIController(const FObjectInitializer& objectInitializer)
-	: Super(objectInitializer.SetDefaultSubobjectClass<UCrowdFollowingComponent>(TEXT("PathFollowingComponent")))
+ABAIController::ABAIController()//const FObjectInitializer& objectInitializer)
+	//: Super(objectInitializer.SetDefaultSubobjectClass<UCrowdFollowingComponent>(TEXT("PathFollowingComponent")))
 {
 	static ConstructorHelpers::FObjectFinder<UBehaviorTree>
 		BTObject(TEXT("BehaviorTree'/Game/AI/Monster_BehaviorTree.Monster_BehaviorTree'"));
@@ -36,7 +36,6 @@ void ABAIController::OnPossess(APawn * InPawn)
 {
 	Super::OnPossess(InPawn);
 
-	MonsterPossessLocation = InPawn->GetActorLocation();
 	RunAI();
 }
 
@@ -44,7 +43,7 @@ void ABAIController::RunAI()
 {
 	if (UseBlackboard(BBAsset, Blackboard))
 	{
-		Blackboard->SetValueAsVector(HomePosKey, MonsterPossessLocation);
+		Blackboard->SetValueAsVector(DestinationPosKey, DestinationLocation);
 		if (!RunBehaviorTree(BTAsset))
 		{
 			BLOG(Warning, TEXT("Not Run BehaviorTree"));

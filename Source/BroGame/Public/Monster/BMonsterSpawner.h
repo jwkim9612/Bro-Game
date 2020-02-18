@@ -38,6 +38,8 @@ private:
 	UFUNCTION()
 	void Spawn();
 
+	FVector GetSnailVector(FVector CenterVec, int32 Idx, float Size);
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Box", meta = (AllowPrivateAccess = true))
 	UBoxComponent* SpawnVolume;
