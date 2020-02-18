@@ -35,7 +35,6 @@ void ABPlayerController::OnPossess(APawn * aPawn)
 {
 	Super::OnPossess(aPawn);
 	
-	BLOG(Warning, TEXT("OnPossess"));
 }
 
 void ABPlayerController::ChangeInputMode(bool bGameMode)

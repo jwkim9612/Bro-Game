@@ -14,3 +14,9 @@ void UBMonsterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		CurrentSpeed = Monster->GetVelocity().Size();
 	}
 }
+
+void UBMonsterAnimInstance::PlayHitMontage()
+{
+	BCHECK(HitMontage != nullptr);
+	Montage_Play(HitMontage);
+}

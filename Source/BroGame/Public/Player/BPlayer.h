@@ -12,18 +12,14 @@ class BROGAME_API ABPlayer : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	ABPlayer();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
+public:
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
+	virtual void PostInitializeComponents() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
@@ -35,6 +31,14 @@ private:
 
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
+
+	void Attack();
+	void AttackCheck();
+	void StartComboState();
+	void EndComboState();
+
+	UFUNCTION()
+	void OnAttackMontageEnded(UAnimMontage* AnimMontage, bool Interrupted);
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera", meta = (AllowPrivateAccess = true))
@@ -49,5 +53,16 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	FName Name;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Combo", meta = (AllowPrivateAccess = true))
+	int32 MaxCombo;
+
+	UPROPERTY()
+	class UBPlayerAnimInstance *BAnimInstance;
+
 	FVector DirectionToMove = FVector::ZeroVector;
+
+	bool bIsAttacking;
+	bool OnComboInput;
+	bool CanNextAttack;
+	int32 CurrentCombo;
 };

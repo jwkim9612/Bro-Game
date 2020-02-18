@@ -22,4 +22,10 @@ protected:
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	float CurrentSpeed;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
+	UAnimMontage* HitMontage;
+	
+public:
+	void PlayHitMontage();
 };

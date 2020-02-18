@@ -18,6 +18,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void PostInitializeComponents() override;
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 public:	
 	// Called every frame
@@ -29,4 +31,8 @@ public:
 private:
 	UPROPERTY()
 	class ABAIController* BAIController;
+
+	UPROPERTY()
+	class UBMonsterAnimInstance* BMonsterAnimInstance;
+
 };

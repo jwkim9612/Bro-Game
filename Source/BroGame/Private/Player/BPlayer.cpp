@@ -2,7 +2,7 @@
 
 
 #include "BPlayer.h"
-
+#include "BPlayerAnimInstance.h"
 
 // Sets default values
 ABPlayer::ABPlayer()
@@ -21,9 +21,8 @@ ABPlayer::ABPlayer()
 	SpringArm->SetupAttachment(RootComponent);
 	Camera->SetupAttachment(SpringArm);
 
-	
-
 	SetControlMode();
+	EndComboState();
 }
 
 // Called when the game starts or when spawned
@@ -46,6 +45,27 @@ void ABPlayer::Tick(float DeltaTime)
 	}
 }
 
+void ABPlayer::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	BAnimInstance = Cast<UBPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	BCHECK(BAnimInstance != nullptr);
+
+	BAnimInstance->OnMontageEnded.AddDynamic(this, &ABPlayer::OnAttackMontageEnded);
+	BAnimInstance->OnCanNextAttack.AddLambda([this]()-> void {
+
+		if (OnComboInput)
+		{
+			OnComboInput = false;
+			StartComboState();
+			BAnimInstance->JumptoNextAttackSection(CurrentCombo);
+		}
+	});
+
+	BAnimInstance->OnHitAttack.AddUObject(this, &ABPlayer::AttackCheck);
+}
+
 // Called to bind functionality to input
 void ABPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -53,6 +73,8 @@ void ABPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ABPlayer::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ABPlayer::MoveRight);
+
+	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &ABPlayer::Attack);
 }
 
 UTexture2D * ABPlayer::GetTexture() const
@@ -82,11 +104,104 @@ void ABPlayer::SetControlMode()
 
 void ABPlayer::MoveForward(float AxisValue)
 {
-	DirectionToMove.X = AxisValue;
+	if (bIsAttacking)
+	{
+		DirectionToMove.X = 0;
+	}
+	else
+	{
+		DirectionToMove.X = AxisValue;
+	}
 }
 
 void ABPlayer::MoveRight(float AxisValue)
 {
-	DirectionToMove.Y = AxisValue;
+	if (bIsAttacking)
+	{
+		DirectionToMove.Y = 0;
+	}
+	else
+	{
+		DirectionToMove.Y = AxisValue;
+	}
+}
+
+void ABPlayer::Attack()
+{
+	if (!bIsAttacking)
+	{
+		bIsAttacking = true;
+		StartComboState();
+	
+		BAnimInstance->PlayGroundAttackMontage();
+	}
+	else
+	{
+		if (CanNextAttack)
+		{
+			OnComboInput = true;
+		}
+	}
+}
+
+void ABPlayer::AttackCheck()
+{
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams Param(NAME_None, false, this);
+
+	float CapsuleRadius = GetCapsuleComponent()->GetScaledCapsuleRadius();
+	float HitRange = 0.0f;
+	float HitDamage = 0.0f;
+	float HitScale = 0.0f;
+
+	HitRange = 100.0f;
+	HitDamage = 10.0f;
+	//HitDamage = WPlayerState->GetAttack();
+	HitScale = 70.0f;
+
+
+	bool bResult = GetWorld()->SweepMultiByChannel(
+		HitResults,
+		GetActorLocation() + GetActorForwardVector() * CapsuleRadius * 2,
+		GetActorLocation() + GetActorForwardVector() * HitRange,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel3,
+		FCollisionShape::MakeSphere(HitScale),
+		Param
+	);
+
+	if (bResult)
+	{
+		for (auto& HitResult : HitResults)
+		{
+			FDamageEvent DamageEvent;
+			HitResult.Actor->TakeDamage(HitDamage, DamageEvent, GetController(), this);
+		}
+	}
+}
+
+void ABPlayer::StartComboState()
+{
+	BCHECK(MaxCombo != 0);
+	CurrentCombo = FMath::Clamp(CurrentCombo + 1, 1, MaxCombo);
+	CanNextAttack = true;
+}
+
+void ABPlayer::EndComboState()
+{
+	OnComboInput = false;
+	CanNextAttack = false;
+	CurrentCombo = 0;
+}
+
+void ABPlayer::OnAttackMontageEnded(UAnimMontage * AnimMontage, bool Interrupted)
+{
+	if (!bIsAttacking)
+	{
+		return;
+	}
+
+	bIsAttacking = false;
+	EndComboState();
 }
 

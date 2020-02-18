@@ -10,8 +10,6 @@ void ABGameModeBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	BLOG(Warning, TEXT("PostInitializeComponents"));
-
 	UBSaveGame* BSaveGame = Cast<UBSaveGame>(UGameplayStatics::CreateSaveGameObject(UBSaveGame::StaticClass()));
 	if (BSaveGame != nullptr)
 	{
@@ -33,14 +31,12 @@ void ABGameModeBase::PostLogin(APlayerController * NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 
-	BLOG(Warning, TEXT("Post Login"));
 }
 
 void ABGameModeBase::StartPlay()
 {
 	Super::StartPlay();
 
-	BLOG(Warning, TEXT("Start Play"));
 }
 
 int32 ABGameModeBase::GetDefaultTimeMin() const
