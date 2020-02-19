@@ -30,7 +30,7 @@ public:
 	void SetHPToDamage(float Damage);
 	float GetHP();
 	float GetHPRatio();
-	int32 GetAttack();
+	int32 GetDamage();
 
 	FOnHPIsZeroDelegate OnHPIsZero;
 	FOnHPChangedDelegate OnHPChanged;

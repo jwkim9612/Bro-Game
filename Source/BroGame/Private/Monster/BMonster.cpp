@@ -78,6 +78,8 @@ void ABMonster::PostInitializeComponents()
 	BMonsterAnimInstance = Cast<UBMonsterAnimInstance>(GetMesh()->GetAnimInstance());
 	BCHECK(BMonsterAnimInstance != nullptr);
 
+	BMonsterAnimInstance->OnMontageEnded.AddDynamic(this, &ABMonster::OnAttackMontageEnded);
+	BMonsterAnimInstance->OnHitAttack.AddUObject(this, &ABMonster::AttackCheck);
 	CurrentStat->OnHPIsZero.AddUObject(this, &ABMonster::Dead);
 }
 
@@ -85,15 +87,17 @@ float ABMonster::TakeDamage(float Damage, FDamageEvent const & DamageEvent, ACon
 {
 	float FinalDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
-	BMonsterAnimInstance->PlayHitMontage();
-
 	CurrentStat->SetHPToDamage(Damage);
 
 	if (bIsDead)
 	{
 		BGameStateBase->SubMonsterNum();
 		// 원래는 플레이어 컨트롤러 생성 후 MonsterKill 함수를 불러와 경험치를 얻음.
+
+		return FinalDamage;
 	}
+
+	BMonsterAnimInstance->PlayHitMontage();
 
 	return FinalDamage;
 }
@@ -110,32 +114,80 @@ void ABMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void ABMonster::Attack()
+{
+	if (!IsAttacking)
+	{
+		IsAttacking = true;
+		BMonsterAnimInstance->PlayAttackMontage();
+	}
+}
+
+void ABMonster::AttackCheck()
+{
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams Param(NAME_None, false, this);
+
+	// 공격 시작위치벡터는 액터의 위치백터 + ( 액터의 forward벡터 * ( 엑터의 캡슐크기 / 2 ) );
+	const FVector AttackStartLocation = GetActorLocation() + GetActorForwardVector() * (GetCapsuleComponent()->GetScaledCapsuleRadius() / 2);
+	const FVector AttackEndLocation = GetActorLocation() + GetActorForwardVector() * ((GetCapsuleComponent()->GetScaledCapsuleRadius() / 2) + AttackRange);
+
+	bool bResult = GetWorld()->SweepMultiByChannel(
+		HitResults,
+		AttackStartLocation,
+		AttackEndLocation,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel6,
+		FCollisionShape::MakeSphere(GetCapsuleComponent()->GetScaledCapsuleRadius()),
+		Param
+	);
+
+	if (bResult)
+	{
+		for (auto& HitResult : HitResults)
+		{
+			FDamageEvent DamageEvent;
+			HitResult.Actor->TakeDamage(CurrentStat->GetDamage(), DamageEvent, GetController(), this);
+		}
+	}
+}
+
 float ABMonster::GetMaxHP() const
 {
 	return MaxHP;
 }
 
-float ABMonster::GetAttack() const
+float ABMonster::GetDamage() const
 {
-	return Attack;
+	return Damage;
+}
+
+float ABMonster::GetAttackRange() const
+{
+	return AttackRange;
 }
 
 void ABMonster::Dead()
 {
 	bIsDead = true;
 	BMonsterAnimInstance->SetIsDead(true);
-	
-	// 아래의 StopAI가 먹히지 않은것 같아서 대체로 사용.
-	GetCharacterMovement()->SetMovementMode(MOVE_None);
-	
-	// 작동하는건지 잘 모르겠음. 비헤이비어 트리 그대로 작동하는거 같음.
 	BAIController->StopAI();
-
 	SetActorEnableCollision(false);
 
 	GetWorld()->GetTimerManager().SetTimer(DeadTimerhandle, FTimerDelegate::CreateLambda([this]() -> void {
 		Destroy();
 	}), DeadTimer, false);
+}
+
+void ABMonster::OnAttackMontageEnded(UAnimMontage * AnimMontage, bool Interrupted)
+{
+	if (!IsAttacking)
+	{
+		return;
+	}
+
+	IsAttacking = false;
+	OnAttackEnd.Broadcast();
 }
 
 void ABMonster::OnVisibleHPBarBoxBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)

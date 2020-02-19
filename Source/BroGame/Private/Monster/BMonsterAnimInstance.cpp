@@ -15,6 +15,12 @@ void UBMonsterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 }
 
+void UBMonsterAnimInstance::PlayAttackMontage()
+{
+	BCHECK(AttackMontage != nullptr);
+	Montage_Play(AttackMontage);
+}
+
 void UBMonsterAnimInstance::PlayHitMontage()
 {
 	BCHECK(HitMontage != nullptr);
@@ -24,4 +30,9 @@ void UBMonsterAnimInstance::PlayHitMontage()
 void UBMonsterAnimInstance::SetIsDead(bool IsDead)
 {
 	bIsDead = IsDead;
+}
+
+void UBMonsterAnimInstance::AnimNotify_HitAttack()
+{
+	OnHitAttack.Broadcast();
 }

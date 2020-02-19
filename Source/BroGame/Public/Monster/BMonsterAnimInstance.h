@@ -6,6 +6,8 @@
 #include "Animation/AnimInstance.h"
 #include "BMonsterAnimInstance.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnHitAttackDelegate);
+
 /**
  * 
  */
@@ -20,8 +22,16 @@ protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	
 public:
+	void PlayAttackMontage();
 	void PlayHitMontage();
 	void SetIsDead(bool IsDead);
+
+public:
+	FOnHitAttackDelegate OnHitAttack;
+
+private:
+	UFUNCTION()
+	void AnimNotify_HitAttack();
 
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
@@ -31,5 +41,10 @@ private:
 	bool bIsDead;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
+	UAnimMontage* AttackMontage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* HitMontage;
+
+
 };

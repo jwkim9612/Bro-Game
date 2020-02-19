@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "BMonster.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
+
 UCLASS()
 class BROGAME_API ABMonster : public ACharacter
 {
@@ -24,11 +26,20 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
+	void Attack();
+	void AttackCheck();
 	float GetMaxHP() const;
-	float GetAttack() const;
+	float GetDamage() const;
+	float GetAttackRange() const;
+
+public:
+	FOnAttackEndDelegate OnAttackEnd;
 
 private:
 	void Dead();
+
+	UFUNCTION()
+	void OnAttackMontageEnded(UAnimMontage* AnimMontage, bool Interrupted);
 
 	UFUNCTION()
 	void OnVisibleHPBarBoxBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -41,7 +52,10 @@ private:
 	float MaxHP;
 
 	UPROPERTY(EditDefaultsOnly, Category = "stat")
-	float Attack;
+	float Damage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "stat")
+	float AttackRange;
 
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UWidgetComponent* HPWidget;
@@ -64,6 +78,7 @@ private:
 	FTimerHandle DeadTimerhandle;
 	float DeadTimer = 3.0f;
 	bool bIsDead = false;
+	bool IsAttacking = false;
 
 	FVector VisibleHPBarBoxSize = FVector(300.0f, 300.0f, 100.0f);
 };

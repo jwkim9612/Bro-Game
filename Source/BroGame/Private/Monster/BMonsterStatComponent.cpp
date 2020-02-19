@@ -66,8 +66,8 @@ float UBMonsterStatComponent::GetHPRatio()
 	return CurrentHP / BMonster->GetMaxHP();
 }
 
-int32 UBMonsterStatComponent::GetAttack()
+int32 UBMonsterStatComponent::GetDamage()
 {
-	return BMonster->GetAttack();
+	return BMonster->GetDamage();
 }
 
