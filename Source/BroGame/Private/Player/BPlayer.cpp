@@ -139,7 +139,11 @@ void ABPlayer::Attack()
 	{
 		if (CanNextAttack)
 		{
-			OnComboInput = true;
+			// MaxCombo를 가장 높은 MaxCombo보다 적게 설정한 경우 무한으로 콤보를 때리기 때문에 걸어놓음
+			if (CurrentCombo != MaxCombo)
+			{
+				OnComboInput = true;
+			}
 		}
 	}
 }

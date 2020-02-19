@@ -4,8 +4,8 @@
 #include "BMonster.h"
 #include "BMonsterAnimInstance.h"
 #include "BAIController.h"
+#include "BMonsterStatComponent.h"
 
-// Sets default values
 ABMonster::ABMonster()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -16,9 +16,12 @@ ABMonster::ABMonster()
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Monster"));
 
+
+	CurrentStat = CreateDefaultSubobject<UBMonsterStatComponent>(TEXT("MonsterStat"));
+
+	DeadTimer = 3.0f;
 }
 
-// Called when the game starts or when spawned
 void ABMonster::BeginPlay()
 {
 	Super::BeginPlay();
@@ -33,6 +36,8 @@ void ABMonster::PostInitializeComponents()
 
 	BMonsterAnimInstance = Cast<UBMonsterAnimInstance>(GetMesh()->GetAnimInstance());
 	BCHECK(BMonsterAnimInstance != nullptr);
+
+	CurrentStat->OnHPIsZero.AddUObject(this, &ABMonster::Dead);
 }
 
 float ABMonster::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
@@ -42,21 +47,47 @@ float ABMonster::TakeDamage(float Damage, FDamageEvent const & DamageEvent, ACon
 	BMonsterAnimInstance->PlayHitMontage();
 	//BAIController->StopAI();
 
+	CurrentStat->SetHPToDamage(Damage);
+
+	if (bIsDead)
+	{
+		// 원래는 플레이어 컨트롤러 생성 후 MonsterKill 함수를 불러와 경험치를 얻음.
+	}
 
 	return FinalDamage;
 }
 
-// Called every frame
 void ABMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-// Called to bind functionality to input
 void ABMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+float ABMonster::GetMaxHP() const
+{
+	return MaxHP;
+}
+
+float ABMonster::GetAttack() const
+{
+	return Attack;
+}
+
+void ABMonster::Dead()
+{
+	bIsDead = true;
+	BMonsterAnimInstance->SetIsDead(true);
+	BAIController->StopAI();
+	SetActorEnableCollision(false);
+
+	GetWorld()->GetTimerManager().SetTimer(DeadTimerhandle, FTimerDelegate::CreateLambda([this]() -> void {
+		Destroy();
+	}), DeadTimer, false);
 }
 

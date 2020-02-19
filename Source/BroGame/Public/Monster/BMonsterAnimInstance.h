@@ -18,14 +18,18 @@ public:
 
 protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+	
+public:
+	void PlayHitMontage();
+	void SetIsDead(bool IsDead);
 
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	float CurrentSpeed;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
+	bool bIsDead;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* HitMontage;
-	
-public:
-	void PlayHitMontage();
 };

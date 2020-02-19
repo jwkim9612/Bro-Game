@@ -20,3 +20,8 @@ void UBMonsterAnimInstance::PlayHitMontage()
 	BCHECK(HitMontage != nullptr);
 	Montage_Play(HitMontage);
 }
+
+void UBMonsterAnimInstance::SetIsDead(bool IsDead)
+{
+	bIsDead = IsDead;
+}
