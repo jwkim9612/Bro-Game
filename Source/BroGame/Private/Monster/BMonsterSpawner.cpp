@@ -6,10 +6,8 @@
 #include "BGameStateBase.h"
 #include "BGameInstance.h"
 
-// Sets default values
 ABMonsterSpawner::ABMonsterSpawner()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	SpawnVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("SpawnVolume"));
@@ -18,7 +16,6 @@ ABMonsterSpawner::ABMonsterSpawner()
 	SpawnVolume->SetBoxExtent(FVector(200.0f, 200.0f, 32.0f));
 }
 
-// Called when the game starts or when spawned
 void ABMonsterSpawner::BeginPlay()
 {
 	Super::BeginPlay();
@@ -37,7 +34,6 @@ void ABMonsterSpawner::PostInitializeComponents()
 	}
 }
 
-// Called every frame
 void ABMonsterSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
