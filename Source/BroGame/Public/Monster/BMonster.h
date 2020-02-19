@@ -43,11 +43,14 @@ private:
 	UPROPERTY()
 	class UBMonsterAnimInstance* BMonsterAnimInstance;
 
+	UPROPERTY()
+	class ABGameStateBase* BGameStateBase;
+
 	UPROPERTY(VisibleAnywhere, Category = "stat")
 	class UBMonsterStatComponent* CurrentStat;
 
 	FTimerHandle DeadTimerhandle;
-	float DeadTimer;
+	float DeadTimer = 3.0f;
 	bool bIsDead = false;
 
 

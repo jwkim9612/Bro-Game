@@ -23,6 +23,21 @@ public:
 protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
+public:
+	void PlayGroundAttackMontage();
+	void JumptoNextAttackSection(int32 NewSection);
+	FName GetAttackMontageSectionName(int32 Section);
+
+	FOnCanNextAttackDelegate OnCanNextAttack;
+	FOnHitAttackDelegate OnHitAttack;
+
+private:
+	UFUNCTION()
+	void AnimNotify_CanNextAttack();
+
+	UFUNCTION()
+	void AnimNotify_HitAttack();
+
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	float CurrentSpeed;
@@ -32,18 +47,4 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* GroundAttackMontage;
-
-	UFUNCTION()
-	void AnimNotify_CanNextAttack();
-
-	UFUNCTION()
-	void AnimNotify_HitAttack();
-
-public:
-	void PlayGroundAttackMontage();
-	void JumptoNextAttackSection(int32 NewSection);
-	FName GetAttackMontageSectionName(int32 Section);
-
-	FOnCanNextAttackDelegate OnCanNextAttack;
-	FOnHitAttackDelegate OnHitAttack;
 };

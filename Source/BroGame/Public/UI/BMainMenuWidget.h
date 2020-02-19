@@ -36,6 +36,4 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* QuitButton;
-
-
 };

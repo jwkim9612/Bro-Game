@@ -18,9 +18,13 @@ class BROGAME_API ABGameStateBase : public AGameStateBase
 {
 	GENERATED_BODY()
 	
+public:
+	ABGameStateBase();
+
 protected:
 	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 	bool IsCountDownDone() const;
@@ -29,6 +33,9 @@ public:
 	int32 GetCurrentTimeMin() const;
 	int32 GetCurrentTimeSec() const;
 	int32 GetCurrentWave() const;
+
+	void AddMonsterNum();
+	void SubMonsterNum();
 
 	// 잠시 옮겨둠 다시 private로 가는것이 좋아보임.
 	void StartTimer();
@@ -51,10 +58,15 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Stage")
 	int32 CurrentWave = 0;
 
+	int32 CurrentMonsterNum = 0;
+
+	UPROPERTY()
+	class ABGameModeBase* BGameModeBase;
+
 	int32 CurrentTimeMin;
 	int32 CurrentTimeSec;
 
 	FTimerHandle CountDownTimerHandle;
 
-	class ABGameModeBase* BGameModeBase = nullptr;
+	EWaveState CurrentWaveState = EWaveState::PREINIT;
 };

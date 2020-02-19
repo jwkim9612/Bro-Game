@@ -15,5 +15,6 @@ class BROGAME_API UBBaseWidget : public UUserWidget
 	GENERATED_BODY()
 	
 protected:
+	UPROPERTY()
 	class ABUIPlayerController* BUIPlayerController;
 };

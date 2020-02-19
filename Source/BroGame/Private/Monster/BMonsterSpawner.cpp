@@ -59,7 +59,10 @@ void ABMonsterSpawner::Spawn()
 			FVector vec = GetSnailLocation(GetActorLocation(), count / MaxSpawnNum, MonsterSize + 20);
 			FRotator rot = FRotator::ZeroRotator;
 
-			GetWorld()->SpawnActor<ACharacter>(Monster.Key, vec, rot);
+			if (GetWorld()->SpawnActor<ACharacter>(Monster.Key, vec, rot))
+			{
+				BGameStateBase->AddMonsterNum();
+			}
 
 			++count;
 		}

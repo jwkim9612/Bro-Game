@@ -19,6 +19,9 @@ protected:
 	void NotifyEnd(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation) override;
 
 private:
+	UPROPERTY()
 	class ABMonster* BMonster;
+
+	UPROPERTY()
 	class ABAIController* BAIController;
 };

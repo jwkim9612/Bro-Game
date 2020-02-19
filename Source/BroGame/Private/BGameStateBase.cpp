@@ -4,6 +4,12 @@
 #include "BGameStateBase.h"
 #include "BGameModeBase.h"
 
+ABGameStateBase::ABGameStateBase()
+{
+	PrimaryActorTick.bCanEverTick = true;
+
+}
+
 void ABGameStateBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -17,6 +23,17 @@ void ABGameStateBase::BeginPlay()
 	Super::BeginPlay();
 
 	StartTimer();
+}
+
+void ABGameStateBase::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (CurrentWaveState == EWaveState::PLAY && CurrentMonsterNum == 0)
+	{
+		SetIsClear(true);
+		StartTimer();
+	}
 }
 
 bool ABGameStateBase::IsCountDownDone() const
@@ -63,8 +80,25 @@ int32 ABGameStateBase::GetCurrentWave() const
 	return CurrentWave;
 }
 
+void ABGameStateBase::AddMonsterNum()
+{
+	++CurrentMonsterNum;
+}
+
+void ABGameStateBase::SubMonsterNum()
+{
+	if (CurrentMonsterNum == 0)
+	{
+		return;
+	}
+
+	--CurrentMonsterNum;
+}
+
 void ABGameStateBase::StartTimer()
 {
+	CurrentWaveState = EWaveState::READY;
+
 	// if( 보스탄이 아니면 )
 	CurrentTimeMin = BGameModeBase->GetDefaultTimeMin();
 	CurrentTimeSec = BGameModeBase->GetDefaultTimeSec();
@@ -100,5 +134,6 @@ void ABGameStateBase::TickPerSecond()
 		GetWorld()->GetTimerManager().ClearTimer(CountDownTimerHandle);
 		++CurrentWave;
 		OnCountDownDone.Broadcast();
+		CurrentWaveState = EWaveState::PLAY;
 	}
 }

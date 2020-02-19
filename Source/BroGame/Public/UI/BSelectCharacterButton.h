@@ -28,9 +28,6 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class ABPlayer> PlayerClass;
 
-	//UPROPERTY()
-	//class ABPlayer* Player;
-
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Button;
 
@@ -39,5 +36,4 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Name;
-	
 };

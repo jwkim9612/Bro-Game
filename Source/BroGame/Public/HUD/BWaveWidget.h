@@ -25,7 +25,7 @@ private:
 	class UTextBlock* Wave;
 
 	UPROPERTY()
-	class ABGameStateBase* BGameStateBase = nullptr;
+	class ABGameStateBase* BGameStateBase;
 
 	int32 CurrentWave = 0;
 };

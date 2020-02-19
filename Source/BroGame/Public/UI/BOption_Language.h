@@ -36,5 +36,4 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* BackButton;
-
 };

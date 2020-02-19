@@ -25,7 +25,7 @@ private:
 	class UTextBlock* Timer;
 
 	UPROPERTY()
-	class ABGameStateBase* BGameStateBase = nullptr;
+	class ABGameStateBase* BGameStateBase;
 
 	int32 Min = 0;
 	int32 Sec = 0;

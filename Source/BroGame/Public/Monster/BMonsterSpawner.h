@@ -49,7 +49,7 @@ private:
 	
 private:
 	UPROPERTY()
-	class ABGameStateBase* BGameStateBase = nullptr;
+	class ABGameStateBase* BGameStateBase;
 
 	// 한 지점에 최대로 스폰할 수 있는 수
 	const int MaxSpawnNum = 9;

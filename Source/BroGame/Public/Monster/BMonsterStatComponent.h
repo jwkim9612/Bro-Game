@@ -24,12 +24,6 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void InitializeComponent() override;
 
-private:
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
-	float CurrentHP;
-
-	class ABMonster* BMonster;
-	
 public:
 	void InitMonsterData(class ABMonster* Monster);
 	void SetHP(float NewHP);
@@ -40,4 +34,11 @@ public:
 
 	FOnHPIsZeroDelegate OnHPIsZero;
 	FOnHPChangedDelegate OnHPChanged;
+
+private:
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
+	float CurrentHP;
+
+	UPROPERTY()
+	class ABMonster* BMonster;
 };

@@ -4,6 +4,14 @@
 
 #include "EngineMinimal.h"
 
+UENUM()
+enum class EWaveState : uint8
+{
+	PREINIT,
+	READY,
+	PLAY
+};
+
 DECLARE_LOG_CATEGORY_EXTERN(BroGame, Log, All);
 #define BLOG_CALLINFO (FString(__FUNCTION__) + TEXT("(") + FString::FromInt(__LINE__) + TEXT(")"))
 #define BLOG_S(Verbosity) UE_LOG(BroGame, Verbosity, TEXT("%s"), *BLOG_CALLINFO)
