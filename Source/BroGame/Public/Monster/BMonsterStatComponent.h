@@ -31,12 +31,13 @@ public:
 	float GetHP();
 	float GetHPRatio();
 	int32 GetDamage();
+	int32 GetDropMoney();
 
 	FOnHPIsZeroDelegate OnHPIsZero;
 	FOnHPChangedDelegate OnHPChanged;
 
 private:
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
 	float CurrentHP;
 
 	UPROPERTY()

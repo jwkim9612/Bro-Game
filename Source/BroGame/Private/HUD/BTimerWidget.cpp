@@ -11,6 +11,7 @@ void UBTimerWidget::NativeConstruct()
 	
 	BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
 	BGameStateBase->OnCountDown.AddUObject(this, &UBTimerWidget::Update);
+
 	Update();
 }
 
@@ -20,7 +21,7 @@ void UBTimerWidget::Update()
 	Min = BGameStateBase->GetCurrentTimeMin();
 	Sec = BGameStateBase->GetCurrentTimeSec();
 
-	FText TextTimer = FText::FromString(FString::Printf(TEXT("%02d:%02d"), Min, Sec));
+	FText Text = FText::FromString(FString::Printf(TEXT("%02d:%02d"), Min, Sec));
 
-	Timer->SetText(TextTimer);
+	TimerText->SetText(Text);
 }

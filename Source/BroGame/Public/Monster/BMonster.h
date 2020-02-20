@@ -31,6 +31,10 @@ public:
 	float GetMaxHP() const;
 	float GetDamage() const;
 	float GetAttackRange() const;
+	bool IsAttacking() const;
+	int32 GetDropMoney() const;
+
+	class UBMonsterStatComponent* GetCurrentStat() const;
 
 public:
 	FOnAttackEndDelegate OnAttackEnd;
@@ -57,6 +61,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "stat")
 	float AttackRange;
 
+	UPROPERTY(EditDefaultsOnly, Category = "stat")
+	int32 DropMoney;
+
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UWidgetComponent* HPWidget;
 
@@ -78,7 +85,7 @@ private:
 	FTimerHandle DeadTimerhandle;
 	float DeadTimer = 3.0f;
 	bool bIsDead = false;
-	bool IsAttacking = false;
+	bool bIsAttacking = false;
 
 	FVector VisibleHPBarBoxSize = FVector(300.0f, 300.0f, 100.0f);
 };

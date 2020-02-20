@@ -17,10 +17,21 @@ class BROGAME_API UBHUDWidget : public UUserWidget
 protected:
 	virtual void NativeConstruct() override;
 
+public:
+	void BindPlayerState(class ABPlayerState* PlayerState);
+	void UpdateHPWidget();
+
 private:
+
+private:
+	TWeakObjectPtr<class ABPlayerState> CurrentPlayerState;
+
 	UPROPERTY(meta = (BindWidget))
 	class UBTimerWidget* TimerWidget;
 
 	UPROPERTY(meta = (BindWidget))
 	class UBWaveWidget* WaveWidget;
+
+	UPROPERTY(meta = (BindWidget))
+	class UBPlayerHPWidget* HPBarWidget;
 };

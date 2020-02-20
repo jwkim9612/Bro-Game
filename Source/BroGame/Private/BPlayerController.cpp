@@ -6,6 +6,10 @@
 #include "BGameStateBase.h"
 #include "BPlayer.h"
 #include "BSaveGame.h"
+#include "BPlayerState.h"
+#include "BHUDWidget.h"
+#include "BMonster.h"
+#include "BMonsterStatComponent.h"
 #include "Blueprint/UserWidget.h"
 
 void ABPlayerController::BeginPlay()
@@ -15,13 +19,16 @@ void ABPlayerController::BeginPlay()
 
 	if (HUDWidgetClass != nullptr)
 	{
-		UUserWidget* HUDWidget = CreateWidget<UUserWidget>(this, HUDWidgetClass);
-		if (HUDWidget != nullptr)
+		BHUDWidget = CreateWidget<UBHUDWidget>(this, HUDWidgetClass);
+		if (BHUDWidget != nullptr)
 		{
-			HUDWidget->AddToViewport();
+			BHUDWidget->AddToViewport();
 		}
 	}
-
+	
+	BPlayerState = Cast<ABPlayerState>(PlayerState);
+	BCHECK(BPlayerState);
+	BHUDWidget->BindPlayerState(BPlayerState);
 }
 
 void ABPlayerController::SetupInputComponent()
@@ -49,6 +56,16 @@ void ABPlayerController::ChangeInputMode(bool bGameMode)
 		SetInputMode(FInputModeUIOnly());
 		bShowMouseCursor = true;
 	}
+}
+
+UBHUDWidget * ABPlayerController::GetHUDWidget() const
+{
+	return BHUDWidget;
+}
+
+void ABPlayerController::MonsterKill(ABMonster * KilledMonster)
+{
+	BPlayerState->AddMoney(KilledMonster->GetCurrentStat()->GetDropMoney());
 }
 
 

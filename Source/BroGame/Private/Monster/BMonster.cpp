@@ -7,6 +7,7 @@
 #include "BMonsterStatComponent.h"
 #include "BGameStateBase.h"
 #include "BMonsterHPWidget.h"
+#include "BPlayerController.h"
 #include "Components/WidgetComponent.h"
 #include "COmponents/BoxComponent.h"
 
@@ -36,7 +37,7 @@ ABMonster::ABMonster()
 	HPWidget->SetWidgetSpace(EWidgetSpace::Screen);
 
 	static ConstructorHelpers::FClassFinder<UUserWidget>
-		HPWidgetClass(TEXT("WidgetBlueprint'/Game/UI/Monster/HP.HP_C'"));
+		HPWidgetClass(TEXT("WidgetBlueprint'/Game/UI/Monster/HP_Monster.HP_Monster_C'"));
 
 	if (HPWidgetClass.Succeeded())
 	{
@@ -93,6 +94,11 @@ float ABMonster::TakeDamage(float Damage, FDamageEvent const & DamageEvent, ACon
 	{
 		BGameStateBase->SubMonsterNum();
 		// 원래는 플레이어 컨트롤러 생성 후 MonsterKill 함수를 불러와 경험치를 얻음.
+		ABPlayerController* BPlayerController = Cast<ABPlayerController>(EventInstigator);
+		if (BPlayerController != nullptr)
+		{
+			BPlayerController->MonsterKill(this);
+		}
 
 		return FinalDamage;
 	}
@@ -116,9 +122,9 @@ void ABMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ABMonster::Attack()
 {
-	if (!IsAttacking)
+	if (!IsAttacking())
 	{
-		IsAttacking = true;
+		bIsAttacking = true;
 		BMonsterAnimInstance->PlayAttackMontage();
 	}
 }
@@ -167,6 +173,21 @@ float ABMonster::GetAttackRange() const
 	return AttackRange;
 }
 
+bool ABMonster::IsAttacking() const
+{
+	return bIsAttacking == true ? true : false;
+}
+
+int32 ABMonster::GetDropMoney() const
+{
+	return DropMoney;
+}
+
+UBMonsterStatComponent * ABMonster::GetCurrentStat() const
+{
+	return CurrentStat;
+}
+
 void ABMonster::Dead()
 {
 	bIsDead = true;
@@ -181,12 +202,12 @@ void ABMonster::Dead()
 
 void ABMonster::OnAttackMontageEnded(UAnimMontage * AnimMontage, bool Interrupted)
 {
-	if (!IsAttacking)
+	if (!IsAttacking())
 	{
 		return;
 	}
 
-	IsAttacking = false;
+	bIsAttacking = false;
 	OnAttackEnd.Broadcast();
 }
 

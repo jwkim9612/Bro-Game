@@ -23,6 +23,8 @@ public:
 	// bGameMode = true is FInputModeGameOnly and ShowMouseCursor
 	// bGameMode = false is FInputModeUIOnly and NotShowMouseCursor
 	void ChangeInputMode(bool bGameMode = true);
+	class UBHUDWidget* GetHUDWidget() const;
+	void MonsterKill(class ABMonster* KilledMonster);
 
 private:
 	void OnGamePuase();
@@ -38,4 +40,10 @@ protected:
 private:
 	UPROPERTY()
 	class UBGamePauseWidget* GamePauseWidget;
+
+	UPROPERTY()
+	class UBHUDWidget* BHUDWidget;
+
+	UPROPERTY()
+	class ABPlayerState* BPlayerState;
 };

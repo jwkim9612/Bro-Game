@@ -20,11 +20,14 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
 	UTexture2D* GetTexture() const;
 	FName GetName() const;
+	int32 GetDefaultAttack() const;
+	float GetDefaultMaxHP() const;
 
 private:
 	void SetControlMode();
@@ -36,6 +39,8 @@ private:
 	void AttackCheck();
 	void StartComboState();
 	void EndComboState();
+
+	void PlayParticle(UParticleSystem* ParticleSystem) const;
 
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* AnimMontage, bool Interrupted);
@@ -53,11 +58,23 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	FName Name;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Combo", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, Category = "Combo")
 	int32 MaxCombo;
+
+	UPROPERTY(EditDefaultsOnly, Category = "stat")
+	int32 DefaultAttack;
+
+	UPROPERTY(EditDefaultsOnly, Category = "stat")
+	float DefaultMaxHP;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Particle", Meta = (AllowPrivateAccess = true))
+	UParticleSystem* HitParticle;
 
 	UPROPERTY()
 	class UBPlayerAnimInstance *BAnimInstance;
+
+	UPROPERTY()
+	class ABPlayerState* BPlayerState;
 
 	FVector DirectionToMove = FVector::ZeroVector;
 

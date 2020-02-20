@@ -3,6 +3,9 @@
 
 #include "BPlayer.h"
 #include "BPlayerAnimInstance.h"
+#include "BPlayerController.h"
+#include "BPlayerState.h"
+#include "BHUDWidget.h"
 
 // Sets default values
 ABPlayer::ABPlayer()
@@ -29,7 +32,14 @@ ABPlayer::ABPlayer()
 void ABPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
+	BPlayerState = Cast<ABPlayerState>(GetController()->PlayerState);
+	BCHECK(BPlayerState != nullptr);
+	BPlayerState->InitPlayerData();
 	
+	ABPlayerController* BPlayerController = Cast<ABPlayerController>(GetController());
+	BCHECK(BPlayerController);
+	BPlayerController->GetHUDWidget()->UpdateHPWidget();
 }
 
 // Called every frame
@@ -66,6 +76,16 @@ void ABPlayer::PostInitializeComponents()
 	BAnimInstance->OnHitAttack.AddUObject(this, &ABPlayer::AttackCheck);
 }
 
+float ABPlayer::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	float FinalDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	PlayParticle(HitParticle);
+	BPlayerState->SetHPToDamage(Damage);
+
+	return FinalDamage;
+}
+
 // Called to bind functionality to input
 void ABPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -85,6 +105,16 @@ UTexture2D * ABPlayer::GetTexture() const
 FName ABPlayer::GetName() const
 {
 	return Name;
+}
+
+int32 ABPlayer::GetDefaultAttack() const
+{
+	return DefaultAttack;
+}
+
+float ABPlayer::GetDefaultMaxHP() const
+{
+	return DefaultMaxHP;
 }
 
 void ABPlayer::SetControlMode()
@@ -196,6 +226,12 @@ void ABPlayer::EndComboState()
 	OnComboInput = false;
 	CanNextAttack = false;
 	CurrentCombo = 0;
+}
+
+void ABPlayer::PlayParticle(UParticleSystem * ParticleSystem) const
+{
+	BCHECK(ParticleSystem != nullptr);
+	UGameplayStatics::SpawnEmitterAttached(ParticleSystem, RootComponent, NAME_None);
 }
 
 void ABPlayer::OnAttackMontageEnded(UAnimMontage * AnimMontage, bool Interrupted)

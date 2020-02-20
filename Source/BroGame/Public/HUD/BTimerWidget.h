@@ -22,7 +22,7 @@ private:
 
 private:
 	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* Timer;
+	class UTextBlock* TimerText;
 
 	UPROPERTY()
 	class ABGameStateBase* BGameStateBase;

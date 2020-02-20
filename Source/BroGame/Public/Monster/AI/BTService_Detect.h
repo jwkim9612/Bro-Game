@@ -19,4 +19,7 @@ public:
 
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+
+private:
+	const float DetectRadius = 600.0f;
 };

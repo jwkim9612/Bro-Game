@@ -71,3 +71,8 @@ int32 UBMonsterStatComponent::GetDamage()
 	return BMonster->GetDamage();
 }
 
+int32 UBMonsterStatComponent::GetDropMoney()
+{
+	return BMonster->GetDropMoney();
+}
+

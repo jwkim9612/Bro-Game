@@ -13,6 +13,12 @@ void UBMonsterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	{
 		CurrentSpeed = Monster->GetVelocity().Size();
 	}
+
+	if (bIsDead)
+	{
+		//Stops the animation montage. If reference is NULL, it will stop ALL active montages.
+		Montage_Stop(0.0f);
+	}
 }
 
 void UBMonsterAnimInstance::PlayAttackMontage()

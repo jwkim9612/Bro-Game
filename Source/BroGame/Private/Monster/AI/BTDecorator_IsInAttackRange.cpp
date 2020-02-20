@@ -19,11 +19,15 @@ bool UBTDecorator_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeCompo
 
 	ABMonster* ControllingPawn = Cast<ABMonster>(OwnerComp.GetAIOwner()->GetPawn());
 	if (ControllingPawn == nullptr)
+	{
 		return false;
+	}
 
 	ABPlayer* Target = Cast<ABPlayer>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(ABAIController::TargetKey));
 	if (Target == nullptr)
+	{
 		return false;
+	}
 
 	float ControllingPawnCapsuleRadius = ControllingPawn->GetCapsuleComponent()->GetScaledCapsuleRadius();
 	float TargetCapsuleRadius = Target->GetCapsuleComponent()->GetScaledCapsuleRadius();

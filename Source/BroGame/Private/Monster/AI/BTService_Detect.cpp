@@ -4,6 +4,7 @@
 #include "BTService_Detect.h"
 #include "BAIController.h"
 #include "BPlayer.h"
+#include "BMonster.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTService_Detect::UBTService_Detect()
@@ -15,12 +16,12 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-	APawn* ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
+	//APawn* ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
+	ABMonster* ControllingPawn = Cast<ABMonster>(OwnerComp.GetAIOwner()->GetPawn());
 	BCHECK(ControllingPawn != nullptr);
 
 	UWorld* World = ControllingPawn->GetWorld();
 	FVector Center = ControllingPawn->GetActorLocation();
-	float DetectRadius = 600.0f;
 
 	BCHECK(World != nullptr)
 	TArray<FOverlapResult> OverlapResults;
@@ -34,7 +35,8 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		CollisionQueryParam
 	);
 
-	if (bResult)
+	// ControllingPawn->IsAttacking()는 몬스터가 공격중에 몬스터와 플레이어가 멀어지면 공격 모션 그대로 도착지점으로 걸어가기 때문에 넣어줌
+	if (bResult || ControllingPawn->IsAttacking())
 	{
 		for (auto& OverlapResult : OverlapResults)
 		{
