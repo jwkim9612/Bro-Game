@@ -74,6 +74,9 @@ private:
 	class UBPlayerAnimInstance *BAnimInstance;
 
 	UPROPERTY()
+	class ABPlayerController* BPlayerController;
+
+	UPROPERTY()
 	class ABPlayerState* BPlayerState;
 
 	FVector DirectionToMove = FVector::ZeroVector;

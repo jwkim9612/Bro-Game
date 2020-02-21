@@ -24,7 +24,9 @@ public:
 private:
 	UFUNCTION()
 	void OnUpgradeButtonClicked();
+	void ChangeStat();
 
+	void SetIncreaseStatText(int32 Stat);
 	void SetPriceText(int32 Price);
 	void SetLevelText(int32 Level);
 
@@ -46,6 +48,8 @@ private:
 
 	UPROPERTY()
 	class ABPlayerState* BPlayerState;
+
+	EStat CurrentStat;
 
 	int32 IncreaseStat;
 	int32 IncreasePrice;

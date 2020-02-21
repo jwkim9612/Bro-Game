@@ -1,12 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BUpgradeWidget.h"
+#include "BUpgradeWindow.h"
 #include "BUpgradeSlot.h"
+#include "BUpgradeWidget.h"
+#include "Components/Button.h"
 #include "Components/VerticalBox.h"
+#include "Components/VerticalBoxSlot.h"
 #include "Blueprint/WidgetTree.h"
 
-void UBUpgradeWidget::Init()
+void UBUpgradeWindow::Init(class UBInterfaceWidgetBase* InterfaceWidget)
 {
 	BUpgrades.Init(nullptr, BUpgradeInfo.Num());
 
@@ -25,9 +28,22 @@ void UBUpgradeWidget::Init()
 		++count;
 	}
 
+	UVerticalBoxSlot* VerticalBoxSlot;
 	for (auto& BUpgrade : BUpgrades)
 	{
 		BUpgrade->SetVisibility(ESlateVisibility::Visible);
-		TestVerticalBox->AddChildToVerticalBox(BUpgrade);
+		VerticalBoxSlot = VerticalBox->AddChildToVerticalBox(BUpgrade);
 	}
+
+	BInterfaceWidget = InterfaceWidget;
+
+	if (CloseButton != nullptr)
+	{
+		CloseButton->OnClicked.AddDynamic(this, &UBUpgradeWindow::OnCloseButtonClicked);
+	}
+}
+
+void UBUpgradeWindow::OnCloseButtonClicked()
+{
+	BInterfaceWidget->HideInterface();
 }

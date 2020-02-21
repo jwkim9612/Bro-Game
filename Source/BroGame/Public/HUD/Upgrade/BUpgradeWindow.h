@@ -3,8 +3,8 @@
 #pragma once
 
 #include "BroGame.h"
-#include "Blueprint/UserWidget.h"
-#include "BUpgradeWidget.generated.h"
+#include "BWindowBase.h"
+#include "BUpgradeWindow.generated.h"
 
 USTRUCT()
 struct FBUpgradeInfo
@@ -29,12 +29,14 @@ public:
  * 
  */
 UCLASS()
-class BROGAME_API UBUpgradeWidget : public UUserWidget
+class BROGAME_API UBUpgradeWindow : public UBWindowBase
 {
 	GENERATED_BODY()
 	
 public:
-	void Init();
+	void Init(class UBInterfaceWidgetBase* InterfaceWidget) override;
+	
+	void OnCloseButtonClicked() override;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Info")
@@ -44,5 +46,11 @@ private:
 	TArray<class UBUpgradeSlot*> BUpgrades;
 
 	UPROPERTY(meta = (BindWidget))
-	class UVerticalBox* TestVerticalBox;
+	class UVerticalBox* VerticalBox;
+
+	//UPROPERTY(meta = (BindWidget))
+	//class UButton* CloseButton;
+
+	//UPROPERTY()
+	//class UBUpgradeWidget* BUpgradeWidget;
 };

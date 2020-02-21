@@ -2,7 +2,7 @@
 
 
 #include "BUpgradeSlot.h"
-#include "BUpgradeWidget.h"
+#include "BUpgradeWindow.h"
 #include "BPlayerState.h"
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
@@ -39,25 +39,11 @@ void UBUpgradeSlot::InitData(struct FBUpgradeInfo& UpgradeInfo)
 	IncreasePrice = UpgradeInfo.IncreasePrice;
 	CurrentPrice = IncreasePrice;
 	CurrentLevel = 1;
+	CurrentStat = UpgradeInfo.Stat;
 
 	UpgradeImage->SetBrushFromTexture(UpgradeInfo.Image);
 
-	switch (UpgradeInfo.Stat)
-	{
-	case EStat::Attack:
-		IncreaseStatText->SetText(FText::FromString(FString::Printf(TEXT("Attack + %d"), IncreaseStat)));
-		break;
-	case EStat::MaxHP:
-		IncreaseStatText->SetText(FText::FromString(FString::Printf(TEXT("MaxHP + %d"), IncreaseStat)));
-		break;
-	case EStat::Speed:
-		IncreaseStatText->SetText(FText::FromString(FString::Printf(TEXT("Speed + %d"), IncreaseStat)));
-		break;
-	default:
-
-		break;
-	}
-
+	SetIncreaseStatText(IncreaseStat);
 	SetPriceText(CurrentPrice);
 	SetLevelText(CurrentLevel);
 
@@ -69,7 +55,6 @@ void UBUpgradeSlot::InitData(struct FBUpgradeInfo& UpgradeInfo)
 
 void UBUpgradeSlot::OnUpgradeButtonClicked()
 {
-	BLOG(Warning, TEXT("GOod"));
 	BPlayerState->UseMoney(CurrentPrice);
 
 	CurrentPrice += IncreasePrice;
@@ -77,6 +62,46 @@ void UBUpgradeSlot::OnUpgradeButtonClicked()
 
 	++CurrentLevel;
 	SetLevelText(CurrentLevel);
+
+	ChangeStat();
+}
+
+void UBUpgradeSlot::ChangeStat()
+{
+	switch (CurrentStat)
+	{
+	case EStat::Attack:
+		BPlayerState->AttackUp(IncreaseStat);
+		break;
+	case EStat::MaxHP:
+		BPlayerState->MaxHPUp(IncreaseStat);
+		break;
+	case EStat::Speed:
+
+		break;
+	default:
+
+		break;
+	}
+}
+
+void UBUpgradeSlot::SetIncreaseStatText(int32 Stat)
+{
+	switch (CurrentStat)
+	{
+	case EStat::Attack:
+		IncreaseStatText->SetText(FText::FromString(FString::Printf(TEXT("Attack + %d"), Stat)));
+		break;
+	case EStat::MaxHP:
+		IncreaseStatText->SetText(FText::FromString(FString::Printf(TEXT("MaxHP + %d"), Stat)));
+		break;
+	case EStat::Speed:
+		IncreaseStatText->SetText(FText::FromString(FString::Printf(TEXT("Speed + %d"), Stat)));
+		break;
+	default:
+
+		break;
+	}
 }
 
 void UBUpgradeSlot::SetPriceText(int32 Price)

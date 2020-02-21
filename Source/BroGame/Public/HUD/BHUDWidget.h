@@ -37,4 +37,7 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UBUpgradeWidget* UpgradeWidget;
+
+	UPROPERTY(meta = (BindWidget))
+	class UBStatWidget* StatWidget;
 };

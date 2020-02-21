@@ -88,6 +88,7 @@ float ABMonster::TakeDamage(float Damage, FDamageEvent const & DamageEvent, ACon
 {
 	float FinalDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
+	BLOG(Warning, TEXT("TakeDamage : %f"), Damage);
 	CurrentStat->SetHPToDamage(Damage);
 
 	if (bIsDead)

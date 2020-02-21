@@ -7,6 +7,7 @@
 #include "BTimerWidget.h"
 #include "BPlayerHPWidget.h"
 #include "BUpgradeWidget.h"
+#include "BStatWidget.h"
 
 void UBHUDWidget::NativeConstruct()
 {
@@ -22,6 +23,7 @@ void UBHUDWidget::NativeConstruct()
 	});
 
 	UpgradeWidget->Init();
+	StatWidget->Init();
 }
 
 void UBHUDWidget::BindPlayerState(ABPlayerState * PlayerState)

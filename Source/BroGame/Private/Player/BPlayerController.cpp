@@ -17,6 +17,8 @@ void ABPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	SetInputMode(FInputModeGameOnly());
+	bShowMouseCursor = true;
+	//SetInputMode(FInputModeUIOnly());
 
 	if (HUDWidgetClass != nullptr)
 	{
@@ -27,8 +29,6 @@ void ABPlayerController::BeginPlay()
 		}
 	}
 	
-	BPlayerState = Cast<ABPlayerState>(PlayerState);
-	BCHECK(BPlayerState);
 	BHUDWidget->BindPlayerState(BPlayerState);
 }
 
@@ -36,13 +36,15 @@ void ABPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 	InputComponent->BindAction(TEXT("GamePause"), EInputEvent::IE_Pressed, this, &ABPlayerController::OnGamePuase);
-	//InputComponent->BindAction(TEXT("Clear"), EInputEvent::IE_Pressed, this, &ABPlayerController::OnClear);
 }
 
 void ABPlayerController::OnPossess(APawn * aPawn)
 {
 	Super::OnPossess(aPawn);
 	
+	BPlayerState = Cast<ABPlayerState>(PlayerState);
+	BCHECK(BPlayerState);
+	BPlayerState->InitPlayerData(aPawn);
 }
 
 void ABPlayerController::ChangeInputMode(bool bGameMode)
@@ -86,13 +88,3 @@ void ABPlayerController::OnGamePuase()
 	SetPause(true);
 	ChangeInputMode(false);
 }
-
-//void ABPlayerController::OnClear()
-//{
-//	ABGameStateBase* BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
-//	if (!(BGameStateBase->IsStageClear()))
-//	{
-//		BGameStateBase->SetIsClear(true);
-//		BGameStateBase->StartTimer();
-//	}
-//}

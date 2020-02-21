@@ -9,23 +9,18 @@ void ABPlayerState::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-
-
 }
 
 void ABPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ABPlayerController* BPlayerController = Cast<ABPlayerController>(GetOwner());
-	if (BPlayerController != nullptr)
-	{
-		BPlayer = Cast<ABPlayer>(BPlayerController->GetCharacter());
-	}
 }
 
-void ABPlayerState::InitPlayerData()
+void ABPlayerState::InitPlayerData(APawn* Pawn)
 {
+	BCHECK(Pawn != nullptr);
+	BPlayer = Cast<ABPlayer>(Pawn);
 	BCHECK(BPlayer != nullptr);
 	CurrentAttack = BPlayer->GetDefaultAttack();
 	CurrentMaxHP = BPlayer->GetDefaultMaxHP();
@@ -49,6 +44,11 @@ float ABPlayerState::GetHPRatio() const
 	return static_cast<float>(CurrentHP) / static_cast<float>(CurrentMaxHP);
 }
 
+int32 ABPlayerState::GetCurrentAttack() const
+{
+	return CurrentAttack;
+}
+
 int32 ABPlayerState::GetCurrentHP() const
 {
 	return CurrentHP;
@@ -59,17 +59,31 @@ int32 ABPlayerState::GetCurrentMaxHP() const
 	return CurrentMaxHP;
 }
 
-void ABPlayerState::AddMoney(int32 Money)
+void ABPlayerState::AttackUp(int32 IncreaseAttack)
 {
-	BCHECK(Money > 0);
-	CurrentMoney += Money;
+	BCHECK(IncreaseAttack >= 0);
+	CurrentAttack += IncreaseAttack;
+	OnAttackChanged.Broadcast();
+}
+
+void ABPlayerState::MaxHPUp(int32 IncreaseHP)
+{
+	BCHECK(IncreaseHP >= 0);
+	CurrentMaxHP += IncreaseHP;
+	OnMaxHPChanged.Broadcast();
+}
+
+void ABPlayerState::AddMoney(int32 IncreaseMoney)
+{
+	BCHECK(IncreaseMoney > 0);
+	CurrentMoney += IncreaseMoney;
 	OnMoneyChanged.Broadcast();
 }
 
-void ABPlayerState::UseMoney(int32 Money)
+void ABPlayerState::UseMoney(int32 UsedMoney)
 {
-	BCHECK(CurrentMoney >= Money);
-	CurrentMoney -= Money;
+	BCHECK(CurrentMoney >= UsedMoney);
+	CurrentMoney -= UsedMoney;
 	OnMoneyChanged.Broadcast();
 }
 

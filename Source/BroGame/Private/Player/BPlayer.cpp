@@ -35,9 +35,8 @@ void ABPlayer::BeginPlay()
 
 	BPlayerState = Cast<ABPlayerState>(GetController()->PlayerState);
 	BCHECK(BPlayerState != nullptr);
-	BPlayerState->InitPlayerData();
 	
-	ABPlayerController* BPlayerController = Cast<ABPlayerController>(GetController());
+	BPlayerController = Cast<ABPlayerController>(GetController());
 	BCHECK(BPlayerController);
 	BPlayerController->GetHUDWidget()->UpdateHPWidget();
 }
@@ -189,8 +188,8 @@ void ABPlayer::AttackCheck()
 	float HitScale = 0.0f;
 
 	HitRange = 100.0f;
-	HitDamage = 10.0f;
-	//HitDamage = WPlayerState->GetAttack();
+	//HitDamage = 10.0f;
+	HitDamage = BPlayerState->GetCurrentAttack();
 	HitScale = 70.0f;
 
 
