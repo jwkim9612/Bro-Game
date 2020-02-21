@@ -34,4 +34,7 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UBPlayerHPWidget* HPBarWidget;
+
+	UPROPERTY(meta = (BindWidget))
+	class UBUpgradeWidget* UpgradeWidget;
 };

@@ -11,6 +11,7 @@
 #include "BMonster.h"
 #include "BMonsterStatComponent.h"
 #include "Blueprint/UserWidget.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 void ABPlayerController::BeginPlay()
 {
@@ -35,7 +36,7 @@ void ABPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 	InputComponent->BindAction(TEXT("GamePause"), EInputEvent::IE_Pressed, this, &ABPlayerController::OnGamePuase);
-	InputComponent->BindAction(TEXT("Clear"), EInputEvent::IE_Pressed, this, &ABPlayerController::OnClear);
+	//InputComponent->BindAction(TEXT("Clear"), EInputEvent::IE_Pressed, this, &ABPlayerController::OnClear);
 }
 
 void ABPlayerController::OnPossess(APawn * aPawn)
@@ -65,7 +66,12 @@ UBHUDWidget * ABPlayerController::GetHUDWidget() const
 
 void ABPlayerController::MonsterKill(ABMonster * KilledMonster)
 {
-	BPlayerState->AddMoney(KilledMonster->GetCurrentStat()->GetDropMoney());
+	int32 MonsterDropMoney = KilledMonster->GetCurrentStat()->GetDropMoney();
+
+	BPlayerState->AddMoney(MonsterDropMoney);
+
+	UKismetSystemLibrary::DrawDebugString(GetWorld(), KilledMonster->GetActorLocation(), FString::Printf(TEXT("+%d"), MonsterDropMoney), NULL, FLinearColor::Yellow, 2.0f);
+	// 화면에 돈 출력.
 }
 
 
@@ -81,12 +87,12 @@ void ABPlayerController::OnGamePuase()
 	ChangeInputMode(false);
 }
 
-void ABPlayerController::OnClear()
-{
-	ABGameStateBase* BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
-	if (!(BGameStateBase->IsStageClear()))
-	{
-		BGameStateBase->SetIsClear(true);
-		BGameStateBase->StartTimer();
-	}
-}
+//void ABPlayerController::OnClear()
+//{
+//	ABGameStateBase* BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+//	if (!(BGameStateBase->IsStageClear()))
+//	{
+//		BGameStateBase->SetIsClear(true);
+//		BGameStateBase->StartTimer();
+//	}
+//}

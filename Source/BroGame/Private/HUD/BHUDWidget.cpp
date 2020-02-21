@@ -6,6 +6,7 @@
 #include "BPlayerState.h"
 #include "BTimerWidget.h"
 #include "BPlayerHPWidget.h"
+#include "BUpgradeWidget.h"
 
 void UBHUDWidget::NativeConstruct()
 {
@@ -19,6 +20,8 @@ void UBHUDWidget::NativeConstruct()
 	BGameStateBase->OnCountDownDone.AddLambda([this]() -> void {
 		TimerWidget->SetVisibility(ESlateVisibility::Hidden);
 	});
+
+	UpgradeWidget->Init();
 }
 
 void UBHUDWidget::BindPlayerState(ABPlayerState * PlayerState)

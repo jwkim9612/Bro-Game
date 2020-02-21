@@ -36,6 +36,7 @@ public:
 	int32 GetCurrentHP() const;
 	int32 GetCurrentMaxHP() const;
 	void AddMoney(int32 Money);
+	void UseMoney(int32 Money);
 	int32 GetCurrentMoney() const;
 
 	FOnHPChangedDelegate OnHPChanged;

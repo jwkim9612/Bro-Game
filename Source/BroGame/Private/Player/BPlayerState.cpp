@@ -66,6 +66,13 @@ void ABPlayerState::AddMoney(int32 Money)
 	OnMoneyChanged.Broadcast();
 }
 
+void ABPlayerState::UseMoney(int32 Money)
+{
+	BCHECK(CurrentMoney >= Money);
+	CurrentMoney -= Money;
+	OnMoneyChanged.Broadcast();
+}
+
 int32 ABPlayerState::GetCurrentMoney() const
 {
 	return CurrentMoney;
