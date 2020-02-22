@@ -44,18 +44,60 @@ void ABMonsterSpawner::Spawn()
 {
 	int count = 0;
 
-	for (auto Monster : Monsters[BGameStateBase->GetCurrentWave()-1].MonsterInfo)
+	//for (auto Monster : Monsters[BGameStateBase->GetCurrentWave()-1].MonsterInfo)
+	//{
+	//	ABMonster* BMonster = Monster.Key->GetDefaultObject<ABMonster>();
+
+	//	// Àß ¸ÔÈû
+	//	//BMonster->SetDamage(100);
+
+	//	float MonsterSize = BMonster->GetCapsuleComponent()->GetScaledCapsuleRadius() * 2;
+
+	//	for (int i = 0; i < Monster.Value; ++i)
+	//	{
+	//		// Á» ¶ç¾î¼­ ³ª¿À°Ô 20À» ´õÇØÁÜ
+	//		FVector vec = GetSnailLocation(GetActorLocation(), count / MaxSpawnNum, MonsterSize + 20);
+	//		FRotator rot = FRotator::ZeroRotator;
+
+	//		//if (GetWorld()->SpawnActor<ACharacter>(Monster.Key, vec, rot))
+	//		//{
+	//		//	BGameStateBase->AddMonsterNum();
+	//		//}	
+	//		
+	//		if (GetWorld()->SpawnActor<ACharacter>(BMonster->GetClass(), vec, rot))
+	//		{
+	//			BGameStateBase->AddMonsterNum();
+	//		}
+
+	//		++count;
+	//	}
+	//}
+
+	for (auto Monster : Monsters)
 	{
-		ABMonster* BMonster = Monster.Key->GetDefaultObject<ABMonster>();
+		ABMonster* BMonster = Monster.Class->GetDefaultObject<ABMonster>();
+
+		// Àß ¸ÔÈû
+		BMonster->SetDamage(Monster.Damage);
+		BMonster->SetMaxHP(Monster.MaxHP);
+		BMonster->SetSpeed(Monster.Speed);
+		BMonster->SetSize(Monster.size);
+
+		//float MonsterSize = BMonster->GetCapsuleComponent()->GetUnscaledCapsuleRadius() * 2;
 		float MonsterSize = BMonster->GetCapsuleComponent()->GetScaledCapsuleRadius() * 2;
 
-		for (int i = 0; i < Monster.Value; ++i)
+		for (int i = 0; i < Monster.Num; ++i)
 		{
 			// Á» ¶ç¾î¼­ ³ª¿À°Ô 20À» ´õÇØÁÜ
 			FVector vec = GetSnailLocation(GetActorLocation(), count / MaxSpawnNum, MonsterSize + 20);
 			FRotator rot = FRotator::ZeroRotator;
 
-			if (GetWorld()->SpawnActor<ACharacter>(Monster.Key, vec, rot))
+			//if (GetWorld()->SpawnActor<ACharacter>(Monster.Key, vec, rot))
+			//{
+			//	BGameStateBase->AddMonsterNum();
+			//}	
+
+			if (GetWorld()->SpawnActor<ACharacter>(BMonster->GetClass(), vec, rot))
 			{
 				BGameStateBase->AddMonsterNum();
 			}

@@ -10,6 +10,7 @@ DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnMoneyChangedDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnAttackChangedDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnMaxHPChangedDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnSpeedChangedDelegate);
 
 // PlayerState 는 네트워크 게임에서 매우 유용한 클래스이다. 
 // 이름에서 그 용도를 짐작할 수 있듯이 게임 플레이어의 모든 상태를 저장하고 다른 클라이언트에게 까지 전달할 수 있는 특징을 가지고 있다
@@ -38,16 +39,19 @@ public:
 	int32 GetCurrentAttack() const;
 	int32 GetCurrentHP() const;
 	int32 GetCurrentMaxHP() const;
+	int32 GetCurrentSpeed() const;
+	int32 GetCurrentMoney() const;
 	void AttackUp(int32 IncreaseAttack);
 	void MaxHPUp(int32 IncreaseHP);
+	void SpeedUp(int32 IncreaseSpeed);
 	void AddMoney(int32 IncreaseMoney);
 	void UseMoney(int32 UsedMoney);
-	int32 GetCurrentMoney() const;
 
 	FOnHPChangedDelegate OnHPChanged;
 	FOnMoneyChangedDelegate OnMoneyChanged;
 	FOnAttackChangedDelegate OnAttackChanged;
 	FOnMaxHPChangedDelegate OnMaxHPChanged;
+	FOnSpeedChangedDelegate OnSpeedChanged;
 
 private:
 	UPROPERTY()
@@ -64,4 +68,7 @@ private:
 
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
 	int32 CurrentMoney;
+
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
+	int32 CurrentSpeed;
 };

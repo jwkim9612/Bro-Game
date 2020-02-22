@@ -31,8 +31,12 @@ public:
 	float GetMaxHP() const;
 	float GetDamage() const;
 	float GetAttackRange() const;
-	bool IsAttacking() const;
 	int32 GetDropMoney() const;
+	bool IsAttacking() const;
+	void SetDamage(float NewDamage);
+	void SetMaxHP(float NewHP);
+	void SetSpeed(float NewSpeed);
+	void SetSize(float NewSize);
 
 	class UBMonsterStatComponent* GetCurrentStat() const;
 
@@ -88,4 +92,8 @@ private:
 	bool bIsAttacking = false;
 
 	FVector VisibleHPBarBoxSize = FVector(300.0f, 300.0f, 100.0f);
+
+	float BRadius;
+	float BHalfHeight;
+	float BSize;
 };

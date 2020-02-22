@@ -94,7 +94,6 @@ float ABMonster::TakeDamage(float Damage, FDamageEvent const & DamageEvent, ACon
 	if (bIsDead)
 	{
 		BGameStateBase->SubMonsterNum();
-		// 원래는 플레이어 컨트롤러 생성 후 MonsterKill 함수를 불러와 경험치를 얻음.
 		ABPlayerController* BPlayerController = Cast<ABPlayerController>(EventInstigator);
 		if (BPlayerController != nullptr)
 		{
@@ -173,15 +172,41 @@ float ABMonster::GetAttackRange() const
 {
 	return AttackRange;
 }
+int32 ABMonster::GetDropMoney() const
+{
+	return DropMoney;
+}
 
 bool ABMonster::IsAttacking() const
 {
 	return bIsAttacking == true ? true : false;
 }
 
-int32 ABMonster::GetDropMoney() const
+void ABMonster::SetDamage(float NewDamage)
 {
-	return DropMoney;
+	Damage = NewDamage;
+}
+
+void ABMonster::SetMaxHP(float NewHP)
+{
+	MaxHP = NewHP;
+}
+
+void ABMonster::SetSpeed(float NewSpeed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = NewSpeed;
+}
+
+void ABMonster::SetSize(float NewSize)
+{
+	float DefaultCapsuleHalfHeight = 88.0f;
+	float DefaultCpasuleRadius = 34.0;
+	GetCapsuleComponent()->SetCapsuleHalfHeight(DefaultCapsuleHalfHeight * NewSize);
+	GetCapsuleComponent()->SetCapsuleRadius(DefaultCpasuleRadius * NewSize);
+
+	float DeafultMeshZLocation = -88.0f;
+	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, DeafultMeshZLocation*NewSize));
+	GetMesh()->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f) * NewSize);
 }
 
 UBMonsterStatComponent * ABMonster::GetCurrentStat() const

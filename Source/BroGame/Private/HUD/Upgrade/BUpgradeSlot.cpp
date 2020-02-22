@@ -77,7 +77,7 @@ void UBUpgradeSlot::ChangeStat()
 		BPlayerState->MaxHPUp(IncreaseStat);
 		break;
 	case EStat::Speed:
-
+		BPlayerState->SpeedUp(IncreaseStat);
 		break;
 	default:
 
@@ -111,5 +111,5 @@ void UBUpgradeSlot::SetPriceText(int32 Price)
 
 void UBUpgradeSlot::SetLevelText(int32 Level)
 {
-	LevelText->SetText(FText::FromString(FString::FromInt(Level)));
+	LevelText->SetText(FText::FromString(FString::Printf(TEXT("Lv %d"),Level)));
 }

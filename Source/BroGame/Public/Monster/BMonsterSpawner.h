@@ -6,6 +6,16 @@
 #include "GameFramework/Actor.h"
 #include "BMonsterSpawner.generated.h"
 
+//USTRUCT()
+//struct FBSpawnInfo
+//{
+//	GENERATED_BODY()
+//
+//public:
+//	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+//	TMap<TSubclassOf<class ABMonster>, int32> MonsterInfo;
+//};
+
 USTRUCT()
 struct FBSpawnInfo
 {
@@ -13,7 +23,22 @@ struct FBSpawnInfo
 
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TMap<TSubclassOf<class ABMonster>, int32> MonsterInfo;
+	TSubclassOf<class ABMonster> Class;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+	int32 Num;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+	int32 Damage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+	int32 MaxHP;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+	float Speed;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+	float size;
 };
 
 UCLASS()

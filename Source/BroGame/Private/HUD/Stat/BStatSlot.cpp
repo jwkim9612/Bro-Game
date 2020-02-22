@@ -17,6 +17,7 @@ void UBStatSlot::NativeConstruct()
 
 	BPlayerState->OnAttackChanged.AddUObject(this, &UBStatSlot::OnStatChanged);
 	BPlayerState->OnMaxHPChanged.AddUObject(this, &UBStatSlot::OnStatChanged);
+	BPlayerState->OnSpeedChanged.AddUObject(this, &UBStatSlot::OnStatChanged);
 }
 
 void UBStatSlot::InitData(struct FBStatInfo& StatInfo)
@@ -24,17 +25,14 @@ void UBStatSlot::InitData(struct FBStatInfo& StatInfo)
 	CurrentStat = StatInfo.Stat;
 	StatImage->SetBrushFromTexture(StatInfo.Image);
 
-	CurrentAttack = BPlayerState->GetCurrentAttack();
-	CurrentMaxHP = BPlayerState->GetCurrentMaxHP();
-	// 스피드 추가.
-
-	ChangeStatText();
+	OnStatChanged();
 }
 
 void UBStatSlot::OnStatChanged()
 {
 	CurrentAttack = BPlayerState->GetCurrentAttack();
 	CurrentMaxHP = BPlayerState->GetCurrentMaxHP();
+	CurrentSpeed = BPlayerState->GetCurrentSpeed();
 
 	ChangeStatText();
 }

@@ -24,6 +24,7 @@ void ABPlayerState::InitPlayerData(APawn* Pawn)
 	BCHECK(BPlayer != nullptr);
 	CurrentAttack = BPlayer->GetDefaultAttack();
 	CurrentMaxHP = BPlayer->GetDefaultMaxHP();
+	CurrentSpeed = BPlayer->GetCharacterMovement()->GetMaxSpeed();
 	CurrentHP = CurrentMaxHP;
 	CurrentMoney = 0;
 }
@@ -59,6 +60,16 @@ int32 ABPlayerState::GetCurrentMaxHP() const
 	return CurrentMaxHP;
 }
 
+int32 ABPlayerState::GetCurrentSpeed() const
+{
+	return CurrentSpeed;
+}
+
+int32 ABPlayerState::GetCurrentMoney() const
+{
+	return CurrentMoney;
+}
+
 void ABPlayerState::AttackUp(int32 IncreaseAttack)
 {
 	BCHECK(IncreaseAttack >= 0);
@@ -73,6 +84,14 @@ void ABPlayerState::MaxHPUp(int32 IncreaseHP)
 	OnMaxHPChanged.Broadcast();
 }
 
+void ABPlayerState::SpeedUp(int32 IncreaseSpeed)
+{
+	BCHECK(IncreaseSpeed >= 0);
+	CurrentSpeed += IncreaseSpeed;
+	BPlayer->GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
+	OnSpeedChanged.Broadcast();
+}
+
 void ABPlayerState::AddMoney(int32 IncreaseMoney)
 {
 	BCHECK(IncreaseMoney > 0);
@@ -85,9 +104,4 @@ void ABPlayerState::UseMoney(int32 UsedMoney)
 	BCHECK(CurrentMoney >= UsedMoney);
 	CurrentMoney -= UsedMoney;
 	OnMoneyChanged.Broadcast();
-}
-
-int32 ABPlayerState::GetCurrentMoney() const
-{
-	return CurrentMoney;
 }

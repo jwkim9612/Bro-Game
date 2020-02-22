@@ -32,6 +32,7 @@ void UBHUDWidget::BindPlayerState(ABPlayerState * PlayerState)
 
 	CurrentPlayerState = PlayerState;
 	PlayerState->OnHPChanged.AddUObject(this, &UBHUDWidget::UpdateHPWidget);
+	PlayerState->OnMaxHPChanged.AddUObject(this, &UBHUDWidget::UpdateHPWidget);
 }
 
 void UBHUDWidget::UpdateHPWidget()
