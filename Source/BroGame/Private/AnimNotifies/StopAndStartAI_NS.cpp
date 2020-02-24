@@ -2,17 +2,16 @@
 
 
 #include "StopAndStartAI_NS.h"
-#include "..\..\Public\AnimNotifies\StopAndStartAI_NS.h"
-#include "BMonster.h"
-#include "BAIController.h"
+#include "BEnemyBase.h"
+#include "BAIControllerBase.h"
 #include "AIModule/Classes/BrainComponent.h"
 
 void UStopAndStartAI_NS::NotifyBegin(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation, float TotalDuration)
 {
-	BMonster = Cast<ABMonster>(MeshComp->GetOwner());
-	if (BMonster != nullptr)
+	BEnemy = Cast<ABEnemyBase>(MeshComp->GetOwner());
+	if (BEnemy != nullptr)
 	{
-		BAIController = Cast<ABAIController>(BMonster->GetController());
+		BAIController = Cast<ABAIControllerBase>(BEnemy->GetController());
 		if (BAIController != nullptr)
 		{
 			BAIController->StopMovement();
@@ -23,10 +22,10 @@ void UStopAndStartAI_NS::NotifyBegin(USkeletalMeshComponent * MeshComp, UAnimSeq
 
 void UStopAndStartAI_NS::NotifyEnd(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation)
 {
-	BMonster = Cast<ABMonster>(MeshComp->GetOwner());
-	if (BMonster != nullptr)
+	BEnemy = Cast<ABEnemyBase>(MeshComp->GetOwner());
+	if (BEnemy != nullptr)
 	{
-		BAIController = Cast<ABAIController>(BMonster->GetController());
+		BAIController = Cast<ABAIControllerBase>(BEnemy->GetController());
 		if (BAIController != nullptr)
 		{
 			BAIController->BrainComponent->RestartLogic();

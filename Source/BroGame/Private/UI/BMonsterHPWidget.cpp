@@ -2,10 +2,10 @@
 
 
 #include "BMonsterHPWidget.h"
-#include "BMonsterStatComponent.h"
+#include "BEnemyStatComponent.h"
 #include "Components/ProgressBar.h"
 
-void UBMonsterHPWidget::BindMonsterState(class UBMonsterStatComponent* MonsterStatComponent)
+void UBMonsterHPWidget::BindMonsterState(class UBEnemyStatComponent* MonsterStatComponent)
 {
 	BCHECK(MonsterStatComponent != nullptr);
 

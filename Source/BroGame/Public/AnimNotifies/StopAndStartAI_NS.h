@@ -20,8 +20,8 @@ protected:
 
 private:
 	UPROPERTY()
-	class ABMonster* BMonster;
+	class ABEnemyBase* BEnemy;
 
 	UPROPERTY()
-	class ABAIController* BAIController;
+	class ABAIControllerBase* BAIController;
 };

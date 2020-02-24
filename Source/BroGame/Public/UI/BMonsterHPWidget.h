@@ -16,10 +16,10 @@ class BROGAME_API UBMonsterHPWidget : public UUserWidget
 	
 
 private:
-	TWeakObjectPtr<class UBMonsterStatComponent> CurrentMonsterState;
+	TWeakObjectPtr<class UBEnemyStatComponent> CurrentMonsterState;
 
 public:
-	void BindMonsterState(class UBMonsterStatComponent* MonsterStatComponent);
+	void BindMonsterState(class UBEnemyStatComponent* MonsterStatComponent);
 	void UpdateHPWidget();
 
 private:

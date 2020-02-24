@@ -9,7 +9,7 @@
 #include "BPlayerState.h"
 #include "BHUDWidget.h"
 #include "BMonster.h"
-#include "BMonsterStatComponent.h"
+#include "BEnemyStatComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
 

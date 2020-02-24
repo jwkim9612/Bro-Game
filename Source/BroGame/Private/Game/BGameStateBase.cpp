@@ -29,10 +29,24 @@ void ABGameStateBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if (CurrentWaveState == EWaveState::PLAY && CurrentMonsterNum == 0)
+	switch (CurrentWaveType)
 	{
-		SetIsClear(true);
-		StartTimer();
+	case EWaveType::Normal:
+		if (CurrentWaveState == EWaveState::PLAY && CurrentMonsterNum == 0)
+		{
+			SetIsClear(true);
+			StartTimer();
+			BLOG(Warning, TEXT("Normal timer"));
+		}
+		break;
+	case EWaveType::Boss:
+		if (CurrentWaveState == EWaveState::PLAY && IsBossDead)
+		{
+			SetIsClear(true);
+			StartTimer();
+			BLOG(Warning, TEXT("Boss timer"));
+		}
+		break;
 	}
 }
 
@@ -50,14 +64,7 @@ bool ABGameStateBase::IsCountDownDone() const
 
 bool ABGameStateBase::IsStageClear() const
 {
-	if (bIsClear)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return bIsClear ? true : false;
 }
 
 void ABGameStateBase::SetIsClear(bool IsClear)
@@ -80,6 +87,11 @@ int32 ABGameStateBase::GetCurrentWave() const
 	return CurrentWave;
 }
 
+EWaveType ABGameStateBase::GetCurrentWaveType() const
+{
+	return CurrentWaveType;
+}
+
 void ABGameStateBase::AddMonsterNum()
 {
 	++CurrentMonsterNum;
@@ -93,6 +105,11 @@ void ABGameStateBase::SubMonsterNum()
 	}
 
 	--CurrentMonsterNum;
+}
+
+void ABGameStateBase::SetIsBossDead(bool IsDead)
+{
+	IsBossDead = IsDead;
 }
 
 void ABGameStateBase::StartTimer()
@@ -133,7 +150,26 @@ void ABGameStateBase::TickPerSecond()
 		bIsClear = false;
 		GetWorld()->GetTimerManager().ClearTimer(CountDownTimerHandle);
 		++CurrentWave;
+		ChangeWaveType(CurrentWave);
+
+		if (CurrentWaveType == EWaveType::Boss)
+		{
+			OnBossCountDownDone.Broadcast();
+		}
+
 		OnCountDownDone.Broadcast();
 		CurrentWaveState = EWaveState::PLAY;
+	}
+}
+
+void ABGameStateBase::ChangeWaveType(int32 Wave)
+{
+	if (Wave % 10 == 0)
+	{
+		CurrentWaveType = EWaveType::Boss;
+	}
+	else
+	{
+		CurrentWaveType = EWaveType::Normal;
 	}
 }

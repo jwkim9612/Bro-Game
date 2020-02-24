@@ -13,6 +13,13 @@ enum class EWaveState : uint8
 };
 
 UENUM()
+enum class EWaveType : uint8
+{
+	Normal,
+	Boss
+};
+
+UENUM()
 enum class EStat : uint8
 {
 	Attack,

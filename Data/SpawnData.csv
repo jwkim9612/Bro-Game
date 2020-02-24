@@ -1,6 +1,6 @@
-﻿Wave,ClassName,Quantity
-1,"(""/Game/Character/Monster/BMonster_BP.BMonster_BP_C"", ""/Game/Character/Monster/BMonster_BP.BMonster_BP_C"", ""/Game/Character/Monster/BMonster_BP2.BMonster_BP2_C"")","(3, 2, 1)"
-2,"(""/Game/Character/Monster/BMonster_BP2.BMonster_BP2_C"", ""/Game/Character/Monster/BMonster_BP.BMonster_BP_C"")","(3, 1)"
-3,"(""/Game/Character/Monster/BMonster_BP2.BMonster_BP2_C"")",(3)
-4,,
-5,,
+﻿Wave,MonsterClassPath,Num,Damage,MaxHP,Speed,Size,DropMoney
+1,"(""/Game/Character/Monster/WhiteMinion/BWhiteMinion_BP.BWhiteMinion_BP_C"")",(9),(50),(10),(200),(1),(10)
+2,"(""/Game/Character/Monster/WhiteMinion/BWhiteMinion_BP.BWhiteMinion_BP_C"")",(20),(10),(50),(400),(1),(100)
+3,"(""/Game/Character/Monster/SuperMinion/BSuperMinion_BP.BSuperMinion_BP_C"", ""/Game/Character/Monster/SuperMinion/BSuperMinion_BP.BSuperMinion_BP_C"", ""/Game/Character/Monster/WhiteMinion/BWhiteMinion_BP.BWhiteMinion_BP_C"")","(1, 2, 3)","(50, 20, 50)","(100, 200, 300)","(200, 300, 400)","(1, 1, 1)","(1, 1, 1)"
+4,"(""/Game/Character/Monster/SuperMinion/BSuperMinion_BP.BSuperMinion_BP_C"", ""/Game/Character/Monster/SuperMinion/BSuperMinion_BP.BSuperMinion_BP_C"", ""/Game/Character/Monster/WhiteMinion/BWhiteMinion_BP.BWhiteMinion_BP_C"")","(1, 2, 3)","(50, 20, 50)","(100, 200, 300)","(200, 300, 400)","(1, 1, 1)","(1, 1, 1)"
+5,"(""/Game/Character/Monster/SuperMinion/BSuperMinion_BP.BSuperMinion_BP_C"", ""/Game/Character/Monster/SuperMinion/BSuperMinion_BP.BSuperMinion_BP_C"", ""/Game/Character/Monster/WhiteMinion/BWhiteMinion_BP.BWhiteMinion_BP_C"")","(1, 2, 3)","(50, 20, 50)","(100, 200, 300)","(200, 300, 400)","(1, 1, 1)","(1, 1, 1)"

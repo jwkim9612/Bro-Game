@@ -5,6 +5,7 @@
 DECLARE_MULTICAST_DELEGATE(FOnCountDownStartDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnCountDownDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnCountDownDoneDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnBossCountDownDoneDelegate);
 
 #include "BroGame.h"
 #include "GameFramework/GameStateBase.h"
@@ -33,20 +34,24 @@ public:
 	int32 GetCurrentTimeMin() const;
 	int32 GetCurrentTimeSec() const;
 	int32 GetCurrentWave() const;
+	EWaveType GetCurrentWaveType() const;
 
 	void AddMonsterNum();
 	void SubMonsterNum();
+	void SetIsBossDead(bool IsDead);
 
 	// 잠시 옮겨둠 다시 private로 가는것이 좋아보임.
 	void StartTimer();
 
 private:
 	void TickPerSecond();
+	void ChangeWaveType(int32 Wave);
 
 public:
 	FOnCountDownStartDelegate OnCountDownStart;
 	FOnCountDownDelegate OnCountDown;
 	FOnCountDownDoneDelegate OnCountDownDone;
+	FOnBossCountDownDoneDelegate OnBossCountDownDone;
 
 private:
 	UPROPERTY()
@@ -69,4 +74,7 @@ private:
 	FTimerHandle CountDownTimerHandle;
 
 	EWaveState CurrentWaveState = EWaveState::PREINIT;
+	EWaveType CurrentWaveType;
+
+	bool IsBossDead = true;
 };
