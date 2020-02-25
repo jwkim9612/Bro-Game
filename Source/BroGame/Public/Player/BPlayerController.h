@@ -28,7 +28,6 @@ public:
 
 private:
 	void OnGamePuase();
-	//void OnClear();
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "UI")

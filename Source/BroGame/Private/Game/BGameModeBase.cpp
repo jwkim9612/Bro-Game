@@ -39,12 +39,22 @@ void ABGameModeBase::StartPlay()
 
 }
 
-int32 ABGameModeBase::GetDefaultTimeMin() const
+int32 ABGameModeBase::GetNormalTimeMin() const
 {
-	return DefaultTimeMin;
+	return NormalTimeMin;
 }
 
-int32 ABGameModeBase::GetDefaultTimeSec() const
+int32 ABGameModeBase::GetNormalTimeSec() const
 {
-	return DefaultTimeSec;
+	return NormalTimeSec;
+}
+
+int32 ABGameModeBase::GetBossTimeMin() const
+{
+	return BossTimeMin;
+}
+
+int32 ABGameModeBase::GetBossTimeSec() const
+{
+	return BossTimeSec;
 }

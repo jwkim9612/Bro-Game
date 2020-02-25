@@ -16,4 +16,15 @@ class BROGAME_API ABBoss : public ABEnemyBase
 	
 protected:
 	virtual void BeginPlay() override;
+
+public:
+	FName GetBossName() const;
+	class UTexture2D* GetWantedPhoto() const;
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "stat")
+	FName BossName;
+
+	UPROPERTY(EditDefaultsOnly, Category = "stat")
+	class UTexture2D* WantedPhoto;
 };

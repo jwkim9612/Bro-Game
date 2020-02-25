@@ -20,6 +20,7 @@ protected:
 public:
 	void BindPlayerState(class ABPlayerState* PlayerState);
 	void UpdateHPWidget();
+	void PlayWantedAnimation();
 
 private:
 
@@ -40,4 +41,13 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UBStatWidget* StatWidget;
+
+	UPROPERTY(meta = (BindWidget))
+	class UBWantedWidget* WantedWidget;
+
+	UPROPERTY()
+	class UWidgetAnimation* WantedAnimation;
+
+	UPROPERTY()
+	class ABGameStateBase* BGameStateBase;
 };

@@ -10,3 +10,13 @@ void ABBoss::BeginPlay()
 
 	BAIController = Cast<ABBossAIController>(GetController());
 }
+
+FName ABBoss::GetBossName() const
+{
+	return BossName;
+}
+
+UTexture2D* ABBoss::GetWantedPhoto() const
+{
+	return WantedPhoto;
+}

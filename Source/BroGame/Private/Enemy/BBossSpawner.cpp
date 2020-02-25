@@ -3,6 +3,8 @@
 #include "BGameStateBase.h"
 #include "BGameInstance.h"
 #include "BBoss.h"
+#include "BPlayerController.h"
+#include "BHUDWidget.h"
 
 ABBossSpawner::ABBossSpawner()
 {
@@ -40,9 +42,15 @@ void ABBossSpawner::Tick(float DeltaTime)
 
 }
 
+TArray<struct FBBossInfo> ABBossSpawner::GetBosses() const
+{
+	return Bosses;
+}
+
 void ABBossSpawner::Spawn()
 {
 	int32 BossIndex = (BGameStateBase->GetCurrentWave() / 10) - 1;
+	BCHECK(BossIndex <= Bosses.Num() - 1);
 
 	ABBoss* Boss = Bosses[BossIndex].BossClass->GetDefaultObject<ABBoss>();
 	

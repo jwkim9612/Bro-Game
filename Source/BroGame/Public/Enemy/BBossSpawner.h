@@ -14,9 +14,6 @@ struct FBBossInfo
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	TSubclassOf<class ABBoss> BossClass;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	class UTexture2D* WantedPhoto;
 };
 
 UCLASS()
@@ -33,6 +30,9 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
+
+public:
+	TArray<struct FBBossInfo> GetBosses() const;
 
 private:
 	UFUNCTION()

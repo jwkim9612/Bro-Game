@@ -5,6 +5,7 @@
 DECLARE_MULTICAST_DELEGATE(FOnCountDownStartDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnCountDownDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnCountDownDoneDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnReadyToBossDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnBossCountDownDoneDelegate);
 
 #include "BroGame.h"
@@ -51,6 +52,7 @@ public:
 	FOnCountDownStartDelegate OnCountDownStart;
 	FOnCountDownDelegate OnCountDown;
 	FOnCountDownDoneDelegate OnCountDownDone;
+	FOnReadyToBossDelegate OnReadyToBoss;
 	FOnBossCountDownDoneDelegate OnBossCountDownDone;
 
 private:
