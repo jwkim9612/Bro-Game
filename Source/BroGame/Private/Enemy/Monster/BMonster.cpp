@@ -8,6 +8,7 @@
 #include "BGameStateBase.h"
 #include "BMonsterHPWidget.h"
 #include "BPlayerController.h"
+#include "BGamePauseWidget.h"
 #include "Components/WidgetComponent.h"
 #include "COmponents/BoxComponent.h"
 
@@ -53,6 +54,8 @@ void ABMonster::BeginPlay()
 	{
 		BMonsterHPWidget->BindMonsterState(CurrentStat);
 	}
+
+	BGameStateBase->OnIsBossDead.AddUObject(this, &ABMonster::Dead);
 }
 
 void ABMonster::PostInitializeComponents()
@@ -73,11 +76,13 @@ float ABMonster::TakeDamage(float Damage, FDamageEvent const & DamageEvent, ACon
 
 	if (bIsDead)
 	{
-		BGameStateBase->SubMonsterNum();
-		ABPlayerController* BPlayerController = Cast<ABPlayerController>(EventInstigator);
-		if (BPlayerController != nullptr)
+		ABPlayerController* InstigatorController = Cast<ABPlayerController>(EventInstigator);
+		if (InstigatorController != nullptr)
 		{
-			BPlayerController->MonsterKill(this);
+			InstigatorController->MonsterKill(this);
+			//BPlayerController->GetGamePauseWidget()->FOnMainMenuClicked.AddLambda([this]() -> void {
+			//	GetWorld()->GetTimerManager().ClearTimer(DeadTimerhandle);
+			//});
 		}
 
 		return FinalDamage;
@@ -127,7 +132,11 @@ void ABMonster::Dead()
 {
 	Super::Dead();
 
+	BGameStateBase->SubMonsterNum();
 	BMonsterAnimInstance->SetIsDead(true);
+	BPlayerController->GetGamePauseWidget()->FOnMainMenuClicked.AddLambda([this]() -> void {
+		GetWorld()->GetTimerManager().ClearTimer(DeadTimerhandle);
+	});
 
 	GetWorld()->GetTimerManager().SetTimer(DeadTimerhandle, FTimerDelegate::CreateLambda([this]() -> void {
 		Destroy();

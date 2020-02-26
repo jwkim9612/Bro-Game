@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "BGamePauseWidget.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnMainMenuClickedDelegate);
+
 /**
  * 
  */
@@ -16,6 +18,10 @@ class BROGAME_API UBGamePauseWidget : public UUserWidget
 
 protected:
 	virtual void NativeConstruct() override;
+
+public:
+	// 아래의 OnMainMenuClicked와 이름이 같아서 후에 변경해야함.
+	FOnMainMenuClickedDelegate FOnMainMenuClicked;
 
 private:
 	UFUNCTION()

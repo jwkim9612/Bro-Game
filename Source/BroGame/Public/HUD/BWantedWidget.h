@@ -15,7 +15,7 @@ class BROGAME_API UBWantedWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	void Init(struct FBBossInfo BossInfo);
+	void Init(TSubclassOf<class ABBoss> BossClass);
 
 private:
 	UPROPERTY(meta = (BindWidget))

@@ -6,6 +6,7 @@
 #include "BAIControllerBase.h"
 #include "BEnemyStatComponent.h"
 #include "BGameStateBase.h"
+#include "BPlayerController.h"
 
 ABEnemyBase::ABEnemyBase()
 {
@@ -32,6 +33,7 @@ void ABEnemyBase::BeginPlay()
 	Super::BeginPlay();
 	
 	BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+	BPlayerController = Cast<ABPlayerController>(UGameplayStatics::GetGameInstance(GetWorld())->GetPrimaryPlayerController());
 }
 
 void ABEnemyBase::PostInitializeComponents()

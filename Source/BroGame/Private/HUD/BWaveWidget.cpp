@@ -10,7 +10,7 @@ void UBWaveWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
-	BGameStateBase->OnCountDownDone.AddUObject(this, &UBWaveWidget::Update);
+	BGameStateBase->OnCurrentWaveChange.AddUObject(this, &UBWaveWidget::Update);
 	Update();
 }
 

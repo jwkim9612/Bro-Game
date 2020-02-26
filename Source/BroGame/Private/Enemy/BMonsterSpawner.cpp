@@ -47,6 +47,7 @@ void ABMonsterSpawner::Spawn()
 	int32 SpawnLocationCount = 0;
 
 	int32 CurrentWave = BGameStateBase->GetCurrentWave();
+	// SpawnData는 인덱스가 0부터 시작이므로 1을 빼준다.
 	SetSpawnData(CurrentWave);
 
 	for (int32 MonsterIndex = 0; MonsterIndex < CurrentSpawnData->MonsterClassPath.Num(); ++MonsterIndex)

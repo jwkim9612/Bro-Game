@@ -21,6 +21,13 @@ public:
 	void BindPlayerState(class ABPlayerState* PlayerState);
 	void UpdateHPWidget();
 	void PlayWantedAnimation();
+	void PauseAllAnimation();
+	void ResumeAllAnimation();
+	void ResumeAnimation(TPair<class UWidgetAnimation*, float> Animation);
+
+	// 스텟과 업그레이드 버튼 클릭관련
+	void SetCanNotClickButton();
+	void SetCanClickButton();
 
 private:
 
@@ -47,6 +54,10 @@ private:
 
 	UPROPERTY()
 	class UWidgetAnimation* WantedAnimation;
+
+	// 애니메이션과 시간
+	UPROPERTY()
+	TMap<class UWidgetAnimation*, float> Animations;
 
 	UPROPERTY()
 	class ABGameStateBase* BGameStateBase;

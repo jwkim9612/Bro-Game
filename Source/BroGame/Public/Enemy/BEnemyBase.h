@@ -74,6 +74,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "stat")
 	class UBEnemyStatComponent* CurrentStat;
 
+	UPROPERTY()
+	class ABPlayerController* BPlayerController;
+
 	bool bIsDead = false;
 	bool bIsAttacking = false;
+
+	
 };

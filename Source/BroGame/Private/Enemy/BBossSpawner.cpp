@@ -42,17 +42,17 @@ void ABBossSpawner::Tick(float DeltaTime)
 
 }
 
-TArray<struct FBBossInfo> ABBossSpawner::GetBosses() const
+TArray<TSubclassOf<class ABBoss>> ABBossSpawner::GetBosses() const
 {
-	return Bosses;
+	return BossClass;
 }
 
 void ABBossSpawner::Spawn()
 {
 	int32 BossIndex = (BGameStateBase->GetCurrentWave() / 10) - 1;
-	BCHECK(BossIndex <= Bosses.Num() - 1);
+	BCHECK(BossIndex <= BossClass.Num() - 1);
 
-	ABBoss* Boss = Bosses[BossIndex].BossClass->GetDefaultObject<ABBoss>();
+	ABBoss* Boss = BossClass[BossIndex]->GetDefaultObject<ABBoss>();
 	
 	FVector Vec = GetActorLocation();
 	FRotator Rot = FRotator::ZeroRotator;

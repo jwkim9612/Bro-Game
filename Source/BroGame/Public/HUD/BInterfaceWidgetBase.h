@@ -23,9 +23,6 @@ public:
 	void HideInterface();
 
 private:
-	//UPROPERTY(meta = (BindWidget))
-	//class UBUpgradeWindow* UpgradeWindow;	
-
 	UPROPERTY(meta = (BindWidget))
 	class UBWindowBase* Window;
 
@@ -37,5 +34,4 @@ private:
 
 	UPROPERTY()
 	class UWidgetAnimation* InterfaceAnimation;
-
 };

@@ -22,6 +22,7 @@ void ABGameStateBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CurrentWave = StartingWave;
 	StartTimer();
 }
 
@@ -34,6 +35,8 @@ void ABGameStateBase::Tick(float DeltaSeconds)
 	case EWaveType::Normal:
 		if (CurrentWaveState == EWaveState::PLAY && CurrentMonsterNum == 0)
 		{
+			++CurrentWave;
+			OnCurrentWaveChange.Broadcast();
 			SetIsClear(true);
 			StartTimer();
 		}
@@ -41,6 +44,9 @@ void ABGameStateBase::Tick(float DeltaSeconds)
 	case EWaveType::Boss:
 		if (CurrentWaveState == EWaveState::PLAY && IsBossDead)
 		{
+			++CurrentWave;
+			OnCurrentWaveChange.Broadcast();
+			OnIsBossDead.Broadcast();
 			SetIsClear(true);
 			StartTimer();
 		}
@@ -115,7 +121,8 @@ void ABGameStateBase::StartTimer()
 	CurrentWaveState = EWaveState::READY;
 
 	// CurrentWave가 Text이기 때문에 Text가 9인 상태에서 타이머가 시작되면 다음이 보스이기 때문에 +1을 해줌.
-	ChangeWaveType(CurrentWave + 1);
+	//ChangeWaveType(CurrentWave + 1);
+	ChangeWaveType(CurrentWave);
 
 	switch (CurrentWaveType)
 	{
@@ -159,7 +166,7 @@ void ABGameStateBase::TickPerSecond()
 	{
 		bIsClear = false;
 		GetWorld()->GetTimerManager().ClearTimer(CountDownTimerHandle);
-		++CurrentWave;
+		//++CurrentWave;
 		//ChangeWaveType(CurrentWave);
 
 		if (CurrentWaveType == EWaveType::Boss)

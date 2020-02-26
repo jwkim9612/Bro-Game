@@ -32,6 +32,7 @@ void UBHUDWidget::NativeConstruct()
 		if (TEXT("ReadyToBossAnim_INST") == Ani->GetName())
 		{
 			WantedAnimation = Ani;
+			Animations.Add(WantedAnimation, 0.0f);
 		}
 	}
 
@@ -47,7 +48,7 @@ void UBHUDWidget::NativeConstruct()
 	}
 
 	BGameStateBase->OnReadyToBoss.AddLambda([this, BossSpawner]() -> void {
-		int32 BossIndex = BGameStateBase->GetCurrentWave() / 10;
+		int32 BossIndex = (BGameStateBase->GetCurrentWave() / 10) - 1;
 		WantedWidget->Init(BossSpawner->GetBosses()[BossIndex]);
 		PlayWantedAnimation();
 	});
@@ -74,4 +75,43 @@ void UBHUDWidget::UpdateHPWidget()
 void UBHUDWidget::PlayWantedAnimation()
 {
 	PlayAnimation(WantedAnimation, 0.0f, 1, EUMGSequencePlayMode::Forward, 1.0f);
+}
+
+void UBHUDWidget::PauseAllAnimation()
+{
+	for (auto& Animation : Animations)
+	{
+		if (IsAnimationPlaying(Animation.Key))
+		{
+			Animation.Value = PauseAnimation(Animation.Key);
+		}
+	}
+}
+
+void UBHUDWidget::ResumeAllAnimation()
+{
+	for (auto& Animation : Animations)
+	{
+		if (Animation.Value != 0.0f)
+		{
+			ResumeAnimation(Animation);
+		}
+	}
+}
+
+void UBHUDWidget::ResumeAnimation(TPair<class UWidgetAnimation*, float> Animation)
+{
+	PlayAnimation(Animation.Key, Animation.Value, 1, EUMGSequencePlayMode::Forward, 1.0f);
+}
+
+void UBHUDWidget::SetCanNotClickButton()
+{
+	StatWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
+	UpgradeWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
+}
+
+void UBHUDWidget::SetCanClickButton()
+{
+	StatWidget->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+	UpgradeWidget->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 }

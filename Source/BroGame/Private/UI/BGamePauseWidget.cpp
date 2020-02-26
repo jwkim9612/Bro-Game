@@ -4,7 +4,7 @@
 #include "BGamePauseWidget.h"
 #include "BPlayerController.h"
 #include "Components/Button.h"
-#include "..\..\Public\UI\BGamePauseWidget.h"
+#include "BHUDWidget.h"
 
 void UBGamePauseWidget::NativeConstruct()
 {
@@ -30,13 +30,22 @@ void UBGamePauseWidget::OnContinueClicked()
 	if (BPlayerController != nullptr)
 	{
 		RemoveFromParent();
-		BPlayerController->ChangeInputMode(true);
 		BPlayerController->SetPause(false);
+	}
+
+	UBHUDWidget* BHUDWidget = Cast<UBHUDWidget>(BPlayerController->GetHUDWidget());
+	BCHECK(BHUDWidget != nullptr);
+
+	BHUDWidget->SetCanClickButton();
+	if (BHUDWidget->IsPlayingAnimation())
+	{
+		BHUDWidget->ResumeAllAnimation();
 	}
 }
 
 void UBGamePauseWidget::OnMainMenuClicked()
 {
+	FOnMainMenuClicked.Broadcast();
 	UGameplayStatics::OpenLevel(GetWorld(), TEXT("Main"));
 }
 

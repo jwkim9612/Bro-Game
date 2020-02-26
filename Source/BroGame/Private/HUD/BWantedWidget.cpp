@@ -7,9 +7,9 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 
-void UBWantedWidget::Init(FBBossInfo BossInfo)
+void UBWantedWidget::Init(TSubclassOf<class ABBoss> BossClass)
 {
-	ABBoss* Boss = BossInfo.BossClass->GetDefaultObject<ABBoss>();
+	ABBoss* Boss = BossClass->GetDefaultObject<ABBoss>();
 	BCHECK(Boss != nullptr);
 
 	BossImage->SetBrushFromTexture(Boss->GetWantedPhoto());

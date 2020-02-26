@@ -6,16 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "BBossSpawner.generated.h"
 
-USTRUCT()
-struct FBBossInfo
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TSubclassOf<class ABBoss> BossClass;
-};
-
 UCLASS()
 class BROGAME_API ABBossSpawner : public AActor
 {
@@ -27,12 +17,13 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
-
+	
 public:	
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	TArray<struct FBBossInfo> GetBosses() const;
+	TArray<TSubclassOf<class ABBoss>> GetBosses() const;
+	
 
 private:
 	UFUNCTION()
@@ -49,5 +40,5 @@ private:
 	class UBGameInstance* BGameInstance;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TArray<struct FBBossInfo> Bosses;
+	TArray<TSubclassOf<class ABBoss>> BossClass;
 };

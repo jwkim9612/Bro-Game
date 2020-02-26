@@ -16,9 +16,7 @@
 void ABPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	SetInputMode(FInputModeGameOnly());
 	bShowMouseCursor = true;
-	//SetInputMode(FInputModeUIOnly());
 
 	if (HUDWidgetClass != nullptr)
 	{
@@ -27,6 +25,11 @@ void ABPlayerController::BeginPlay()
 		{
 			BHUDWidget->AddToViewport();
 		}
+	}
+
+	if (GamePauseWidgetClass)
+	{
+		GamePauseWidget = CreateWidget<UBGamePauseWidget>(this, GamePauseWidgetClass);
 	}
 	
 	BHUDWidget->BindPlayerState(BPlayerState);
@@ -47,26 +50,17 @@ void ABPlayerController::OnPossess(APawn * aPawn)
 	BPlayerState->InitPlayerData(aPawn);
 }
 
-void ABPlayerController::ChangeInputMode(bool bGameMode)
-{
-	if (bGameMode)
-	{
-		SetInputMode(FInputModeGameOnly());
-		bShowMouseCursor = false;
-	}
-	else
-	{
-		SetInputMode(FInputModeUIOnly());
-		bShowMouseCursor = true;
-	}
-}
-
 UBHUDWidget * ABPlayerController::GetHUDWidget() const
 {
 	return BHUDWidget;
 }
 
-void ABPlayerController::MonsterKill(ABMonster * KilledMonster)
+UBGamePauseWidget * ABPlayerController::GetGamePauseWidget() const
+{
+	return GamePauseWidget;
+}
+
+void ABPlayerController::MonsterKill(ABEnemyBase * KilledMonster)
 {
 	int32 MonsterDropMoney = KilledMonster->GetCurrentStat()->GetDropMoney();
 
@@ -76,15 +70,19 @@ void ABPlayerController::MonsterKill(ABMonster * KilledMonster)
 	// 화면에 돈 출력.
 }
 
-
 void ABPlayerController::OnGamePuase()
 {
-	GamePauseWidget = CreateWidget<UBGamePauseWidget>(this, GamePauseWidgetClass);
+	//GamePauseWidget = CreateWidget<UBGamePauseWidget>(this, GamePauseWidgetClass);
 	if (GamePauseWidget != nullptr)
 	{
 		GamePauseWidget->AddToViewport(3);
 	}
 
+	BHUDWidget->SetCanNotClickButton();
 	SetPause(true);
-	ChangeInputMode(false);
+
+	if (BHUDWidget->IsPlayingAnimation())
+	{
+		BHUDWidget->PauseAllAnimation();
+	}
 }

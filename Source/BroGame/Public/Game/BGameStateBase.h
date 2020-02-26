@@ -5,8 +5,10 @@
 DECLARE_MULTICAST_DELEGATE(FOnCountDownStartDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnCountDownDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnCountDownDoneDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnCurrentWaveChangeDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnReadyToBossDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnBossCountDownDoneDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnIsBossDeadDelegate);
 
 #include "BroGame.h"
 #include "GameFramework/GameStateBase.h"
@@ -52,8 +54,10 @@ public:
 	FOnCountDownStartDelegate OnCountDownStart;
 	FOnCountDownDelegate OnCountDown;
 	FOnCountDownDoneDelegate OnCountDownDone;
+	FOnCurrentWaveChangeDelegate OnCurrentWaveChange;
 	FOnReadyToBossDelegate OnReadyToBoss;
 	FOnBossCountDownDoneDelegate OnBossCountDownDone;
+	FOnIsBossDeadDelegate OnIsBossDead;
 
 private:
 	UPROPERTY()
@@ -63,7 +67,10 @@ private:
 	bool bIsClear = true;
 
 	UPROPERTY(VisibleAnywhere, Category = "Stage")
-	int32 CurrentWave = 0;
+	int32 CurrentWave = 1;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stage")
+	int32 StartingWave = 1;
 
 	int32 CurrentMonsterNum = 0;
 
