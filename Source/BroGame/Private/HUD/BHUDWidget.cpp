@@ -10,12 +10,15 @@
 #include "BStatWidget.h"
 #include "BBossSpawner.h"
 #include "BWantedWidget.h"
+#include "BBonusWidget.h"
+#include "BPlayerController.h"
 #include "Engine/public/EngineUtils.h"
 
 void UBHUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	BPlayerController = Cast<ABPlayerController>(GetOwningPlayer());
 	BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
 	BGameStateBase->OnCountDownStart.AddLambda([this]() -> void {
 		TimerWidget->SetVisibility(ESlateVisibility::Visible);
@@ -33,6 +36,18 @@ void UBHUDWidget::NativeConstruct()
 		{
 			WantedAnimation = Ani;
 			Animations.Add(WantedAnimation, 0.0f);
+		}
+
+		if (TEXT("ShowBonusAnim_INST") == Ani->GetName())
+		{
+			ShowBonusAnimation = Ani;
+			Animations.Add(ShowBonusAnimation, 0.0f);
+		}
+
+		if (TEXT("HideBonusAnim_INST") == Ani->GetName())
+		{
+			HideBonusAnimation = Ani;
+			Animations.Add(HideBonusAnimation, 0.0f);
 		}
 	}
 
@@ -53,8 +68,17 @@ void UBHUDWidget::NativeConstruct()
 		PlayWantedAnimation();
 	});
 
+	BGameStateBase->OnBonusWaveClear.AddLambda([this]() -> void {
+		GetWorld()->GetTimerManager().SetTimer(BonusTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
+			BonusWidget->SlotsUpdate();
+			PlayShowBonusAnimation();
+			BPlayerController->SetPause(true);
+		}), BonusTimer, false);
+	});
+
 	UpgradeWidget->Init();
 	StatWidget->Init();
+	BonusWidget->Init(this);
 }
 
 void UBHUDWidget::BindPlayerState(ABPlayerState * PlayerState)
@@ -75,6 +99,16 @@ void UBHUDWidget::UpdateHPWidget()
 void UBHUDWidget::PlayWantedAnimation()
 {
 	PlayAnimation(WantedAnimation, 0.0f, 1, EUMGSequencePlayMode::Forward, 1.0f);
+}
+
+void UBHUDWidget::PlayShowBonusAnimation()
+{
+	PlayAnimation(ShowBonusAnimation, 0.0f, 1, EUMGSequencePlayMode::Forward, 1.0f);
+}
+
+void UBHUDWidget::PlayHideBonusAnimation()
+{
+	PlayAnimation(HideBonusAnimation, 0.0f, 1, EUMGSequencePlayMode::Forward, 1.0f);
 }
 
 void UBHUDWidget::PauseAllAnimation()

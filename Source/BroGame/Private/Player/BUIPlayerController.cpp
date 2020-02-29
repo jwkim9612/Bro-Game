@@ -5,21 +5,19 @@
 #include "BMainMenuWidget.h"
 #include "Blueprint/UserWidget.h"
 
+void ABUIPlayerController::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	
+}
+
 void ABUIPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	SetInputMode(FInputModeGameAndUI());
 
 	ChangeMenuWidget(MainMenuWidgetClass);
-
-	//if (MainMenuWidgetClass != nullptr)
-	//{
-	//	MainMenuWidget = CreateWidget<UUserWidget>(this, MainMenuWidgetClass);
-	//	if (MainMenuWidget != nullptr)
-	//	{
-	//		MainMenuWidget->AddToViewport();
-	//	}
-	//}
 
 	BCHECK(MainMenuWidgetClass != nullptr);
 	BCHECK(SelectModeWidgetClass != nullptr);

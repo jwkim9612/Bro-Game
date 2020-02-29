@@ -46,7 +46,7 @@ private:
 	UPROPERTY()
 	class UBMonsterAnimInstance* BMonsterAnimInstance;
 
-	FTimerHandle DeadTimerhandle;
+	FTimerHandle DeadTimerHandle;
 	float DeadTimer = 3.0f;
 
 	FVector VisibleHPBarBoxSize = FVector(300.0f, 300.0f, 100.0f);

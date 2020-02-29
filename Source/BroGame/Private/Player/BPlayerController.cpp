@@ -12,6 +12,7 @@
 #include "BEnemyStatComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Math/RandomStream.h"
 
 void ABPlayerController::BeginPlay()
 {
@@ -31,7 +32,7 @@ void ABPlayerController::BeginPlay()
 	{
 		GamePauseWidget = CreateWidget<UBGamePauseWidget>(this, GamePauseWidgetClass);
 	}
-	
+
 	BHUDWidget->BindPlayerState(BPlayerState);
 }
 
@@ -72,7 +73,6 @@ void ABPlayerController::MonsterKill(ABEnemyBase * KilledMonster)
 
 void ABPlayerController::OnGamePuase()
 {
-	//GamePauseWidget = CreateWidget<UBGamePauseWidget>(this, GamePauseWidgetClass);
 	if (GamePauseWidget != nullptr)
 	{
 		GamePauseWidget->AddToViewport(3);

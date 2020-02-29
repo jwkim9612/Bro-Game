@@ -56,7 +56,6 @@ void UBSelectCharacter::NativeConstruct()
 		GridSlot->SetHorizontalAlignment(HAlign_Center);
 		GridSlot->SetVerticalAlignment(VAlign_Center);
 	}
-
 }
 
 void UBSelectCharacter::OnBackClicked()

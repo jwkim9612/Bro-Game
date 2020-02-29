@@ -3,29 +3,7 @@
 #pragma once
 
 #include "EngineMinimal.h"
-
-UENUM()
-enum class EWaveState : uint8
-{
-	PREINIT,
-	READY,
-	PLAY
-};
-
-UENUM()
-enum class EWaveType : uint8
-{
-	Normal,
-	Boss
-};
-
-UENUM()
-enum class EStat : uint8
-{
-	Attack,
-	MaxHP,
-	Speed
-};
+#include "BDatas.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(BroGame, Log, All);
 #define BLOG_CALLINFO (FString(__FUNCTION__) + TEXT("(") + FString::FromInt(__LINE__) + TEXT(")"))

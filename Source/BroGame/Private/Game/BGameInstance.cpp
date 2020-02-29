@@ -2,6 +2,7 @@
 
 
 #include "BGameInstance.h"
+#include "BBonusManager.h"
 
 UBGameInstance::UBGameInstance()
 {
@@ -13,10 +14,22 @@ UBGameInstance::UBGameInstance()
 	BCHECK(SpawnMonster_DataTable.Succeeded());
 	SpawnDataTable = SpawnMonster_DataTable.Object;
 	BCHECK(SpawnDataTable->GetRowMap().Num() > 0);
-
 }
 
-FBSpawnInfo * UBGameInstance::GetSpawnDataTable(int32 Wave)
+void UBGameInstance::Init()
+{
+	Super::Init();
+
+	BBonusManager = NewObject<UBBonusManager>(this);
+	BBonusManager->Init();
+}
+
+FBSpawnInfo * UBGameInstance::GetSpawnDataByWave(int32 Wave)
 {
 	return SpawnDataTable->FindRow<FBSpawnInfo>(*FString::FromInt(Wave), TEXT(""));
+}
+
+UDataTable * UBGameInstance::GetBonusDataTable() const
+{
+	return BonusDataTable;
 }

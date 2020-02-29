@@ -9,6 +9,7 @@ DECLARE_MULTICAST_DELEGATE(FOnCurrentWaveChangeDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnReadyToBossDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnBossCountDownDoneDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnIsBossDeadDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnBonusWaveClearDelegate);
 
 #include "BroGame.h"
 #include "GameFramework/GameStateBase.h"
@@ -33,6 +34,7 @@ protected:
 public:
 	bool IsCountDownDone() const;
 	bool IsStageClear() const;
+	bool IsBonusWaveClear() const;
 	void SetIsClear(bool IsClear);
 	int32 GetCurrentTimeMin() const;
 	int32 GetCurrentTimeSec() const;
@@ -58,6 +60,7 @@ public:
 	FOnReadyToBossDelegate OnReadyToBoss;
 	FOnBossCountDownDoneDelegate OnBossCountDownDone;
 	FOnIsBossDeadDelegate OnIsBossDead;
+	FOnBonusWaveClearDelegate OnBonusWaveClear;
 
 private:
 	UPROPERTY()

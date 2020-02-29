@@ -35,6 +35,11 @@ void ABGameStateBase::Tick(float DeltaSeconds)
 	case EWaveType::Normal:
 		if (CurrentWaveState == EWaveState::PLAY && CurrentMonsterNum == 0)
 		{
+			if (IsBonusWaveClear())
+			{
+				OnBonusWaveClear.Broadcast();
+			}
+
 			++CurrentWave;
 			OnCurrentWaveChange.Broadcast();
 			SetIsClear(true);
@@ -44,6 +49,11 @@ void ABGameStateBase::Tick(float DeltaSeconds)
 	case EWaveType::Boss:
 		if (CurrentWaveState == EWaveState::PLAY && IsBossDead)
 		{
+			if (IsBonusWaveClear())
+			{
+				OnBonusWaveClear.Broadcast();
+			}
+
 			++CurrentWave;
 			OnCurrentWaveChange.Broadcast();
 			OnIsBossDead.Broadcast();
@@ -69,6 +79,20 @@ bool ABGameStateBase::IsCountDownDone() const
 bool ABGameStateBase::IsStageClear() const
 {
 	return bIsClear ? true : false;
+}
+
+bool ABGameStateBase::IsBonusWaveClear() const
+{
+	int32 CheckWave = CurrentWave % 10;
+
+	if (CheckWave == 3 || CheckWave == 6 || CheckWave == 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void ABGameStateBase::SetIsClear(bool IsClear)

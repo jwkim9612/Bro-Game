@@ -21,6 +21,8 @@ public:
 	void BindPlayerState(class ABPlayerState* PlayerState);
 	void UpdateHPWidget();
 	void PlayWantedAnimation();
+	void PlayShowBonusAnimation();
+	void PlayHideBonusAnimation();
 	void PauseAllAnimation();
 	void ResumeAllAnimation();
 	void ResumeAnimation(TPair<class UWidgetAnimation*, float> Animation);
@@ -52,8 +54,17 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UBWantedWidget* WantedWidget;
 
+	UPROPERTY(meta = (BindWidget))
+	class UBBonusWidget* BonusWidget;
+
 	UPROPERTY()
 	class UWidgetAnimation* WantedAnimation;
+
+	UPROPERTY()
+	class UWidgetAnimation* ShowBonusAnimation;
+
+	UPROPERTY()
+	class UWidgetAnimation* HideBonusAnimation;
 
 	// 애니메이션과 시간
 	UPROPERTY()
@@ -61,4 +72,10 @@ private:
 
 	UPROPERTY()
 	class ABGameStateBase* BGameStateBase;
+
+	UPROPERTY()
+	class ABPlayerController* BPlayerController;
+
+	FTimerHandle BonusTimerHandle;
+	float BonusTimer = 1.0f;
 };

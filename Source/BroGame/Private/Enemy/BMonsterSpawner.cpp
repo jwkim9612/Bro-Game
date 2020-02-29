@@ -5,6 +5,7 @@
 #include "BMonster.h"
 #include "BGameStateBase.h"
 #include "BGameInstance.h"
+#include "BDatas.h"
 #include "UObject/SoftObjectPtr.h"
 
 ABMonsterSpawner::ABMonsterSpawner()
@@ -171,6 +172,6 @@ void ABMonsterSpawner::SetSpawnData(int32 CurrentWave)
 {
 	BCHECK(BGameInstance != nullptr);
 
-	CurrentSpawnData = BGameInstance->GetSpawnDataTable(CurrentWave);
+	CurrentSpawnData = BGameInstance->GetSpawnDataByWave(CurrentWave);
 	BCHECK(CurrentSpawnData != nullptr);
 }

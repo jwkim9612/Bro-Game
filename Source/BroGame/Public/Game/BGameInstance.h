@@ -7,34 +7,6 @@
 #include "Engine/DataTable.h"
 #include "BGameInstance.generated.h"
 
-USTRUCT()
-struct FBSpawnInfo : public FTableRowBase
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TArray<FString> MonsterClassPath;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TArray<int32> Num;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TArray<int32> Damage;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TArray<int32> MaxHP;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TArray<float> Speed;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TArray<float> size;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TArray<int32> DropMoney;
-};
-
 /**
  * 
  */
@@ -47,10 +19,23 @@ class BROGAME_API UBGameInstance : public UGameInstance
 public:
 	UBGameInstance();
 
-	FBSpawnInfo* GetSpawnDataTable(int32 Wave);
+public:
+	virtual void Init() override;
+
+public:
+	struct FBSpawnInfo* GetSpawnDataByWave(int32 Wave);
+	
+	class UDataTable* GetBonusDataTable() const;
+
+public:
+	UPROPERTY()
+	class UBBonusManager* BBonusManager;
 
 private:
 	UPROPERTY()
 	class UDataTable* SpawnDataTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Data")
+	class UDataTable* BonusDataTable;
 
 };

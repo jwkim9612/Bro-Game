@@ -135,10 +135,10 @@ void ABMonster::Dead()
 	BGameStateBase->SubMonsterNum();
 	BMonsterAnimInstance->SetIsDead(true);
 	BPlayerController->GetGamePauseWidget()->FOnMainMenuClicked.AddLambda([this]() -> void {
-		GetWorld()->GetTimerManager().ClearTimer(DeadTimerhandle);
+		GetWorld()->GetTimerManager().ClearTimer(DeadTimerHandle);
 	});
 
-	GetWorld()->GetTimerManager().SetTimer(DeadTimerhandle, FTimerDelegate::CreateLambda([this]() -> void {
+	GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
 		Destroy();
 	}), DeadTimer, false);
 }
