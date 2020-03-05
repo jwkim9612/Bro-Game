@@ -24,6 +24,8 @@ ABPlayer::ABPlayer()
 	SpringArm->SetupAttachment(RootComponent);
 	Camera->SetupAttachment(SpringArm);
 
+	DefaultCanCombo = 1;
+
 	SetControlMode();
 	EndComboState();
 }
@@ -38,7 +40,7 @@ void ABPlayer::BeginPlay()
 	
 	BPlayerController = Cast<ABPlayerController>(GetController());
 	BCHECK(BPlayerController);
-	BPlayerController->GetHUDWidget()->UpdateHPWidget();
+	BPlayerController->GetHUDWidget()->UpdatePlayerHPWidget();
 }
 
 // Called every frame
@@ -80,7 +82,7 @@ float ABPlayer::TakeDamage(float Damage, FDamageEvent const & DamageEvent, ACont
 	float FinalDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
 	PlayParticle(HitParticle);
-	BPlayerState->SetHPToDamage(Damage);
+	BPlayerState->SetHPToDamage(FMath::Clamp<int32>(Damage - BPlayerState->GetCurrentDefense(), 1, Damage));
 
 	return FinalDamage;
 }
@@ -111,15 +113,30 @@ int32 ABPlayer::GetDefaultAttack() const
 	return DefaultAttack;
 }
 
+int32 ABPlayer::GetDefaultDefense() const
+{
+	return DefaultDefense;
+}
+
 float ABPlayer::GetDefaultMaxHP() const
 {
 	return DefaultMaxHP;
 }
 
+int32 ABPlayer::GetDefaultCanCombo() const
+{
+	return DefaultCanCombo;
+}
+
+int32 ABPlayer::GetMaxCombo() const
+{
+	return MaxCombo;
+}
+
 void ABPlayer::SetControlMode()
 {
 	SpringArm->SetRelativeRotation(FRotator(-60.0f, 0.0f, 0.0f));
-	SpringArm->TargetArmLength = 1200.0f;
+	SpringArm->TargetArmLength = 1500.0f;
 	SpringArm->bUsePawnControlRotation = false;
 	SpringArm->bInheritPitch = false;
 	SpringArm->bInheritRoll = false;
@@ -169,7 +186,7 @@ void ABPlayer::Attack()
 		if (CanNextAttack)
 		{
 			// MaxCombo를 가장 높은 MaxCombo보다 적게 설정한 경우 무한으로 콤보를 때리기 때문에 걸어놓음
-			if (CurrentCombo != MaxCombo)
+			if (CurrentCombo != BPlayerState->GetCurrentCanCombo())
 			{
 				OnComboInput = true;
 			}
@@ -216,7 +233,11 @@ void ABPlayer::AttackCheck()
 void ABPlayer::StartComboState()
 {
 	BCHECK(MaxCombo != 0);
-	CurrentCombo = FMath::Clamp(CurrentCombo + 1, 1, MaxCombo);
+
+	int32 CurrentCanCombo = BPlayerState->GetCurrentCanCombo();
+	BCHECK(CurrentCanCombo != 0);
+
+	CurrentCombo = FMath::Clamp(CurrentCombo + 1, 1, CurrentCanCombo);
 	CanNextAttack = true;
 }
 

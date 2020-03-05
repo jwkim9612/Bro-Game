@@ -13,10 +13,13 @@ UCLASS()
 class BROGAME_API ABAIControllerBase : public AAIController
 {
 	GENERATED_BODY()
-	
+
+protected:
+	virtual void OnPossess(APawn* InPawn) override;
+
 public:
 	static const FName DestinationPosKey;
-	static const FName PatrolPosKey;
+	static const FName RandomPosKey;
 	static const FName TargetKey;
 
 	void virtual RunAI();
@@ -25,9 +28,9 @@ public:
 protected:
 	const FVector DestinationLocation = FVector(500.0f, 900.0f, 220.0f);
 
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	UBehaviorTree* BTAsset;
 
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	UBlackboardData* BBAsset;
 };

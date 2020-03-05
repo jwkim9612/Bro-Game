@@ -7,11 +7,10 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 
-void UBWantedWidget::Init(TSubclassOf<class ABBoss> BossClass)
+void UBWantedWidget::Init(class ABBoss* BBoss)
 {
-	ABBoss* Boss = BossClass->GetDefaultObject<ABBoss>();
-	BCHECK(Boss != nullptr);
+	BCHECK(BBoss != nullptr);
 
-	BossImage->SetBrushFromTexture(Boss->GetWantedPhoto());
-	BossName->SetText(FText::FromName(Boss->GetBossName()));
+	BossImage->SetBrushFromTexture(BBoss->GetWantedPhoto());
+	BossName->SetText(FText::FromName(BBoss->GetBossName()));
 }

@@ -22,6 +22,7 @@ protected:
 public:
 	FName GetBossName() const;
 	class UTexture2D* GetWantedPhoto() const;
+	class UBBossAnimInstance* GetAnimInstance() const;
 
 private:
 	void virtual Dead() override;

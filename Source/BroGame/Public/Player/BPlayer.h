@@ -27,7 +27,10 @@ public:
 	UTexture2D* GetTexture() const;
 	FName GetName() const;
 	int32 GetDefaultAttack() const;
+	int32 GetDefaultDefense() const;
 	float GetDefaultMaxHP() const;
+	int32 GetDefaultCanCombo() const;
+	int32 GetMaxCombo() const;
 
 private:
 	void SetControlMode();
@@ -58,14 +61,20 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	FName Name;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Combo")
-	int32 MaxCombo;
-
 	UPROPERTY(EditDefaultsOnly, Category = "stat")
 	int32 DefaultAttack;
 
 	UPROPERTY(EditDefaultsOnly, Category = "stat")
+	int32 DefaultDefense;
+
+	UPROPERTY(EditDefaultsOnly, Category = "stat")
 	float DefaultMaxHP;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Combo")
+	int32 MaxCombo;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Combo")
+	int32 DefaultCanCombo;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Particle", Meta = (AllowPrivateAccess = true))
 	UParticleSystem* HitParticle;

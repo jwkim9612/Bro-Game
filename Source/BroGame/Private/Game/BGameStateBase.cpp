@@ -95,6 +95,16 @@ bool ABGameStateBase::IsBonusWaveClear() const
 	}
 }
 
+bool ABGameStateBase::IsBossWave() const
+{
+	return CurrentWave % 10 == 0 ? true : false;
+}
+
+bool ABGameStateBase::IsBossNextWave() const
+{
+	return CurrentWave % 10 == 1 ? true : false;
+}
+
 void ABGameStateBase::SetIsClear(bool IsClear)
 {
 	bIsClear = IsClear;
@@ -113,6 +123,14 @@ int32 ABGameStateBase::GetCurrentTimeSec() const
 int32 ABGameStateBase::GetCurrentWave() const
 {
 	return CurrentWave;
+}
+
+int32 ABGameStateBase::GetCurrentBossWave() const
+{
+	if (CurrentWave < 10)
+		return 0;
+
+	return CurrentWave / 10;
 }
 
 EWaveType ABGameStateBase::GetCurrentWaveType() const
@@ -186,6 +204,11 @@ void ABGameStateBase::TickPerSecond()
 
 	OnCountDown.Broadcast();
 
+	if (CurrentTimeSec == 5)
+	{
+		OnReadyToMonster.Broadcast();
+	}
+
 	if (IsCountDownDone())
 	{
 		bIsClear = false;
@@ -193,12 +216,14 @@ void ABGameStateBase::TickPerSecond()
 		//++CurrentWave;
 		//ChangeWaveType(CurrentWave);
 
+		OnCountDownDone.Broadcast();
+
 		if (CurrentWaveType == EWaveType::Boss)
 		{
 			OnBossCountDownDone.Broadcast();
 		}
 
-		OnCountDownDone.Broadcast();
+		//OnCountDownDone.Broadcast();
 		CurrentWaveState = EWaveState::PLAY;
 	}
 }

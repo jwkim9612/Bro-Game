@@ -6,14 +6,7 @@
 
 UBGameInstance::UBGameInstance()
 {
-	FString SpawnMonsterDataPath = TEXT("DataTable'/Game/GameData/Spawner/SpawnData.SpawnData'");
 
-	static ConstructorHelpers::FObjectFinder<UDataTable>
-		SpawnMonster_DataTable(*SpawnMonsterDataPath);
-
-	BCHECK(SpawnMonster_DataTable.Succeeded());
-	SpawnDataTable = SpawnMonster_DataTable.Object;
-	BCHECK(SpawnDataTable->GetRowMap().Num() > 0);
 }
 
 void UBGameInstance::Init()
@@ -24,9 +17,14 @@ void UBGameInstance::Init()
 	BBonusManager->Init();
 }
 
-FBSpawnInfo * UBGameInstance::GetSpawnDataByWave(int32 Wave)
+FBSpawnInfo UBGameInstance::GetSpawnDataByWave(int32 Wave)
 {
-	return SpawnDataTable->FindRow<FBSpawnInfo>(*FString::FromInt(Wave), TEXT(""));
+	return *SpawnDataTable->FindRow<FBSpawnInfo>(*FString::FromInt(Wave), TEXT(""));
+}
+
+FBBossSpawnInfo UBGameInstance::GetBossSpawnDataWave(int32 Wave)
+{
+	return *BossSpawnDataTable->FindRow<FBBossSpawnInfo>(*FString::FromInt(Wave), TEXT(""));
 }
 
 UDataTable * UBGameInstance::GetBonusDataTable() const

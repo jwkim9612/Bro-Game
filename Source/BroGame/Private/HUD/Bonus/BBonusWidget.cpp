@@ -3,6 +3,7 @@
 
 #include "BBonusWidget.h"
 #include "BBonusSlot.h"
+#include "BGameStateBase.h"
 #include "Blueprint/WidgetTree.h"
 #include "..\..\..\Public\HUD\Bonus\BBonusWidget.h"
 
@@ -22,14 +23,37 @@ void UBBonusWidget::Init(UBHUDWidget * HUDWidget)
 		if (!BonusSlot) continue;
 		BonusSlot->Init(HUDWidget);
 		Bonuses[SlotNum] = BonusSlot;
+		Bonuses[SlotNum]->OnBonusClicked.AddLambda([this]() -> void {
+			// 여러번 클릭해서 버그를 사용하지 않기위해.
+			SetVisibility(ESlateVisibility::HitTestInvisible);
+		});
+
 		++SlotNum;;
 	}
 }
 
 void UBBonusWidget::SlotsUpdate()
 {
+	SetVisibility(ESlateVisibility::Visible);
+
 	for (auto& Bonus : Bonuses)
 	{
-		Bonus->Update();
+		Bonus->RandomUpdate();
 	}
 }
+
+void UBBonusWidget::SlotsUpdateOnBossWave()
+{
+	SetVisibility(ESlateVisibility::Visible);
+
+	ABGameStateBase* BGameState = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+	// 인덱스는 0부터 시작이기때문에 1을 뺌
+	int32 BossIndex = BGameState->GetCurrentWave() / 10 - 1;
+
+	for (auto& Bonus : Bonuses)
+	{
+		Bonus->RandomUpdateByRarelity(UpdateRarelities[BossIndex]);
+	}
+}
+
+

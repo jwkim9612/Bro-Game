@@ -37,6 +37,8 @@ private:
 	EStat CurrentStat;
 
 	int32 CurrentAttack = 0;
+	int32 CurrentDefense = 0;
 	int32 CurrentMaxHP = 0;
 	int32 CurrentSpeed = 0;
+	int32 CurrentCanCombo = 0;
 };

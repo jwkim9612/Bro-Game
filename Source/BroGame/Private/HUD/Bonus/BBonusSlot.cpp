@@ -33,23 +33,26 @@ void UBBonusSlot::Init(UBHUDWidget * HUDWidget)
 	}
 }
 
-void UBBonusSlot::Update()
+void UBBonusSlot::RandomUpdate()
 {
 	BCHECK(BGameInstance != nullptr);
 	BonusInfo = BGameInstance->BBonusManager->GetRandomBonus();
 	
-	UpdateBonusText();
-	UpdateBonusImage();
-	UpdateColorByRarelity();
+	UpdateWidget();
+}
+
+void UBBonusSlot::RandomUpdateByRarelity(EBonusRarelity Rarelity)
+{
+	BCHECK(BGameInstance != nullptr);
+	BonusInfo = BGameInstance->BBonusManager->GetRandomBonusByRarelity(Rarelity);
+
+	UpdateWidget();
 }
 
 void UBBonusSlot::OnBonusButtonClicked()
 {
 	switch (BonusInfo.Type)
 	{
-	case EBonusType::Attack:
-		BPlayerState->AttackUp(BonusInfo.BonusValue);
-		break;
 	case EBonusType::MaxHP:
 		BPlayerState->MaxHPUp(BonusInfo.BonusValue);
 		break;
@@ -59,8 +62,15 @@ void UBBonusSlot::OnBonusButtonClicked()
 	case EBonusType::Speed:
 		BPlayerState->SpeedUp(BonusInfo.BonusValue);
 		break;
+	case EBonusType::Combo:
+		BPlayerState->ComboUp(BonusInfo.BonusValue);
+		break;
+	default:
+		BLOG(Warning, TEXT("Error!"));
+		break;
 	}
 
+	OnBonusClicked.Broadcast();
 	BHUDWidget->PlayHideBonusAnimation();
 	BPlayerContoller->SetPause(false);
 }
@@ -78,9 +88,6 @@ void UBBonusSlot::UpdateBonusImage()
 
 	switch (BonusInfo.Type)
 	{
-	case EBonusType::Attack:
-		BonusTexture = BGameInstance->BBonusManager->GetAttackTexture();
-		break;
 	case EBonusType::MaxHP:
 		BonusTexture = BGameInstance->BBonusManager->GetMaxHPTexture();
 		break;
@@ -89,6 +96,9 @@ void UBBonusSlot::UpdateBonusImage()
 		break;
 	case EBonusType::Money:
 		BonusTexture = BGameInstance->BBonusManager->GetMoneyTexture();
+		break;
+	case EBonusType::Combo:
+		BonusTexture = BGameInstance->BBonusManager->GetComboTexture();
 		break;
 	}
 
@@ -117,4 +127,11 @@ void UBBonusSlot::UpdateColorByRarelity()
 	}
 
 	ColorByRarelity->SetBrushColor(Color);
+}
+
+void UBBonusSlot::UpdateWidget()
+{
+	UpdateBonusText();
+	UpdateBonusImage();
+	UpdateColorByRarelity();
 }

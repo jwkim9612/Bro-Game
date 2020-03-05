@@ -20,8 +20,12 @@ protected:
 public:
 	void Init(class UBHUDWidget* HUDWidget);
 	void SlotsUpdate();
+	void SlotsUpdateOnBossWave();
 
 private:
 	UPROPERTY(meta = (BindWidget))
 	TArray<class UBBonusSlot*> Bonuses;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Rarelity")
+	TArray<EBonusRarelity> UpdateRarelities;
 };

@@ -36,8 +36,10 @@ UENUM()
 enum class EStat : uint8
 {
 	Attack,
+	Defense,
 	MaxHP,
-	Speed
+	Speed,
+	Combo
 };
 
 UENUM()
@@ -53,7 +55,6 @@ UENUM()
 enum class  EBonusType : uint8
 {
 	Money,
-	Attack,
 	Speed,
 	MaxHP,
 	Combo
@@ -81,10 +82,20 @@ public:
 	TArray<float> Speed;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TArray<float> size;
+	TArray<float> Size;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	TArray<int32> DropMoney;
+};
+
+USTRUCT()
+struct BROGAME_API FBBossSpawnInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+	FString BossClassPath;
 };
 
 USTRUCT()

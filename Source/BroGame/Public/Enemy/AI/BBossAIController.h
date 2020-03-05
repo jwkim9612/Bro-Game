@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "BroGame.h"
 #include "BAIControllerBase.h"
 #include "BBossAIController.generated.h"
 

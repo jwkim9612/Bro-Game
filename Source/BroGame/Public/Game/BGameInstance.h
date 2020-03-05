@@ -23,7 +23,8 @@ public:
 	virtual void Init() override;
 
 public:
-	struct FBSpawnInfo* GetSpawnDataByWave(int32 Wave);
+	struct FBSpawnInfo GetSpawnDataByWave(int32 Wave);
+	struct FBBossSpawnInfo GetBossSpawnDataWave(int32 Wave);
 	
 	class UDataTable* GetBonusDataTable() const;
 
@@ -32,10 +33,12 @@ public:
 	class UBBonusManager* BBonusManager;
 
 private:
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, Category = "Data")
 	class UDataTable* SpawnDataTable;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Data")
-	class UDataTable* BonusDataTable;
+	class UDataTable* BossSpawnDataTable;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Data")
+	class UDataTable* BonusDataTable;
 };

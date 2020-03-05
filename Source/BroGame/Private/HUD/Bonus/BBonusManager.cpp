@@ -9,15 +9,7 @@
 UBBonusManager::UBBonusManager()
 {
 	static ConstructorHelpers::FObjectFinder<UTexture2D>
-		Attack_Texture(TEXT("Texture2D'/Game/GameData/Interface/fight.fight'"));
-
-	if (Attack_Texture.Succeeded())
-	{
-		AttackTexture = Attack_Texture.Object;
-	}
-
-	static ConstructorHelpers::FObjectFinder<UTexture2D>
-		MaxHP_Texture(TEXT("Texture2D'/Game/GameData/Interface/hp.hp'"));
+		MaxHP_Texture(TEXT("Texture2D'/Game/GameData/Interface/MaxHP.MaxHP'"));
 
 	if (MaxHP_Texture.Succeeded())
 	{
@@ -25,7 +17,7 @@ UBBonusManager::UBBonusManager()
 	}
 
 	static ConstructorHelpers::FObjectFinder<UTexture2D>
-		Speed_Texture(TEXT("Texture2D'/Game/GameData/Interface/sprinter.sprinter'"));
+		Speed_Texture(TEXT("Texture2D'/Game/GameData/Interface/Speed.Speed'"));
 
 	if (Speed_Texture.Succeeded())
 	{
@@ -33,13 +25,20 @@ UBBonusManager::UBBonusManager()
 	}
 
 	static ConstructorHelpers::FObjectFinder<UTexture2D>
-		Money_Texture(TEXT("Texture2D'/Game/GameData/Coin/gold.gold'"));
+		Money_Texture(TEXT("Texture2D'/Game/GameData/Coin/Coin.Coin'"));
 
 	if (Money_Texture.Succeeded())
 	{
 		MoneyTexture = Money_Texture.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UTexture2D>
+		Combo_Texture(TEXT("Texture2D'/Game/GameData/Interface/Combo.Combo'"));
+
+	if (Combo_Texture.Succeeded())
+	{
+		ComboTexture = Combo_Texture.Object;
+	}
 }
 
 void UBBonusManager::Init()
@@ -86,34 +85,18 @@ FBBonusInfo UBBonusManager::GetRandomBonus()
 	
 	EBonusRarelity RandomRarelity = GetRarelityByNum(RandomNum);
 
+	return GetRandomBonusInfo(RandomRarelity);
 
-	int32 RandomIndex;
-	switch (RandomRarelity)
-	{
-	case EBonusRarelity::Normal:
-		RandomIndex = UKismetMathLibrary::RandomIntegerInRange(0, Normals.Num()-1);
-		return Normals[RandomIndex];
-		break;
-	case EBonusRarelity::Rare:
-		RandomIndex = UKismetMathLibrary::RandomIntegerInRange(0, Rares.Num() - 1);
-		return Rares[RandomIndex];
-		break;
-	case EBonusRarelity::Unique:
-		RandomIndex = UKismetMathLibrary::RandomIntegerInRange(0, Uniques.Num() - 1);
-		return Uniques[RandomIndex];
-	case EBonusRarelity::Legend:
-		RandomIndex = UKismetMathLibrary::RandomIntegerInRange(0, Legends.Num() - 1);
-		return Legends[RandomIndex];
-		break;
-	}
-
-	// 예외처리해주기. 나중에 할것.
-	return FBBonusInfo();
+	//// 예외처리해주기. 나중에 할것.
+	//return FBBonusInfo();
 }
 
-UTexture2D * UBBonusManager::GetAttackTexture() const
+FBBonusInfo UBBonusManager::GetRandomBonusByRarelity(EBonusRarelity Rarelity)
 {
-	return AttackTexture;
+	return GetRandomBonusInfo(Rarelity);
+
+	//// 예외처리해주기. 나중에 할것.
+	//return FBBonusInfo();
 }
 
 UTexture2D * UBBonusManager::GetMaxHPTexture() const
@@ -129,6 +112,11 @@ UTexture2D * UBBonusManager::GetSpeedTexture() const
 UTexture2D * UBBonusManager::GetMoneyTexture() const
 {
 	return MoneyTexture;
+}
+
+UTexture2D * UBBonusManager::GetComboTexture() const
+{
+	return ComboTexture;
 }
 
 bool UBBonusManager::IsInNormalRange(float Num)
@@ -205,4 +193,30 @@ EBonusRarelity UBBonusManager::GetRarelityByNum(float Num)
 
 	// 후에 바꿔야함. try catch 등.
 	return EBonusRarelity::Normal;
+}
+
+FBBonusInfo UBBonusManager::GetRandomBonusInfo(EBonusRarelity Rarelity)
+{
+	int32 RandomIndex;
+	switch (Rarelity)
+	{
+	case EBonusRarelity::Normal:
+		RandomIndex = UKismetMathLibrary::RandomIntegerInRange(0, Normals.Num() - 1);
+		return Normals[RandomIndex];
+		break;
+	case EBonusRarelity::Rare:
+		RandomIndex = UKismetMathLibrary::RandomIntegerInRange(0, Rares.Num() - 1);
+		return Rares[RandomIndex];
+		break;
+	case EBonusRarelity::Unique:
+		RandomIndex = UKismetMathLibrary::RandomIntegerInRange(0, Uniques.Num() - 1);
+		return Uniques[RandomIndex];
+	case EBonusRarelity::Legend:
+		RandomIndex = UKismetMathLibrary::RandomIntegerInRange(0, Legends.Num() - 1);
+		return Legends[RandomIndex];
+		break;
+	}
+
+	// 예외처리해주기. 나중에 할것.
+	return FBBonusInfo();
 }

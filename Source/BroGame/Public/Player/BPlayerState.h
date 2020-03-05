@@ -6,11 +6,15 @@
 #include "GameFramework/PlayerState.h"
 #include "BPlayerState.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
-DECLARE_MULTICAST_DELEGATE(FOnMoneyChangedDelegate);
+//DECLARE_MULTICAST_DELEGATE(FOnStatChangedDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnAttackChangedDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnDefenseChangedDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnMaxHPChangedDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnSpeedChangedDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnCanComboChangedDelegate);
+
+DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnMoneyChangedDelegate);
 
 // PlayerState 는 네트워크 게임에서 매우 유용한 클래스이다. 
 // 이름에서 그 용도를 짐작할 수 있듯이 게임 플레이어의 모든 상태를 저장하고 다른 클라이언트에게 까지 전달할 수 있는 특징을 가지고 있다
@@ -37,21 +41,30 @@ public:
 	void SetHPToDamage(int32 Damage);
 	float GetHPRatio() const;
 	int32 GetCurrentAttack() const;
+	int32 GetCurrentDefense() const;
 	int32 GetCurrentHP() const;
 	int32 GetCurrentMaxHP() const;
 	int32 GetCurrentSpeed() const;
 	int32 GetCurrentMoney() const;
+	int32 GetCurrentCanCombo() const;
 	void AttackUp(int32 IncreaseAttack);
+	void DefenseUp(int32 IncreaseDefense);
 	void MaxHPUp(int32 IncreaseHP);
 	void SpeedUp(int32 IncreaseSpeed);
+	void ComboUp(int32 IncreaseCombo);
 	void AddMoney(int32 IncreaseMoney);
 	void UseMoney(int32 UsedMoney);
 
-	FOnHPChangedDelegate OnHPChanged;
-	FOnMoneyChangedDelegate OnMoneyChanged;
+
+	//FOnStatChangedDelegate OnStatChanged;
 	FOnAttackChangedDelegate OnAttackChanged;
+	FOnDefenseChangedDelegate OnDefenseChanged;
 	FOnMaxHPChangedDelegate OnMaxHPChanged;
 	FOnSpeedChangedDelegate OnSpeedChanged;
+	FOnCanComboChangedDelegate OnCanComboChanged;
+
+	FOnHPChangedDelegate OnHPChanged;
+	FOnMoneyChangedDelegate OnMoneyChanged;
 
 private:
 	UPROPERTY()
@@ -60,6 +73,9 @@ private:
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
 	int32 CurrentAttack;
 	
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
+	int32 CurrentDefense;
+
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
 	int32 CurrentMaxHP;
 
@@ -71,4 +87,7 @@ private:
 
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
 	int32 CurrentSpeed;
+
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
+	int32 CurrentCanCombo;
 };

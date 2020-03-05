@@ -8,12 +8,28 @@
 #include "BPlayerController.h"
 #include "BGameStateBase.h"
 #include "BGamePauseWidget.h"
+#include "BHUDWidget.h"
 
 void ABBoss::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//BAIController = Cast<ABBossAIController>(GetController());
 	BAIController = Cast<ABBossAIController>(GetController());
+	//BPlayerController->GetHUDWidget()->OnStartCinematic.AddLambda([this]() -> void {
+	//	BAIController->StopAI();
+	//});
+
+	//BPlayerController->GetHUDWidget()->OnEndCinematic.AddLambda([this]() -> void {
+	//	BAIController->RunAI();
+	//});
+
+	if (bIsForCinema)
+	{
+		return;
+	}
+
+	BPlayerController->GetHUDWidget()->BindBossHPWidget(this);
 }
 
 void ABBoss::PostInitializeComponents()
@@ -39,9 +55,6 @@ float ABBoss::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, A
 		if (InstigatorController != nullptr)
 		{
 			InstigatorController->MonsterKill(this);
-			//BPlayerController->GetGamePauseWidget()->FOnMainMenuClicked.AddLambda([this]() -> void {
-			//	GetWorld()->GetTimerManager().ClearTimer(DeadTimerhandle);
-			//});
 		}
 	}
 
@@ -56,6 +69,11 @@ FName ABBoss::GetBossName() const
 UTexture2D* ABBoss::GetWantedPhoto() const
 {
 	return WantedPhoto;
+}
+
+UBBossAnimInstance * ABBoss::GetAnimInstance() const
+{
+	return BBossAnimInstance;
 }
 
 void ABBoss::Dead()

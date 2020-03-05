@@ -34,18 +34,20 @@ void ABEnemyBase::BeginPlay()
 	
 	BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
 	BPlayerController = Cast<ABPlayerController>(UGameplayStatics::GetGameInstance(GetWorld())->GetPrimaryPlayerController());
+	
+	if (bIsForCinema)
+	{
+		return;
+	}
+
+	BGameStateBase->AddMonsterNum();
 }
 
 void ABEnemyBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	//BEnemyAnimInstance = Cast<UBMonsterAnimInstance>(GetMesh()->GetAnimInstance());
-	//BCHECK(BEnemyAnimInstance != nullptr);
 
-	//BEnemyAnimInstance->OnMontageEnded.AddDynamic(this, &ABEnemyBase::OnAttackMontageEnded);
-	//BEnemyAnimInstance->OnHitAttack.AddUObject(this, &ABEnemyBase::AttackCheck);
-	//CurrentStat->OnHPIsZero.AddUObject(this, &ABEnemyBase::Dead);
 }
 
 float ABEnemyBase::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)

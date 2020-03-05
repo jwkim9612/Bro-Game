@@ -32,4 +32,5 @@ void ABMonsterAIController::OnPossess(APawn * InPawn)
 	Super::OnPossess(InPawn);
 
 	RunAI();
+
 }

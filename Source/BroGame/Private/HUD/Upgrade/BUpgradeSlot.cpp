@@ -73,14 +73,8 @@ void UBUpgradeSlot::ChangeStat()
 	case EStat::Attack:
 		BPlayerState->AttackUp(IncreaseStat);
 		break;
-	case EStat::MaxHP:
-		BPlayerState->MaxHPUp(IncreaseStat);
-		break;
-	case EStat::Speed:
-		BPlayerState->SpeedUp(IncreaseStat);
-		break;
-	default:
-
+	case EStat::Defense:
+		BPlayerState->DefenseUp(IncreaseStat);
 		break;
 	}
 }
@@ -92,14 +86,8 @@ void UBUpgradeSlot::SetIncreaseStatText(int32 Stat)
 	case EStat::Attack:
 		IncreaseStatText->SetText(FText::FromString(FString::Printf(TEXT("Attack + %d"), Stat)));
 		break;
-	case EStat::MaxHP:
-		IncreaseStatText->SetText(FText::FromString(FString::Printf(TEXT("MaxHP + %d"), Stat)));
-		break;
-	case EStat::Speed:
-		IncreaseStatText->SetText(FText::FromString(FString::Printf(TEXT("Speed + %d"), Stat)));
-		break;
-	default:
-
+	case EStat::Defense:
+		IncreaseStatText->SetText(FText::FromString(FString::Printf(TEXT("Defense + %d"), Stat)));
 		break;
 	}
 }

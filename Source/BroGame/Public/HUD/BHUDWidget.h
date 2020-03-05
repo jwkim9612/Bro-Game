@@ -19,7 +19,9 @@ protected:
 
 public:
 	void BindPlayerState(class ABPlayerState* PlayerState);
-	void UpdateHPWidget();
+	void BindBossHPWidget(class ABBoss* BBoss);
+	void UpdatePlayerHPWidget();
+	void UpdateBossHPWidget();
 	void PlayWantedAnimation();
 	void PlayShowBonusAnimation();
 	void PlayHideBonusAnimation();
@@ -31,10 +33,13 @@ public:
 	void SetCanNotClickButton();
 	void SetCanClickButton();
 
+public:
+
 private:
 
 private:
 	TWeakObjectPtr<class ABPlayerState> CurrentPlayerState;
+	TWeakObjectPtr<class UBEnemyStatComponent> CurrentBossStat;
 
 	UPROPERTY(meta = (BindWidget))
 	class UBTimerWidget* TimerWidget;
@@ -43,7 +48,7 @@ private:
 	class UBWaveWidget* WaveWidget;
 
 	UPROPERTY(meta = (BindWidget))
-	class UBPlayerHPWidget* HPBarWidget;
+	class UBPlayerHPWidget* PlayerHPBarWidget;
 
 	UPROPERTY(meta = (BindWidget))
 	class UBUpgradeWidget* UpgradeWidget;
@@ -56,6 +61,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UBBonusWidget* BonusWidget;
+
+	UPROPERTY(meta = (BindWidget))
+	class UBBossHPWidget* BossHPWidget;
 
 	UPROPERTY()
 	class UWidgetAnimation* WantedAnimation;
@@ -78,4 +86,11 @@ private:
 
 	FTimerHandle BonusTimerHandle;
 	float BonusTimer = 1.0f;
+
+	// ½Ã³×¸¶Æ½
+	UPROPERTY()
+	class ABLevelScriptActor* BLevelScriptActor;
+
+	FTimerHandle SequenceTimerHandle;
+	float SequenceTimer = 1.0f;
 };

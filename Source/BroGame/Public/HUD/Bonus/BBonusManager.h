@@ -22,11 +22,12 @@ public:
 public:
 	void Init();
 	struct FBBonusInfo GetRandomBonus();
+	struct FBBonusInfo GetRandomBonusByRarelity(EBonusRarelity Rarelity);
 
-	class UTexture2D* GetAttackTexture() const;
 	class UTexture2D* GetMaxHPTexture() const;
 	class UTexture2D* GetSpeedTexture() const;
 	class UTexture2D* GetMoneyTexture() const;
+	class UTexture2D* GetComboTexture() const;
 
 private:
 	bool IsInNormalRange(float Num);
@@ -34,6 +35,7 @@ private:
 	bool IsInUniqueRange(float Num);
 	bool IsInLegendRange(float Num);
 	EBonusRarelity GetRarelityByNum(float Num);
+	struct FBBonusInfo GetRandomBonusInfo(EBonusRarelity Rarelity);
 
 private:
 	TArray<struct FBBonusInfo*> AllBonusInfo;
@@ -51,9 +53,6 @@ private:
 	TArray<struct FBBonusInfo> Legends;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Image")
-	class UTexture2D* AttackTexture;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Image")
 	class UTexture2D* MaxHPTexture;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Image")
@@ -64,6 +63,4 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Image")
 	class UTexture2D* ComboTexture;
-
-
 };

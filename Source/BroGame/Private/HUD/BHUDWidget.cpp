@@ -12,6 +12,11 @@
 #include "BWantedWidget.h"
 #include "BBonusWidget.h"
 #include "BPlayerController.h"
+#include "BEnemyStatComponent.h"
+#include "BBoss.h"
+#include "BBossHPWidget.h"
+#include "BLevelScriptActor.h"
+#include "LevelSequencePlayer.h"
 #include "Engine/public/EngineUtils.h"
 
 void UBHUDWidget::NativeConstruct()
@@ -20,6 +25,8 @@ void UBHUDWidget::NativeConstruct()
 
 	BPlayerController = Cast<ABPlayerController>(GetOwningPlayer());
 	BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+	BLevelScriptActor = Cast<ABLevelScriptActor>(GetWorld()->GetLevelScriptActor());
+
 	BGameStateBase->OnCountDownStart.AddLambda([this]() -> void {
 		TimerWidget->SetVisibility(ESlateVisibility::Visible);
 	});
@@ -52,9 +59,9 @@ void UBHUDWidget::NativeConstruct()
 	}
 
 	ABBossSpawner* BossSpawner;
-	for (const auto& entity : FActorRange(GetWorld()))
+	for (TActorIterator<ABBossSpawner> It(GetWorld()); It; ++It)
 	{
-		BossSpawner = Cast<ABBossSpawner>(entity);
+		BossSpawner = Cast<ABBossSpawner>(*It);
 		if (BossSpawner != nullptr)
 		{
 			BLOG(Warning, TEXT("Find BossSpawner"));
@@ -62,18 +69,52 @@ void UBHUDWidget::NativeConstruct()
 		}
 	}
 
+
 	BGameStateBase->OnReadyToBoss.AddLambda([this, BossSpawner]() -> void {
-		int32 BossIndex = (BGameStateBase->GetCurrentWave() / 10) - 1;
-		WantedWidget->Init(BossSpawner->GetBosses()[BossIndex]);
+		BossSpawner->InitBossData();
+		WantedWidget->Init(BossSpawner->GetCurrentBoss());
 		PlayWantedAnimation();
 	});
 
 	BGameStateBase->OnBonusWaveClear.AddLambda([this]() -> void {
 		GetWorld()->GetTimerManager().SetTimer(BonusTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
-			BonusWidget->SlotsUpdate();
+			// 보너스탄 클리어후에 탄이 넘어가기때문에 바로전 웨이브가 Boss였는지 확인해야함.
+			if (BGameStateBase->IsBossNextWave())
+			{
+				BonusWidget->SlotsUpdateOnBossWave();
+			}
+			else
+			{
+				BonusWidget->SlotsUpdate();
+			}
+
 			PlayShowBonusAnimation();
 			BPlayerController->SetPause(true);
 		}), BonusTimer, false);
+	});
+
+	BGameStateBase->OnIsBossDead.AddLambda([this]() -> void {
+		BossHPWidget->SetVisibility(ESlateVisibility::Collapsed);
+	});
+
+	BGameStateBase->OnBossCountDownDone.AddLambda([this]() -> void {
+		//
+		if (BLevelScriptActor != nullptr)
+		{
+			if (BLevelScriptActor->PlayBossCinematic(BGameStateBase->GetCurrentBossWave()))
+			{
+				SetVisibility(ESlateVisibility::Hidden);
+
+				SequenceTimer = BLevelScriptActor->GetLevelSequencePlayer()->GetDuration().AsSeconds();				
+				GetWorld()->GetTimerManager().SetTimer(SequenceTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
+					SetVisibility(ESlateVisibility::Visible);
+					BLevelScriptActor->OnEndCinematic.Broadcast();
+				}), SequenceTimer, false);
+			}
+		}
+		//
+
+		BossHPWidget->SetVisibility(ESlateVisibility::Visible);
 	});
 
 	UpgradeWidget->Init();
@@ -86,14 +127,31 @@ void UBHUDWidget::BindPlayerState(ABPlayerState * PlayerState)
 	BCHECK(PlayerState != nullptr);
 
 	CurrentPlayerState = PlayerState;
-	PlayerState->OnHPChanged.AddUObject(this, &UBHUDWidget::UpdateHPWidget);
-	PlayerState->OnMaxHPChanged.AddUObject(this, &UBHUDWidget::UpdateHPWidget);
+	PlayerState->OnHPChanged.AddUObject(this, &UBHUDWidget::UpdatePlayerHPWidget);
+	PlayerState->OnMaxHPChanged.AddUObject(this, &UBHUDWidget::UpdatePlayerHPWidget);
 }
 
-void UBHUDWidget::UpdateHPWidget()
+void UBHUDWidget::BindBossHPWidget(ABBoss * BBoss)
 {
-	HPBarWidget->SetHPBarPercent(CurrentPlayerState->GetHPRatio());
-	HPBarWidget->SetHPText(FText::FromString(FString::Printf(TEXT("%.0f / %.0f"), static_cast<float>(CurrentPlayerState->GetCurrentHP()), static_cast<float>(CurrentPlayerState->GetCurrentMaxHP()))));
+	BCHECK(BBoss != nullptr);
+
+	CurrentBossStat = BBoss->GetCurrentStat();
+	CurrentBossStat->OnHPChanged.AddUObject(this, &UBHUDWidget::UpdateBossHPWidget);
+	BossHPWidget->SetBossHP(1.0f);
+	BossHPWidget->SetBossImage(BBoss->GetWantedPhoto());
+}
+
+void UBHUDWidget::UpdatePlayerHPWidget()
+{
+	BCHECK(CurrentPlayerState != nullptr);
+	PlayerHPBarWidget->SetHPBarPercent(CurrentPlayerState->GetHPRatio());
+	PlayerHPBarWidget->SetHPText(FText::FromString(FString::Printf(TEXT("%.0f / %.0f"), static_cast<float>(CurrentPlayerState->GetCurrentHP()), static_cast<float>(CurrentPlayerState->GetCurrentMaxHP()))));
+}
+
+void UBHUDWidget::UpdateBossHPWidget()
+{
+	BCHECK(CurrentBossStat != nullptr);
+	BossHPWidget->SetBossHP(CurrentBossStat->GetHPRatio());
 }
 
 void UBHUDWidget::PlayWantedAnimation()

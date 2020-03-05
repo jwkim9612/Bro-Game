@@ -62,6 +62,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "stat")
 	int32 DropMoney;
 
+	UPROPERTY(EditAnywhere, Category = "Cinema")
+	bool bIsForCinema = false;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+	bool bStopAI;
+
 	UPROPERTY()
 	class ABAIControllerBase* BAIController;
 

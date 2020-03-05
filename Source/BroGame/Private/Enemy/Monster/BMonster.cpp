@@ -9,6 +9,7 @@
 #include "BMonsterHPWidget.h"
 #include "BPlayerController.h"
 #include "BGamePauseWidget.h"
+#include "BHUDWidget.h"
 #include "Components/WidgetComponent.h"
 #include "COmponents/BoxComponent.h"
 
@@ -46,7 +47,17 @@ void ABMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//BAIController = Cast<ABMonsterAIController>(GetController());
+
 	BAIController = Cast<ABMonsterAIController>(GetController());
+	//BPlayerController->GetHUDWidget()->OnStartCinematic.AddLambda([this]() -> void {
+	//	BAIController->StopAI();
+	//});
+
+	//BPlayerController->GetHUDWidget()->OnEndCinematic.AddLambda([this]() -> void {
+	//	BAIController->RunAI();
+	//});
+
 	HPWidget->SetVisibility(false);
 
 	UBMonsterHPWidget* BMonsterHPWidget = Cast<UBMonsterHPWidget>(HPWidget->GetUserWidgetObject());
@@ -80,9 +91,6 @@ float ABMonster::TakeDamage(float Damage, FDamageEvent const & DamageEvent, ACon
 		if (InstigatorController != nullptr)
 		{
 			InstigatorController->MonsterKill(this);
-			//BPlayerController->GetGamePauseWidget()->FOnMainMenuClicked.AddLambda([this]() -> void {
-			//	GetWorld()->GetTimerManager().ClearTimer(DeadTimerhandle);
-			//});
 		}
 
 		return FinalDamage;

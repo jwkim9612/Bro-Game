@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "BBonusSlot.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnBonusClickedDelegate);
+
 /**
  * 
  */
@@ -19,10 +21,15 @@ protected:
 
 public:
 	void Init(class UBHUDWidget* HUDWidget);
-	void Update();
+	void RandomUpdate();
+	void RandomUpdateByRarelity(EBonusRarelity Rarelity);
 	void UpdateBonusText();
 	void UpdateBonusImage();
 	void UpdateColorByRarelity();
+	void UpdateWidget();
+
+public:
+	FOnBonusClickedDelegate OnBonusClicked;
 
 private:
 	UFUNCTION()

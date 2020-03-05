@@ -23,8 +23,10 @@ void ABPlayerState::InitPlayerData(APawn* Pawn)
 	BPlayer = Cast<ABPlayer>(Pawn);
 	BCHECK(BPlayer != nullptr);
 	CurrentAttack = BPlayer->GetDefaultAttack();
+	CurrentDefense = BPlayer->GetDefaultDefense();
 	CurrentMaxHP = BPlayer->GetDefaultMaxHP();
 	CurrentSpeed = BPlayer->GetCharacterMovement()->GetMaxSpeed();
+	CurrentCanCombo = BPlayer->GetDefaultCanCombo();
 	CurrentHP = CurrentMaxHP;
 	CurrentMoney = 0;
 }
@@ -50,6 +52,11 @@ int32 ABPlayerState::GetCurrentAttack() const
 	return CurrentAttack;
 }
 
+int32 ABPlayerState::GetCurrentDefense() const
+{
+	return CurrentDefense;
+}
+
 int32 ABPlayerState::GetCurrentHP() const
 {
 	return CurrentHP;
@@ -70,17 +77,32 @@ int32 ABPlayerState::GetCurrentMoney() const
 	return CurrentMoney;
 }
 
+int32 ABPlayerState::GetCurrentCanCombo() const
+{
+	return CurrentCanCombo;
+}
+
 void ABPlayerState::AttackUp(int32 IncreaseAttack)
 {
 	BCHECK(IncreaseAttack >= 0);
 	CurrentAttack += IncreaseAttack;
+	//OnStatChanged.Broadcast();
 	OnAttackChanged.Broadcast();
+}
+
+void ABPlayerState::DefenseUp(int32 IncreaseDefense)
+{
+	BCHECK(IncreaseDefense >= 0);
+	CurrentDefense += IncreaseDefense;
+	//OnStatChanged.Broadcast();
+	OnDefenseChanged.Broadcast();
 }
 
 void ABPlayerState::MaxHPUp(int32 IncreaseHP)
 {
 	BCHECK(IncreaseHP >= 0);
 	CurrentMaxHP += IncreaseHP;
+	//OnStatChanged.Broadcast();
 	OnMaxHPChanged.Broadcast();
 }
 
@@ -89,7 +111,17 @@ void ABPlayerState::SpeedUp(int32 IncreaseSpeed)
 	BCHECK(IncreaseSpeed >= 0);
 	CurrentSpeed += IncreaseSpeed;
 	BPlayer->GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
+	//OnStatChanged.Broadcast();
 	OnSpeedChanged.Broadcast();
+}
+
+void ABPlayerState::ComboUp(int32 IncreaseCombo)
+{
+	BCHECK(IncreaseCombo >= 0);
+	BCHECK(CurrentCanCombo + IncreaseCombo <= BPlayer->GetMaxCombo());
+	CurrentCanCombo += IncreaseCombo;
+	//OnStatChanged.Broadcast();
+	OnCanComboChanged.Broadcast();
 }
 
 void ABPlayerState::AddMoney(int32 IncreaseMoney)

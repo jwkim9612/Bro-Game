@@ -7,6 +7,7 @@ DECLARE_MULTICAST_DELEGATE(FOnCountDownDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnCountDownDoneDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnCurrentWaveChangeDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnReadyToBossDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnReadyToMonsterDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnBossCountDownDoneDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnIsBossDeadDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnBonusWaveClearDelegate);
@@ -35,10 +36,13 @@ public:
 	bool IsCountDownDone() const;
 	bool IsStageClear() const;
 	bool IsBonusWaveClear() const;
+	bool IsBossWave() const;
+	bool IsBossNextWave() const;
 	void SetIsClear(bool IsClear);
 	int32 GetCurrentTimeMin() const;
 	int32 GetCurrentTimeSec() const;
 	int32 GetCurrentWave() const;
+	int32 GetCurrentBossWave() const;
 	EWaveType GetCurrentWaveType() const;
 
 	void AddMonsterNum();
@@ -58,6 +62,7 @@ public:
 	FOnCountDownDoneDelegate OnCountDownDone;
 	FOnCurrentWaveChangeDelegate OnCurrentWaveChange;
 	FOnReadyToBossDelegate OnReadyToBoss;
+	FOnReadyToMonsterDelegate OnReadyToMonster;
 	FOnBossCountDownDoneDelegate OnBossCountDownDone;
 	FOnIsBossDeadDelegate OnIsBossDead;
 	FOnBonusWaveClearDelegate OnBonusWaveClear;

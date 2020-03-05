@@ -47,10 +47,4 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UVerticalBox* VerticalBox;
-
-	//UPROPERTY(meta = (BindWidget))
-	//class UButton* CloseButton;
-
-	//UPROPERTY()
-	//class UBUpgradeWidget* BUpgradeWidget;
 };
