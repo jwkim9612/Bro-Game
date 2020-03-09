@@ -3,7 +3,6 @@
 
 #include "BAIControllerBase.h"
 #include "BGameStateBase.h"
-#include "BLevelScriptActor.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BlackboardData.h"
@@ -16,28 +15,8 @@ void ABAIControllerBase::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
-	ABGameStateBase* BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+	BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
 	BCHECK(BGameStateBase);
-
-	if (BGameStateBase->IsBossWave())
-	{
-		ABLevelScriptActor* BLevelScriptActor = Cast<ABLevelScriptActor>(GetWorld()->GetLevelScriptActor());
-		if (BLevelScriptActor != nullptr)
-		{
-			BLevelScriptActor->OnStartCinematic.AddLambda([this]() -> void {
-				StopAI();
-			});
-
-			BLevelScriptActor->OnEndCinematic.AddLambda([this]() -> void {
-				RunAI();
-			});
-
-		}
-		else
-		{
-			BLOG(Warning, TEXT("No Controller"));
-		}
-	}
 }
 
 void ABAIControllerBase::RunAI()

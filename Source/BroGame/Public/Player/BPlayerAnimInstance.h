@@ -21,6 +21,7 @@ public:
 	UBPlayerAnimInstance();
 
 protected:
+	virtual void NativeBeginPlay() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 public:
@@ -36,9 +37,15 @@ private:
 	void AnimNotify_CanNextAttack();
 
 	UFUNCTION()
-	void AnimNotify_HitAttack();
+	void AnimNotify_StartHit();
+
+	UFUNCTION()
+	void AnimNotify_EndHit();
 
 private:
+	UPROPERTY()
+	class ABPlayer* PlayerCharacter;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	float CurrentSpeed;
 

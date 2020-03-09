@@ -25,7 +25,7 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Montage")
-	UAnimMontage* SpawnMontage;
+	UAnimMontage* Montage;
 
 	FTimerHandle MontageEndTimerHandle;
 

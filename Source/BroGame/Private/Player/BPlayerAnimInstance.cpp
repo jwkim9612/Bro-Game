@@ -6,14 +6,21 @@
 
 UBPlayerAnimInstance::UBPlayerAnimInstance()
 {
+	
+}
 
+void UBPlayerAnimInstance::NativeBeginPlay()
+{
+	Super::NativeBeginPlay();
+
+	PlayerCharacter = Cast<ABPlayer>(TryGetPawnOwner());
 }
 
 void UBPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	ABPlayer* PlayerCharacter = Cast<ABPlayer>(TryGetPawnOwner());
+	//PlayerCharacter = Cast<ABPlayer>(TryGetPawnOwner());
 	if (PlayerCharacter != nullptr)
 	{
 		CurrentSpeed	= PlayerCharacter->GetVelocity().Size();
@@ -26,9 +33,14 @@ void UBPlayerAnimInstance::AnimNotify_CanNextAttack()
 	OnCanNextAttack.Broadcast();
 }
 
-void UBPlayerAnimInstance::AnimNotify_HitAttack()
+void UBPlayerAnimInstance::AnimNotify_StartHit()
 {
-	OnHitAttack.Broadcast();
+	PlayerCharacter->SetIsHitting(true);
+}
+
+void UBPlayerAnimInstance::AnimNotify_EndHit()
+{
+	PlayerCharacter->SetIsHitting(false);
 }
 
 void UBPlayerAnimInstance::PlayGroundAttackMontage()

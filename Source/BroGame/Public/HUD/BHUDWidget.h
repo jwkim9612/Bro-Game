@@ -33,6 +33,8 @@ public:
 	void SetCanNotClickButton();
 	void SetCanClickButton();
 
+	void OnCinemaEnded();
+
 public:
 
 private:

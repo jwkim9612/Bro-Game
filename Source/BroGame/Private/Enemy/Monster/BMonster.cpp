@@ -77,7 +77,7 @@ void ABMonster::PostInitializeComponents()
 	BCHECK(BMonsterAnimInstance != nullptr);
 	
 	BMonsterAnimInstance->OnMontageEnded.AddDynamic(this, &ABMonster::OnAttackMontageEnded);
-	BMonsterAnimInstance->OnHitAttack.AddUObject(this, &ABMonster::AttackCheck);
+	//BMonsterAnimInstance->OnHitAttack.AddUObject(this, &ABMonster::AttackCheck);
 	CurrentStat->OnHPIsZero.AddUObject(this, &ABMonster::Dead);
 }
 
@@ -140,7 +140,7 @@ void ABMonster::Dead()
 {
 	Super::Dead();
 
-	BGameStateBase->SubMonsterNum();
+//	BGameStateBase->SubMonsterNum();
 	BMonsterAnimInstance->SetIsDead(true);
 	BPlayerController->GetGamePauseWidget()->FOnMainMenuClicked.AddLambda([this]() -> void {
 		GetWorld()->GetTimerManager().ClearTimer(DeadTimerHandle);

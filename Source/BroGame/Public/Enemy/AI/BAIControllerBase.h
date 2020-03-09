@@ -33,4 +33,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	UBlackboardData* BBAsset;
+
+	UPROPERTY()
+	class ABGameStateBase* BGameStateBase;
 };

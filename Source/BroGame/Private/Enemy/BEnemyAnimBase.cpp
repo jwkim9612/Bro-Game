@@ -8,7 +8,6 @@ void UBEnemyAnimBase::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	Monster = Cast<ABEnemyBase>(TryGetPawnOwner());
 	if (Monster != nullptr)
 	{
 		CurrentSpeed = Monster->GetVelocity().Size();
@@ -21,9 +20,26 @@ void UBEnemyAnimBase::NativeUpdateAnimation(float DeltaSeconds)
 	}
 }
 
-void UBEnemyAnimBase::AnimNotify_HitAttack()
+void UBEnemyAnimBase::NativeBeginPlay()
 {
-	OnHitAttack.Broadcast();
+	Super::NativeBeginPlay();
+
+	Monster = Cast<ABEnemyBase>(TryGetPawnOwner());
+}
+
+//void UBEnemyAnimBase::AnimNotify_HitAttack()
+//{
+//	OnHitAttack.Broadcast();
+//}
+
+void UBEnemyAnimBase::AnimNotify_StartHit()
+{
+	Monster->SetIsHitting(true);
+}
+
+void UBEnemyAnimBase::AnimNotify_EndHit()
+{
+	Monster->SetIsHitting(false);
 }
 
 void UBEnemyAnimBase::SetIsDead(bool IsDead)

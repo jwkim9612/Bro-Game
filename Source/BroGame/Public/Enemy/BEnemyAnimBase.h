@@ -18,9 +18,16 @@ class BROGAME_API UBEnemyAnimBase : public UAnimInstance
 	
 protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+	virtual void NativeBeginPlay() override;
 	
+	//UFUNCTION()
+	//void AnimNotify_HitAttack();
+
 	UFUNCTION()
-	void AnimNotify_HitAttack();
+	void AnimNotify_StartHit();
+
+	UFUNCTION()
+	void AnimNotify_EndHit();
 
 public:
 	void SetIsDead(bool IsDead); 
@@ -30,6 +37,9 @@ public:
 	FOnHitAttackDelegate OnHitAttack;
 
 protected:
+	UPROPERTY()
+	class ABEnemyBase* Monster;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	float CurrentSpeed;
 
@@ -38,7 +48,4 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;
-
-	UPROPERTY()
-	class ABEnemyBase* Monster;
 };

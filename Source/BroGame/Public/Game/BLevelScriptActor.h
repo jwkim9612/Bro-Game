@@ -33,10 +33,18 @@ public:
 public:
 	UPROPERTY()
 	class ULevelSequencePlayer* BLevelSequencePlayer;
-	
+
 	UPROPERTY(EditAnywhere, Category = "Actor")
 	TArray<class ULevelSequence*> BLevelSequence;
 
 	UPROPERTY(EditAnywhere, Category = "Actor")
 	TArray<class ALevelSequenceActor*> BLevelSequenceActor;
+
+private:
+	void OnCinemaEnded();
+
+private:
+	FTimerHandle SequenceTimerHandle;
+	float SequenceTimer;
+	
 };

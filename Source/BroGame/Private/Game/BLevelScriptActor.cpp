@@ -12,7 +12,6 @@ void ABLevelScriptActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-
 }
 
 ULevelSequencePlayer * ABLevelScriptActor::GetLevelSequencePlayer() const
@@ -37,10 +36,17 @@ bool ABLevelScriptActor::PlayBossCinematic(int32 BossWave)
 
 	if (BLevelSequencePlayer != nullptr)
 	{
+		SequenceTimer = BLevelSequencePlayer->GetDuration().AsSeconds() + 0.5f;
+
 		BLevelSequencePlayer->Play();
-		OnStartCinematic.Broadcast();
+		GetWorld()->GetTimerManager().SetTimer(SequenceTimerHandle, this, &ABLevelScriptActor::OnCinemaEnded, SequenceTimer, false);
 		return true;
 	}
 
 	return false;
+}
+
+void ABLevelScriptActor::OnCinemaEnded()
+{
+	OnEndCinematic.Broadcast();
 }

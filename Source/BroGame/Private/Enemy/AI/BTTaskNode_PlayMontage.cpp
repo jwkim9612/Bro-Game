@@ -9,7 +9,7 @@
 UBTTaskNode_PlayMontage::UBTTaskNode_PlayMontage()
 {
 	bNotifyTick = true;
-	NodeName = TEXT("SpawnMonster");
+	NodeName = TEXT("PlayMontage");
 }
 
 EBTNodeResult::Type UBTTaskNode_PlayMontage::ExecuteTask(UBehaviorTreeComponent & OwnerComp, uint8 * NodeMemory)
@@ -25,7 +25,7 @@ EBTNodeResult::Type UBTTaskNode_PlayMontage::ExecuteTask(UBehaviorTreeComponent 
 	float DefaultCharacterSpeed = BBoss->GetCharacterMovement()->GetMaxSpeed();
 	BBoss->GetCharacterMovement()->MaxWalkSpeed = 0.0f;
 	
-	float MontagePlayTime = BBoss->GetAnimInstance()->Montage_Play(SpawnMontage);
+	float MontagePlayTime = BBoss->GetAnimInstance()->Montage_Play(Montage);
 
 	GetWorld()->GetTimerManager().SetTimer(MontageEndTimerHandle, FTimerDelegate::CreateLambda([this, BBoss, DefaultCharacterSpeed]() -> void {
 		BBoss->GetCharacterMovement()->MaxWalkSpeed = DefaultCharacterSpeed;

@@ -39,6 +39,7 @@ void ABBoss::PostInitializeComponents()
 	BBossAnimInstance = Cast<UBBossAnimInstance>(GetMesh()->GetAnimInstance());
 	BCHECK(BBossAnimInstance != nullptr);
 
+	BBossAnimInstance->OnMontageEnded.AddDynamic(this, &ABBoss::OnAttackMontageEnded);
 	CurrentStat->OnHPIsZero.AddUObject(this, &ABBoss::Dead);
 }
 
@@ -74,6 +75,15 @@ UTexture2D* ABBoss::GetWantedPhoto() const
 UBBossAnimInstance * ABBoss::GetAnimInstance() const
 {
 	return BBossAnimInstance;
+}
+
+void ABBoss::Attack()
+{
+	if (!IsAttacking())
+	{
+		bIsAttacking = true;
+		BBossAnimInstance->PlayAttackMontage();
+	}
 }
 
 void ABBoss::Dead()

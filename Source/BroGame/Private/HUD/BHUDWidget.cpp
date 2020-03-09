@@ -27,6 +27,10 @@ void UBHUDWidget::NativeConstruct()
 	BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
 	BLevelScriptActor = Cast<ABLevelScriptActor>(GetWorld()->GetLevelScriptActor());
 
+	BCHECK(BPlayerController != nullptr);
+	BCHECK(BGameStateBase != nullptr);
+	BCHECK(BLevelScriptActor != nullptr);
+
 	BGameStateBase->OnCountDownStart.AddLambda([this]() -> void {
 		TimerWidget->SetVisibility(ESlateVisibility::Visible);
 	});
@@ -34,6 +38,8 @@ void UBHUDWidget::NativeConstruct()
 	BGameStateBase->OnCountDownDone.AddLambda([this]() -> void {
 		TimerWidget->SetVisibility(ESlateVisibility::Hidden);
 	});
+
+	BLevelScriptActor->OnEndCinematic.AddUObject(this, &UBHUDWidget::OnCinemaEnded);
 
 	UWidgetBlueprintGeneratedClass* WidgetAni = Cast<UWidgetBlueprintGeneratedClass>(GetClass());
 
@@ -98,21 +104,13 @@ void UBHUDWidget::NativeConstruct()
 	});
 
 	BGameStateBase->OnBossCountDownDone.AddLambda([this]() -> void {
-		//
 		if (BLevelScriptActor != nullptr)
 		{
 			if (BLevelScriptActor->PlayBossCinematic(BGameStateBase->GetCurrentBossWave()))
 			{
 				SetVisibility(ESlateVisibility::Hidden);
-
-				SequenceTimer = BLevelScriptActor->GetLevelSequencePlayer()->GetDuration().AsSeconds();				
-				GetWorld()->GetTimerManager().SetTimer(SequenceTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
-					SetVisibility(ESlateVisibility::Visible);
-					BLevelScriptActor->OnEndCinematic.Broadcast();
-				}), SequenceTimer, false);
 			}
 		}
-		//
 
 		BossHPWidget->SetVisibility(ESlateVisibility::Visible);
 	});
@@ -206,4 +204,9 @@ void UBHUDWidget::SetCanClickButton()
 {
 	StatWidget->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	UpgradeWidget->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+}
+
+void UBHUDWidget::OnCinemaEnded()
+{
+	SetVisibility(ESlateVisibility::Visible);
 }

@@ -24,6 +24,8 @@ public:
 	class UTexture2D* GetWantedPhoto() const;
 	class UBBossAnimInstance* GetAnimInstance() const;
 
+	void virtual Attack() override;
+
 private:
 	void virtual Dead() override;
 

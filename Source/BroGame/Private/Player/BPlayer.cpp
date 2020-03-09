@@ -41,6 +41,8 @@ void ABPlayer::BeginPlay()
 	BPlayerController = Cast<ABPlayerController>(GetController());
 	BCHECK(BPlayerController);
 	BPlayerController->GetHUDWidget()->UpdatePlayerHPWidget();
+
+	AddAttackCollision();
 }
 
 // Called every frame
@@ -73,8 +75,6 @@ void ABPlayer::PostInitializeComponents()
 			BAnimInstance->JumptoNextAttackSection(CurrentCombo);
 		}
 	});
-
-	BAnimInstance->OnHitAttack.AddUObject(this, &ABPlayer::AttackCheck);
 }
 
 float ABPlayer::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
@@ -131,6 +131,16 @@ int32 ABPlayer::GetDefaultCanCombo() const
 int32 ABPlayer::GetMaxCombo() const
 {
 	return MaxCombo;
+}
+
+void ABPlayer::SetIsHitting(bool IsHitting)
+{
+	bIsHitting = IsHitting;
+
+	if (!IsHitting)
+	{
+		bIsDamageToOtherActor = false;
+	}
 }
 
 void ABPlayer::SetControlMode()
@@ -194,41 +204,41 @@ void ABPlayer::Attack()
 	}
 }
 
-void ABPlayer::AttackCheck()
-{
-	TArray<FHitResult> HitResults;
-	FCollisionQueryParams Param(NAME_None, false, this);
-
-	float CapsuleRadius = GetCapsuleComponent()->GetScaledCapsuleRadius();
-	float HitRange = 0.0f;
-	float HitDamage = 0.0f;
-	float HitScale = 0.0f;
-
-	HitRange = 100.0f;
-	//HitDamage = 10.0f;
-	HitDamage = BPlayerState->GetCurrentAttack();
-	HitScale = 70.0f;
-
-
-	bool bResult = GetWorld()->SweepMultiByChannel(
-		HitResults,
-		GetActorLocation() + GetActorForwardVector() * CapsuleRadius * 2,
-		GetActorLocation() + GetActorForwardVector() * HitRange,
-		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel3,
-		FCollisionShape::MakeSphere(HitScale),
-		Param
-	);
-
-	if (bResult)
-	{
-		for (auto& HitResult : HitResults)
-		{
-			FDamageEvent DamageEvent;
-			HitResult.Actor->TakeDamage(HitDamage, DamageEvent, GetController(), this);
-		}
-	}
-}
+//void ABPlayer::AttackCheck()
+//{
+//	TArray<FHitResult> HitResults;
+//	FCollisionQueryParams Param(NAME_None, false, this);
+//
+//	float CapsuleRadius = GetCapsuleComponent()->GetScaledCapsuleRadius();
+//	float HitRange = 0.0f;
+//	float HitDamage = 0.0f;
+//	float HitScale = 0.0f;
+//
+//	HitRange = 100.0f;
+//	//HitDamage = 10.0f;
+//	HitDamage = BPlayerState->GetCurrentAttack();
+//	HitScale = 70.0f;
+//
+//
+//	bool bResult = GetWorld()->SweepMultiByChannel(
+//		HitResults,
+//		GetActorLocation() + GetActorForwardVector() * CapsuleRadius * 2,
+//		GetActorLocation() + GetActorForwardVector() * HitRange,
+//		FQuat::Identity,
+//		ECollisionChannel::ECC_GameTraceChannel3,
+//		FCollisionShape::MakeSphere(HitScale),
+//		Param
+//	);
+//
+//	//if (bResult)
+//	//{
+//	//	for (auto& HitResult : HitResults)
+//	//	{
+//	//		FDamageEvent DamageEvent;
+//	//		HitResult.Actor->TakeDamage(HitDamage, DamageEvent, GetController(), this);
+//	//	}
+//	//}
+//}
 
 void ABPlayer::StartComboState()
 {
@@ -265,3 +275,38 @@ void ABPlayer::OnAttackMontageEnded(UAnimMontage * AnimMontage, bool Interrupted
 	EndComboState();
 }
 
+void ABPlayer::OnAttackOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
+	{
+		if (bIsHitting && !bIsDamageToOtherActor)
+		{
+			FDamageEvent DamageEvent;
+			OtherActor->TakeDamage(BPlayerState->GetCurrentAttack(), DamageEvent, GetController(), this);
+			bIsDamageToOtherActor = true;
+		}
+	}
+}
+
+void ABPlayer::AddAttackCollision()
+{
+	TArray<UActorComponent*> Components;
+	GetComponents(Components);
+
+	UCapsuleComponent* CapsuleCollision;
+	for (auto& Component : Components)
+	{
+		CapsuleCollision = Cast<UCapsuleComponent>(Component);
+
+		if (CapsuleCollision == RootComponent)
+		{
+			continue;
+		}
+
+		if (CapsuleCollision != nullptr)
+		{
+			AttackCollisions.Add(CapsuleCollision);
+			CapsuleCollision->OnComponentBeginOverlap.AddDynamic(this, &ABPlayer::OnAttackOverlapBegin);
+		}
+	}
+}
