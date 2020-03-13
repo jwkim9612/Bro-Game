@@ -25,8 +25,9 @@ public:
 public:
 	struct FBSpawnInfo GetSpawnDataByWave(int32 Wave);
 	struct FBBossSpawnInfo GetBossSpawnDataWave(int32 Wave);
-	
 	class UDataTable* GetBonusDataTable() const;
+
+	FVector GetSnailLocation(FVector CenterVec, int32 AreaIdx, float Size, int32 count);
 
 public:
 	UPROPERTY()

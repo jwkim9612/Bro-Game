@@ -47,16 +47,7 @@ void ABMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//BAIController = Cast<ABMonsterAIController>(GetController());
-
 	BAIController = Cast<ABMonsterAIController>(GetController());
-	//BPlayerController->GetHUDWidget()->OnStartCinematic.AddLambda([this]() -> void {
-	//	BAIController->StopAI();
-	//});
-
-	//BPlayerController->GetHUDWidget()->OnEndCinematic.AddLambda([this]() -> void {
-	//	BAIController->RunAI();
-	//});
 
 	HPWidget->SetVisibility(false);
 
@@ -77,7 +68,7 @@ void ABMonster::PostInitializeComponents()
 	BCHECK(BMonsterAnimInstance != nullptr);
 	
 	BMonsterAnimInstance->OnMontageEnded.AddDynamic(this, &ABMonster::OnAttackMontageEnded);
-	//BMonsterAnimInstance->OnHitAttack.AddUObject(this, &ABMonster::AttackCheck);
+	BMonsterAnimInstance->OnHitAttack.AddUObject(this, &ABMonster::AttackCheck);
 	CurrentStat->OnHPIsZero.AddUObject(this, &ABMonster::Dead);
 }
 

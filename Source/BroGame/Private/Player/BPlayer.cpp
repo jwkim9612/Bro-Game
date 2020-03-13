@@ -6,6 +6,7 @@
 #include "BPlayerController.h"
 #include "BPlayerState.h"
 #include "BHUDWidget.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ABPlayer::ABPlayer()
@@ -41,8 +42,6 @@ void ABPlayer::BeginPlay()
 	BPlayerController = Cast<ABPlayerController>(GetController());
 	BCHECK(BPlayerController);
 	BPlayerController->GetHUDWidget()->UpdatePlayerHPWidget();
-
-	AddAttackCollision();
 }
 
 // Called every frame
@@ -66,6 +65,7 @@ void ABPlayer::PostInitializeComponents()
 	BCHECK(BAnimInstance != nullptr);
 
 	BAnimInstance->OnMontageEnded.AddDynamic(this, &ABPlayer::OnAttackMontageEnded);
+	BAnimInstance->OnHitAttack.AddUObject(this, &ABPlayer::AttackCheck);
 	BAnimInstance->OnCanNextAttack.AddLambda([this]()-> void {
 
 		if (OnComboInput)
@@ -87,7 +87,6 @@ float ABPlayer::TakeDamage(float Damage, FDamageEvent const & DamageEvent, ACont
 	return FinalDamage;
 }
 
-// Called to bind functionality to input
 void ABPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -131,16 +130,6 @@ int32 ABPlayer::GetDefaultCanCombo() const
 int32 ABPlayer::GetMaxCombo() const
 {
 	return MaxCombo;
-}
-
-void ABPlayer::SetIsHitting(bool IsHitting)
-{
-	bIsHitting = IsHitting;
-
-	if (!IsHitting)
-	{
-		bIsDamageToOtherActor = false;
-	}
 }
 
 void ABPlayer::SetControlMode()
@@ -204,41 +193,60 @@ void ABPlayer::Attack()
 	}
 }
 
-//void ABPlayer::AttackCheck()
-//{
-//	TArray<FHitResult> HitResults;
-//	FCollisionQueryParams Param(NAME_None, false, this);
-//
-//	float CapsuleRadius = GetCapsuleComponent()->GetScaledCapsuleRadius();
-//	float HitRange = 0.0f;
-//	float HitDamage = 0.0f;
-//	float HitScale = 0.0f;
-//
-//	HitRange = 100.0f;
-//	//HitDamage = 10.0f;
-//	HitDamage = BPlayerState->GetCurrentAttack();
-//	HitScale = 70.0f;
-//
-//
-//	bool bResult = GetWorld()->SweepMultiByChannel(
-//		HitResults,
-//		GetActorLocation() + GetActorForwardVector() * CapsuleRadius * 2,
-//		GetActorLocation() + GetActorForwardVector() * HitRange,
-//		FQuat::Identity,
-//		ECollisionChannel::ECC_GameTraceChannel3,
-//		FCollisionShape::MakeSphere(HitScale),
-//		Param
-//	);
-//
-//	//if (bResult)
-//	//{
-//	//	for (auto& HitResult : HitResults)
-//	//	{
-//	//		FDamageEvent DamageEvent;
-//	//		HitResult.Actor->TakeDamage(HitDamage, DamageEvent, GetController(), this);
-//	//	}
-//	//}
-//}
+// 무기에 콜리전을 넣어서 그 콜리전에 닿으면 데미지를 달게 하려고 했는데 캐릭터가 콜리전에 잘 닿지 않아서
+// Sweep함수를 이용했다.
+void ABPlayer::AttackCheck()
+{
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams Param(NAME_None, false, this);
+
+	float CapsuleRadius = GetCapsuleComponent()->GetScaledCapsuleRadius();
+	float HitRange = 0.0f;
+	float HitDamage = 0.0f;
+	float HitScale = 0.0f;
+
+	HitRange = 100.0f;
+	//HitDamage = 10.0f;
+	HitDamage = BPlayerState->GetCurrentAttack();
+	HitScale = 70.0f;
+
+
+	bool bResult = GetWorld()->SweepMultiByChannel(
+		HitResults,
+		GetActorLocation() + GetActorForwardVector() * CapsuleRadius * 2,
+		GetActorLocation() + GetActorForwardVector() * HitRange,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel3,
+		FCollisionShape::MakeSphere(HitScale),
+		Param
+	);
+
+	if (bResult)
+	{
+		for (auto& HitResult : HitResults)
+		{
+			FDamageEvent DamageEvent;
+			HitResult.Actor->TakeDamage(HitDamage, DamageEvent, GetController(), this);
+		}
+	}
+
+	FVector TraceVec = GetActorForwardVector() * HitRange;
+	FVector Center = GetActorLocation() + TraceVec * 0.5f;
+	float HalfHeight = HitRange * 0.5f + HitScale;
+	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+	float DebugLifeTime = 5.0f;
+
+	DrawDebugCapsule(GetWorld(),
+		Center,
+		HalfHeight,
+		HitScale,
+		CapsuleRot,
+		DrawColor,
+		false,
+		DebugLifeTime);
+
+}
 
 void ABPlayer::StartComboState()
 {
@@ -273,40 +281,4 @@ void ABPlayer::OnAttackMontageEnded(UAnimMontage * AnimMontage, bool Interrupted
 
 	bIsAttacking = false;
 	EndComboState();
-}
-
-void ABPlayer::OnAttackOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
-{
-	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
-	{
-		if (bIsHitting && !bIsDamageToOtherActor)
-		{
-			FDamageEvent DamageEvent;
-			OtherActor->TakeDamage(BPlayerState->GetCurrentAttack(), DamageEvent, GetController(), this);
-			bIsDamageToOtherActor = true;
-		}
-	}
-}
-
-void ABPlayer::AddAttackCollision()
-{
-	TArray<UActorComponent*> Components;
-	GetComponents(Components);
-
-	UCapsuleComponent* CapsuleCollision;
-	for (auto& Component : Components)
-	{
-		CapsuleCollision = Cast<UCapsuleComponent>(Component);
-
-		if (CapsuleCollision == RootComponent)
-		{
-			continue;
-		}
-
-		if (CapsuleCollision != nullptr)
-		{
-			AttackCollisions.Add(CapsuleCollision);
-			CapsuleCollision->OnComponentBeginOverlap.AddDynamic(this, &ABPlayer::OnAttackOverlapBegin);
-		}
-	}
 }

@@ -20,14 +20,8 @@ protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	virtual void NativeBeginPlay() override;
 	
-	//UFUNCTION()
-	//void AnimNotify_HitAttack();
-
 	UFUNCTION()
-	void AnimNotify_StartHit();
-
-	UFUNCTION()
-	void AnimNotify_EndHit();
+	void AnimNotify_HitAttack();
 
 public:
 	void SetIsDead(bool IsDead); 

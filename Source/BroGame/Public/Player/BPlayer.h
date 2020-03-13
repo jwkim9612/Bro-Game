@@ -32,8 +32,6 @@ public:
 	int32 GetDefaultCanCombo() const;
 	int32 GetMaxCombo() const;
 
-	void SetIsHitting(bool IsHitting);
-
 private:
 	void SetControlMode();
 
@@ -41,7 +39,7 @@ private:
 	void MoveRight(float AxisValue);
 
 	void Attack();
-	//void AttackCheck();
+	void AttackCheck();
 	void StartComboState();
 	void EndComboState();
 
@@ -49,11 +47,6 @@ private:
 
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* AnimMontage, bool Interrupted);
-
-	UFUNCTION()
-	void OnAttackOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	void AddAttackCollision();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera", meta = (AllowPrivateAccess = true))
@@ -104,7 +97,4 @@ private:
 	bool OnComboInput;
 	bool CanNextAttack;
 	int32 CurrentCombo;
-
-	bool bIsHitting = false;
-	bool bIsDamageToOtherActor = false;
 };

@@ -27,7 +27,7 @@ public:
 
 public:
 	void virtual Attack();
-	//void AttackCheck();
+	void AttackCheck();
 	float GetMaxHP() const;
 	float GetDamage() const;
 	float GetAttackRange() const;
@@ -37,7 +37,6 @@ public:
 	void SetMaxHP(float NewHP);
 	void SetSpeed(float NewSpeed);
 	void SetDropMoney(int32 NewDropMoney);
-	void SetIsHitting(bool IsHitting);
 
 	class UBEnemyStatComponent* GetCurrentStat() const;
 
@@ -49,12 +48,6 @@ protected:
 
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* AnimMontage, bool Interrupted);
-
-private:
-	UFUNCTION()
-	void OnAttackOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	void AddAttackCollision();
 
 protected:
 	UPROPERTY()
@@ -72,13 +65,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "stat")
 	int32 DropMoney;
 
-	UPROPERTY(EditAnywhere, Category = "Cinema")
-	bool bIsForCinema = false;
-
 	UPROPERTY(EditAnywhere, Category = "AI")
 	bool bStopAI;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly ,Category = "AI")
 	class ABAIControllerBase* BAIController;
 
 	//UPROPERTY()
@@ -87,15 +77,14 @@ protected:
 	UPROPERTY()
 	class ABGameStateBase* BGameStateBase;
 
-	UPROPERTY(VisibleAnywhere, Category = "stat")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "stat")
 	class UBEnemyStatComponent* CurrentStat;
 
 	UPROPERTY()
 	class ABPlayerController* BPlayerController;
 
+	UPROPERTY(BluePrintReadOnly, Category = "Dead")
 	bool bIsDead = false;
-	bool bIsAttacking = false;
 
-	bool bIsHitting = false;
-	bool bIsDamageToOtherActor = false;
+	bool bIsAttacking = false;
 };

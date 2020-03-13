@@ -27,19 +27,9 @@ void UBEnemyAnimBase::NativeBeginPlay()
 	Monster = Cast<ABEnemyBase>(TryGetPawnOwner());
 }
 
-//void UBEnemyAnimBase::AnimNotify_HitAttack()
-//{
-//	OnHitAttack.Broadcast();
-//}
-
-void UBEnemyAnimBase::AnimNotify_StartHit()
+void UBEnemyAnimBase::AnimNotify_HitAttack()
 {
-	Monster->SetIsHitting(true);
-}
-
-void UBEnemyAnimBase::AnimNotify_EndHit()
-{
-	Monster->SetIsHitting(false);
+	OnHitAttack.Broadcast();
 }
 
 void UBEnemyAnimBase::SetIsDead(bool IsDead)

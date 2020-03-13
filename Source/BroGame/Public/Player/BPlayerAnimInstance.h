@@ -37,10 +37,7 @@ private:
 	void AnimNotify_CanNextAttack();
 
 	UFUNCTION()
-	void AnimNotify_StartHit();
-
-	UFUNCTION()
-	void AnimNotify_EndHit();
+	void AnimNotify_HitAttack();
 
 private:
 	UPROPERTY()

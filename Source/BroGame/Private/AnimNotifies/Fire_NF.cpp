@@ -19,7 +19,6 @@ void UFire_NF::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Anima
 	UWorld* World = BBoss->GetWorld();
 	if (World)
 	{
-		BLOG(Warning, TEXT("InWorld"));
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = BBoss;
 		SpawnParams.Instigator = BBoss->Instigator;
@@ -27,9 +26,13 @@ void UFire_NF::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Anima
 		ABProjectile* Projectile = World->SpawnActor<ABProjectile>(ProjectileClass, Vec, Rot, SpawnParams);
 		if (Projectile)
 		{
-			BLOG(Warning, TEXT("Spawn Good"));
 			FVector LaunchDirection = Rot.Vector();
+			// 발사체가 떨어지지않게.
+			LaunchDirection.Z = 0.0f;
+
 			Projectile->FireInDirection(LaunchDirection);
+			Projectile->SetContoller(BBoss->GetController());
+			Projectile->SetActor(BBoss);
 		}
 
 	}

@@ -33,14 +33,9 @@ void UBPlayerAnimInstance::AnimNotify_CanNextAttack()
 	OnCanNextAttack.Broadcast();
 }
 
-void UBPlayerAnimInstance::AnimNotify_StartHit()
+void UBPlayerAnimInstance::AnimNotify_HitAttack()
 {
-	PlayerCharacter->SetIsHitting(true);
-}
-
-void UBPlayerAnimInstance::AnimNotify_EndHit()
-{
-	PlayerCharacter->SetIsHitting(false);
+	OnHitAttack.Broadcast();
 }
 
 void UBPlayerAnimInstance::PlayGroundAttackMontage()

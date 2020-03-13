@@ -28,6 +28,10 @@ void ABAIControllerBase::RunAI()
 		{
 			BLOG(Warning, TEXT("Not Run BehaviorTree"));
 		}
+		else
+		{
+			bIsRunning = true;
+		}
 	}
 }
 
@@ -37,5 +41,6 @@ void ABAIControllerBase::StopAI()
 	if (BehaviorTreeComponent != nullptr)
 	{
 		BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
+		bIsRunning = false;
 	}
 }

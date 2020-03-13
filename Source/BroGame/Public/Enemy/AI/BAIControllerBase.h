@@ -25,8 +25,12 @@ public:
 	void virtual RunAI();
 	void virtual StopAI();
 
+public:
+	UPROPERTY(BlueprintReadOnly, Category = "AI")
+	bool bIsRunning = false;
+
 protected:
-	const FVector DestinationLocation = FVector(500.0f, 900.0f, 220.0f);
+	const FVector DestinationLocation = FVector(0.0f, -300.0f, 220.0f);
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	UBehaviorTree* BTAsset;

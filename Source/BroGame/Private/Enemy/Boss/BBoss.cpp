@@ -14,21 +14,7 @@ void ABBoss::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//BAIController = Cast<ABBossAIController>(GetController());
 	BAIController = Cast<ABBossAIController>(GetController());
-	//BPlayerController->GetHUDWidget()->OnStartCinematic.AddLambda([this]() -> void {
-	//	BAIController->StopAI();
-	//});
-
-	//BPlayerController->GetHUDWidget()->OnEndCinematic.AddLambda([this]() -> void {
-	//	BAIController->RunAI();
-	//});
-
-	if (bIsForCinema)
-	{
-		return;
-	}
-
 	BPlayerController->GetHUDWidget()->BindBossHPWidget(this);
 }
 
@@ -40,6 +26,7 @@ void ABBoss::PostInitializeComponents()
 	BCHECK(BBossAnimInstance != nullptr);
 
 	BBossAnimInstance->OnMontageEnded.AddDynamic(this, &ABBoss::OnAttackMontageEnded);
+	BBossAnimInstance->OnHitAttack.AddUObject(this, &ABBoss::AttackCheck);
 	CurrentStat->OnHPIsZero.AddUObject(this, &ABBoss::Dead);
 }
 
@@ -51,7 +38,7 @@ float ABBoss::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, A
 
 	if (bIsDead)
 	{
-		BGameStateBase->SetIsBossDead(true);
+		//BGameStateBase->SetIsBossDead(true);
 		ABPlayerController* InstigatorController = Cast<ABPlayerController>(EventInstigator);
 		if (InstigatorController != nullptr)
 		{
@@ -90,6 +77,7 @@ void ABBoss::Dead()
 {
 	Super::Dead();
 
+	BGameStateBase->SetIsBossDead(true);
 	BBossAnimInstance->SetIsDead(true);
 	BPlayerController->GetGamePauseWidget()->FOnMainMenuClicked.AddLambda([this]() -> void {
 		GetWorld()->GetTimerManager().ClearTimer(DeadTimerhandle);

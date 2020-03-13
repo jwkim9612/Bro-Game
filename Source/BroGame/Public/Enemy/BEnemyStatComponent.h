@@ -26,8 +26,13 @@ public:
 
 public:
 	void InitMonsterData(class ABEnemyBase* Monster);
+
+	UFUNCTION()
 	void SetHP(float NewHP);
+
+	UFUNCTION(BlueprintCallable)
 	void SetHPToDamage(float Damage);
+
 	float GetHP();
 	float GetHPRatio();
 	int32 GetDamage();

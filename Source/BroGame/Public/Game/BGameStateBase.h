@@ -80,6 +80,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Stage")
 	int32 StartingWave = 1;
 
+	UPROPERTY(VisibleInstanceOnly, Category = "Stage")
 	int32 CurrentMonsterNum = 0;
 
 	UPROPERTY()

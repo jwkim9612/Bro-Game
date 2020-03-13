@@ -7,6 +7,7 @@
 #include "BEnemyStatComponent.h"
 #include "BGameStateBase.h"
 #include "BPlayerController.h"
+#include "DrawDebugHelpers.h"
 
 ABEnemyBase::ABEnemyBase()
 {
@@ -34,15 +35,8 @@ void ABEnemyBase::BeginPlay()
 	
 	BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
 	BPlayerController = Cast<ABPlayerController>(UGameplayStatics::GetGameInstance(GetWorld())->GetPrimaryPlayerController());
-	
-	if (bIsForCinema)
-	{
-		return;
-	}
 
 	BGameStateBase->AddMonsterNum();
-
-	AddAttackCollision();
 }
 
 void ABEnemyBase::PostInitializeComponents()
@@ -57,8 +51,6 @@ float ABEnemyBase::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AC
 	float FinalDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
 	CurrentStat->SetHPToDamage(Damage);
-
-	BLOG(Warning, TEXT("Enemy TakeDamage"));
 
 	return FinalDamage;
 }
@@ -81,34 +73,50 @@ void ABEnemyBase::Attack()
 
 }
 
-//void ABEnemyBase::AttackCheck()
-//{
-//	TArray<FHitResult> HitResults;
-//	FCollisionQueryParams Param(NAME_None, false, this);
-//
-//	// 공격 시작위치벡터는 액터의 위치백터 + ( 액터의 forward벡터 * ( 엑터의 캡슐크기 / 2 ) );
-//	const FVector AttackStartLocation = GetActorLocation() + GetActorForwardVector() * (GetCapsuleComponent()->GetScaledCapsuleRadius() / 2);
-//	const FVector AttackEndLocation = GetActorLocation() + GetActorForwardVector() * ((GetCapsuleComponent()->GetScaledCapsuleRadius() / 2) + AttackRange);
-//
-//	bool bResult = GetWorld()->SweepMultiByChannel(
-//		HitResults,
-//		AttackStartLocation,
-//		AttackEndLocation,
-//		FQuat::Identity,
-//		ECollisionChannel::ECC_GameTraceChannel6,
-//		FCollisionShape::MakeSphere(GetCapsuleComponent()->GetScaledCapsuleRadius()),
-//		Param
-//	);
-//
-//	if (bResult)
-//	{
-//		for (auto& HitResult : HitResults)
-//		{
-//			FDamageEvent DamageEvent;
-//			HitResult.Actor->TakeDamage(CurrentStat->GetDamage(), DamageEvent, GetController(), this);
-//		}
-//	}
-//}
+void ABEnemyBase::AttackCheck()
+{
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams Param(NAME_None, false, this);
+
+	// 공격 시작위치벡터는 액터의 위치백터 + ( 액터의 forward벡터 * ( 엑터의 캡슐크기 / 2 ) );
+	const FVector AttackStartLocation = GetActorLocation() + GetActorForwardVector() * (GetCapsuleComponent()->GetScaledCapsuleRadius() / 2);
+	const FVector AttackEndLocation = GetActorLocation() + GetActorForwardVector() * ((GetCapsuleComponent()->GetScaledCapsuleRadius() / 2) + AttackRange);
+
+	bool bResult = GetWorld()->SweepMultiByChannel(
+		HitResults,
+		AttackStartLocation,
+		AttackEndLocation,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel6,
+		FCollisionShape::MakeSphere(GetCapsuleComponent()->GetScaledCapsuleRadius()),
+		Param
+	);
+
+	if (bResult)
+	{
+		for (auto& HitResult : HitResults)
+		{
+			FDamageEvent DamageEvent;
+			HitResult.Actor->TakeDamage(CurrentStat->GetDamage(), DamageEvent, GetController(), this);
+		}
+	}
+
+	FVector TraceVec = GetActorForwardVector() * ((GetCapsuleComponent()->GetScaledCapsuleRadius() / 2) + AttackRange);
+	FVector Center = GetActorLocation() + TraceVec * 0.5f;
+	float HalfHeight = AttackRange * 0.5f + GetCapsuleComponent()->GetScaledCapsuleRadius();
+	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+	float DebugLifeTime = 5.0f;
+
+	DrawDebugCapsule(GetWorld(),
+		Center,
+		HalfHeight,
+		GetCapsuleComponent()->GetScaledCapsuleRadius(),
+		CapsuleRot,
+		DrawColor,
+		false,
+		DebugLifeTime);
+}
 
 float ABEnemyBase::GetMaxHP() const
 {
@@ -155,16 +163,6 @@ void ABEnemyBase::SetDropMoney(int32 NewDropMoney)
 	DropMoney = NewDropMoney;
 }
 
-void ABEnemyBase::SetIsHitting(bool IsHitting)
-{
-	bIsHitting = IsHitting;
-
-	if (!IsHitting)
-	{
-		bIsDamageToOtherActor = false;
-	}
-}
-
 UBEnemyStatComponent * ABEnemyBase::GetCurrentStat() const
 {
 	return CurrentStat;
@@ -187,41 +185,4 @@ void ABEnemyBase::OnAttackMontageEnded(UAnimMontage * AnimMontage, bool Interrup
 
 	bIsAttacking = false;
 	OnAttackEnd.Broadcast();
-}
-
-void ABEnemyBase::OnAttackOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
-{
-	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
-	{
-		if (bIsHitting && !bIsDamageToOtherActor)
-		{
-			bIsDamageToOtherActor = true;
-			FDamageEvent DamageEvent;
-			OtherActor->TakeDamage(DefaultDamage, DamageEvent, GetController(), this);
-		}
-	}
-}
-
-void ABEnemyBase::AddAttackCollision()
-{
-	TArray<UActorComponent*> Components;
-	GetComponents(Components);
-
-	UCapsuleComponent* CapsuleCollision;
-	for (auto& Component : Components)
-	{
-		CapsuleCollision = Cast<UCapsuleComponent>(Component);
-
-		if (CapsuleCollision == RootComponent)
-		{
-			continue;
-		}
-
-		if (CapsuleCollision != nullptr)
-		{
-			AttackCollisions.Add(CapsuleCollision);
-			CapsuleCollision->OnComponentBeginOverlap.AddDynamic(this, &ABEnemyBase::OnAttackOverlapBegin);
-			BLOG(Warning, TEXT("Capsule!!"));
-		}
-	}
 }
