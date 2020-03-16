@@ -10,6 +10,9 @@
 const FName ABAIControllerBase::DestinationPosKey(TEXT("DestinationPos"));
 const FName ABAIControllerBase::RandomPosKey(TEXT("RandomPos"));
 const FName ABAIControllerBase::TargetKey(TEXT("Target"));
+const FName ABAIControllerBase::DistanceToTargetKey(TEXT("DistanceToTarget"));
+//const FName ABAIControllerBase::DetectedTargetKey(TEXT("DetectedTargetKey"));
+//const FName ABAIControllerBase::IsInAttackRangeTargetKey(TEXT("IsInAttackRangeTargetKey"));
 
 void ABAIControllerBase::OnPossess(APawn* InPawn)
 {

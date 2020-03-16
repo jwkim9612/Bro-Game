@@ -35,6 +35,7 @@ public:
 	bool IsAttacking() const;
 	void SetDamage(float NewDamage);
 	void SetMaxHP(float NewHP);
+	void SetAttackRange(float NewAttackRange);
 	void SetSpeed(float NewSpeed);
 	void SetDropMoney(int32 NewDropMoney);
 
@@ -50,8 +51,8 @@ protected:
 	void OnAttackMontageEnded(UAnimMontage* AnimMontage, bool Interrupted);
 
 protected:
-	UPROPERTY()
-	TArray<UCapsuleComponent*> AttackCollisions;
+	UPROPERTY(EditDefaultsOnly, Category = "Name")
+	FName Name;
 
 	UPROPERTY(EditDefaultsOnly, Category = "stat")
 	float MaxHP;

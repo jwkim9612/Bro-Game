@@ -7,21 +7,21 @@
 
 void UFire_NF::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-	ABBoss* BBoss = Cast<ABBoss>(MeshComp->GetOwner());
-	BCHECK(BBoss != nullptr);
+	ACharacter* ControllingPawn = Cast<ACharacter>(MeshComp->GetOwner());
+	BCHECK(ControllingPawn != nullptr);
 
 	FVector Vec;
 	FRotator Rot;
 
 	Vec = MeshComp->GetSocketLocation(SocketName);
-	Rot = BBoss->GetActorForwardVector().Rotation();
+	Rot = ControllingPawn->GetActorForwardVector().Rotation();
 
-	UWorld* World = BBoss->GetWorld();
+	UWorld* World = ControllingPawn->GetWorld();
 	if (World)
 	{
 		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = BBoss;
-		SpawnParams.Instigator = BBoss->Instigator;
+		SpawnParams.Owner = ControllingPawn;
+		SpawnParams.Instigator = ControllingPawn->Instigator;
 
 		ABProjectile* Projectile = World->SpawnActor<ABProjectile>(ProjectileClass, Vec, Rot, SpawnParams);
 		if (Projectile)
@@ -31,8 +31,8 @@ void UFire_NF::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Anima
 			LaunchDirection.Z = 0.0f;
 
 			Projectile->FireInDirection(LaunchDirection);
-			Projectile->SetContoller(BBoss->GetController());
-			Projectile->SetActor(BBoss);
+			Projectile->SetContoller(ControllingPawn->GetController());
+			Projectile->SetActor(ControllingPawn);
 		}
 
 	}

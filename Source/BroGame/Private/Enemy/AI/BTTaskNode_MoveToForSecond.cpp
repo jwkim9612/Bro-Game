@@ -2,6 +2,7 @@
 
 
 #include "BTTaskNode_MoveToForSecond.h"
+#include "BAIControllerBase.h"
 
 UBTTaskNode_MoveToForSecond::UBTTaskNode_MoveToForSecond()
 {
@@ -19,6 +20,9 @@ EBTNodeResult::Type UBTTaskNode_MoveToForSecond::ExecuteTask(UBehaviorTreeCompon
 		bIsDone = true;
 	}), MoveTime, false);
 
+	BLOG(Warning, TEXT("radius %f, observed %f"), AcceptableRadius, ObservedBlackboardValueTolerance);
+
+
 	return EBTNodeResult::InProgress;
 }
 
@@ -28,6 +32,12 @@ void UBTTaskNode_MoveToForSecond::TickTask(UBehaviorTreeComponent & OwnerComp, u
 
 	if (bIsDone)
 	{
+		APawn* Pawn = Cast<ACharacter>(OwnerComp.GetAIOwner()->GetPawn());
+		if (Pawn != nullptr)
+		{
+			Pawn->GetMovementComponent()->StopActiveMovement();
+		}
+
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 }

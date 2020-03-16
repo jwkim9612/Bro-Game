@@ -3,6 +3,7 @@
 
 #include "BGameInstance.h"
 #include "BBonusManager.h"
+#include "BMonster.h"
 
 UBGameInstance::UBGameInstance()
 {
@@ -27,9 +28,19 @@ FBBossSpawnInfo UBGameInstance::GetBossSpawnDataWave(int32 Wave)
 	return *BossSpawnDataTable->FindRow<FBBossSpawnInfo>(*FString::FromInt(Wave), TEXT(""));
 }
 
+FBMonsterInfo UBGameInstance::GetMonsterData(FName MonsterName)
+{
+	return *MonsterDataTable->FindRow<FBMonsterInfo>(MonsterName, TEXT(""));
+}
+
 UDataTable * UBGameInstance::GetBonusDataTable() const
 {
 	return BonusDataTable;
+}
+
+TMap<FName, ABMonster*> UBGameInstance::GetMonsterTable() const
+{
+	return MonsterTable;
 }
 
 FVector UBGameInstance::GetSnailLocation(FVector CenterVec, int32 AreaIdx, float Size, int32 count)
@@ -113,4 +124,21 @@ Exit:
 	}
 
 	return CenterVec;
+}
+
+void UBGameInstance::LoadMonster()
+{
+	BCHECK(nullptr != MonsterDataTable);
+		
+	TArray<FName> Names = MonsterDataTable->GetRowNames();
+	for (const auto& Name : Names)
+	{
+		FBMonsterInfo* Data = MonsterDataTable->FindRow<FBMonsterInfo>(Name, TEXT(""));
+		if (Data->Class != nullptr)
+		{
+			auto* Monster = Data->Class->GetDefaultObject<ABMonster>();
+			Monster->SetDefaultStat(*Data);
+			MonsterTable.Add(Name, Monster);
+		}
+	}
 }

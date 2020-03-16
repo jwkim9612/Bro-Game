@@ -24,8 +24,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
-	void virtual Attack() override;
+	virtual void Attack() override;
 	virtual void SetSize(float NewSize);
+	void SetDefaultStat(struct FBMonsterInfo BMonsterInfo);
 
 private:
 	void virtual Dead() override;
@@ -46,8 +47,14 @@ private:
 	UPROPERTY()
 	class UBMonsterAnimInstance* BMonsterAnimInstance;
 
+	struct FBMonsterInfo MonsterData;
+
 	FTimerHandle DeadTimerHandle;
 	float DeadTimer = 3.0f;
 
 	FVector VisibleHPBarBoxSize = FVector(300.0f, 300.0f, 100.0f);
+
+	float DefaultCapsuleHalfHeight;
+	float DefaultCapsuleRadius;
+	float DefaultMeshZLocation;
 };

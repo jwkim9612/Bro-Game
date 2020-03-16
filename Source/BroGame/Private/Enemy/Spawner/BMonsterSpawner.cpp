@@ -52,22 +52,27 @@ void ABMonsterSpawner::Spawn()
 	// SpawnData는 인덱스가 0부터 시작이므로 1을 빼준다.
 	SetSpawnData(CurrentWave);
 
-	for (int32 MonsterIndex = 0; MonsterIndex < CurrentSpawnData.MonsterClassPath.Num(); ++MonsterIndex)
+	for (int32 MonsterIndex = 0; MonsterIndex < CurrentSpawnData.MonsterName.Num(); ++MonsterIndex)
 	{
-		EnemyClassPtr = TSoftClassPtr<ABMonster>(FSoftObjectPath(CurrentSpawnData.MonsterClassPath[MonsterIndex]));
-		BCHECK(EnemyClassPtr != nullptr);
+		auto MonsterTable = BGameInstance->GetMonsterTable();
 
-		BEnmeyClass = EnemyClassPtr.LoadSynchronous();
-		BCHECK(BEnmeyClass != nullptr);
-
-		BMonster = BEnmeyClass->GetDefaultObject<ABMonster>();
-		BCHECK(BMonster != nullptr);
-
+		BMonster = *MonsterTable.Find(CurrentSpawnData.MonsterName[MonsterIndex]);
+		
+		BCHECK(nullptr != BMonster);
 		BMonster->SetDamage(CurrentSpawnData.Damage[MonsterIndex]);
 		BMonster->SetMaxHP(CurrentSpawnData.MaxHP[MonsterIndex]);
 		BMonster->SetSpeed(CurrentSpawnData.Speed[MonsterIndex]);
 		BMonster->SetSize(CurrentSpawnData.Size[MonsterIndex]);
 		BMonster->SetDropMoney(CurrentSpawnData.DropMoney[MonsterIndex]);
+
+		//EnemyClassPtr = TSoftClassPtr<ABMonster>(FSoftObjectPath(CurrentSpawnData.MonsterClassPath[MonsterIndex]));
+		//BCHECK(EnemyClassPtr != nullptr);
+
+		//BEnmeyClass = EnemyClassPtr.LoadSynchronous();
+		//BCHECK(BEnmeyClass != nullptr);
+
+		//BMonster = BEnmeyClass->GetDefaultObject<ABMonster>();
+		//BCHECK(BMonster != nullptr);
 
 		float MonsterSize = BMonster->GetCapsuleComponent()->GetUnscaledCapsuleRadius() * 2;
 
@@ -75,7 +80,7 @@ void ABMonsterSpawner::Spawn()
 		{
 			FVector vec = GetSnailLocation(GetActorLocation(), SpawnLocationCount / MaxSpawnNum, MonsterSize, SpawnLocationCount % MaxSpawnNum);
 			FRotator rot = FRotator::ZeroRotator;
-			
+
 			GetWorld()->SpawnActor<ABMonster>(BMonster->GetClass(), vec, rot);
 
 			++SpawnLocationCount;

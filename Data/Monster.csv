@@ -1,0 +1,51 @@
+﻿Name,Class,CapsuleHalfHeight,CapsuleRadius,MeshZLocation,DefaultDamage,DefaultMaxHP,AttackRange,DefaultDropMoney
+SmallWhiteMinion,/Game/Character/Monster/SmallWhiteMinion/BSmallWhiteMinion_BP.BSmallWhiteMinion_BP_C,60 ,34 ,-60 ,1 ,5 ,50 ,1 
+WhiteMinion,/Game/Character/Monster/WhiteMinion/BWhiteMinion_BP.BWhiteMinion_BP_C,80 ,50 ,-80 ,2 ,10 ,100 ,2 
+BlackMinion,/Game/Character/Monster/BlackMinion/BBlackMinion_BP.BBlackMinion_BP_C,80 ,50 ,-80 ,3 ,20 ,100 ,3 
+SuperMinion,/Game/Character/Monster/SuperMinion/BSuperMinion_BP.BSuperMinion_BP_C,100 ,70 ,-100 ,5 ,50 ,150 ,5 
+ForestWhiteMinion,/Game/Character/Monster/ForestWhiteMinion/BForestWhiteMinion_BP.BForestWhiteMinion_BP_C,60 ,34 ,-60 ,10 ,10 ,50 ,7 
+Rapter,/Game/Character/Monster/Rapter/BRapter_BP.BRapter_BP_C,120 ,60 ,-120 ,15 ,50 ,100 ,10 
+BlueFly,/Game/Character/Monster/BlueFly/BBlueFly_BP.BBlueFly_BP_C,30 ,30 ,-60 ,5 ,10 ,500 ,10 
+RangeMinion,/Game/Character/Monster/RangeMinion/BRangeMinion_BP.BRangeMinion_BP_C,80 ,60 ,-80 ,10 ,20 ,400 ,20 
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,

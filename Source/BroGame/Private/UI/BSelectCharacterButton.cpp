@@ -3,6 +3,7 @@
 
 #include "BSelectCharacterButton.h"
 #include "BSaveGame.h"
+#include "BGameInstance.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
@@ -38,6 +39,10 @@ void UBSelectCharacterButton::OnImageButtonClicked()
 	{
 		BSaveGame->BPlayerClass = PlayerClass;
 	}
+
+	UBGameInstance* BGameInstance = Cast<UBGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	BCHECK(BGameInstance != nullptr);
+	BGameInstance->LoadMonster();
 
 	UGameplayStatics::SaveGameToSlot(BSaveGame, BSaveGame->SaveSlotName, BSaveGame->SaveIndex);
 	UGameplayStatics::OpenLevel(GetWorld(), TEXT("test1"), true);

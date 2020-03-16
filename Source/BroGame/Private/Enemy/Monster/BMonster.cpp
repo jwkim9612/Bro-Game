@@ -17,6 +17,8 @@ ABMonster::ABMonster()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+
+
 	///////////////// Ã¼·Â ¹Ù //////////////////////
 	HPWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPWidget"));
 	HPWidget->SetupAttachment(GetMesh());
@@ -46,7 +48,6 @@ ABMonster::ABMonster()
 void ABMonster::BeginPlay()
 {
 	Super::BeginPlay();
-
 	BAIController = Cast<ABMonsterAIController>(GetController());
 
 	HPWidget->SetVisibility(false);
@@ -115,16 +116,31 @@ void ABMonster::Attack()
 
 void ABMonster::SetSize(float NewSize)
 {
-	BLOG(Warning, TEXT("Base SetSize"));
+	if (NewSize == 0.0f)
+	{
+		return;
+	}
 
-	float DefaultCapsuleHalfHeight = 88.0f;
-	float DefaultCpasuleRadius = 34.0;
 	GetCapsuleComponent()->SetCapsuleHalfHeight(DefaultCapsuleHalfHeight * NewSize);
-	GetCapsuleComponent()->SetCapsuleRadius(DefaultCpasuleRadius * NewSize);
-
-	float DeafultMeshZLocation = -88.0f;
-	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, DeafultMeshZLocation*NewSize));
+	GetCapsuleComponent()->SetCapsuleRadius(DefaultCapsuleRadius * NewSize);
+	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, DefaultMeshZLocation*NewSize));
 	GetMesh()->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f) * NewSize);
+}
+
+void ABMonster::SetDefaultStat(FBMonsterInfo BMonsterInfo)
+{
+	SetDamage(BMonsterInfo.DefaultDamage);
+	SetMaxHP(BMonsterInfo.DefaultMaxHP);
+	SetAttackRange(BMonsterInfo.AttackRange);
+	SetDropMoney(BMonsterInfo.DefaultDropMoney);
+	
+	DefaultCapsuleHalfHeight = BMonsterInfo.CapsuleHalfHeight;
+	DefaultCapsuleRadius = BMonsterInfo.CapsuleRadius;
+	DefaultMeshZLocation = BMonsterInfo.MeshZLocation;
+
+	GetCapsuleComponent()->SetCapsuleHalfHeight(DefaultCapsuleHalfHeight);
+	GetCapsuleComponent()->SetCapsuleRadius(DefaultCapsuleRadius);
+	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, DefaultMeshZLocation));
 }
 
 void ABMonster::Dead()

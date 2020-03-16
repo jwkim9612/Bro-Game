@@ -21,6 +21,9 @@ public:
 	static const FName DestinationPosKey;
 	static const FName RandomPosKey;
 	static const FName TargetKey;
+	static const FName DistanceToTargetKey;
+	//static const FName DetectedTargetKey;
+	//static const FName IsInAttackRangeTargetKey;
 
 	void virtual RunAI();
 	void virtual StopAI();

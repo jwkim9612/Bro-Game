@@ -145,21 +145,46 @@ bool ABEnemyBase::IsAttacking() const
 
 void ABEnemyBase::SetDamage(float NewDamage)
 {
+	if (NewDamage == 0)
+	{
+		return;
+	}
+
 	DefaultDamage = NewDamage;
 }
 
 void ABEnemyBase::SetMaxHP(float NewHP)
 {
+	if (NewHP == 0)
+	{
+		return;
+	}
+
 	MaxHP = NewHP;
+}
+
+void ABEnemyBase::SetAttackRange(float NewAttackRange)
+{
+	AttackRange = NewAttackRange;
 }
 
 void ABEnemyBase::SetSpeed(float NewSpeed)
 {
+	if (NewSpeed == 0)
+	{
+		return;
+	}
+
 	GetCharacterMovement()->MaxWalkSpeed = NewSpeed;
 }
 
 void ABEnemyBase::SetDropMoney(int32 NewDropMoney)
 {
+	if (DropMoney == 0)
+	{
+		return;
+	}
+
 	DropMoney = NewDropMoney;
 }
 

@@ -6,6 +6,7 @@
 #include "BPlayer.h"
 #include "BEnemyBase.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "DrawDebugHelpers.h"
 
 UBTService_Detect::UBTService_Detect()
 {
@@ -34,6 +35,8 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		FCollisionShape::MakeSphere(DetectRadius),
 		CollisionQueryParam
 	);
+
+	//DrawDebugSphere(World, ControllingPawn->GetActorLocation(), DetectRadius, 50, FColor::Purple, false, 2.0f);
 
 	// ControllingPawn->IsAttacking()는 몬스터가 공격중에 몬스터와 플레이어가 멀어지면 공격 모션 그대로 도착지점으로 걸어가기 때문에 넣어줌
 	if (bResult || ControllingPawn->IsAttacking())

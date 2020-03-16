@@ -67,7 +67,7 @@ struct BROGAME_API FBSpawnInfo : public FTableRowBase
 
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TArray<FString> MonsterClassPath;
+	TArray<FName> MonsterName;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	TArray<int32> Num;
@@ -115,4 +115,35 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Bonus")
 	EBonusType Type;
+};
+
+USTRUCT()
+struct BROGAME_API FBMonsterInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	TSubclassOf<class ABMonster> Class;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	float CapsuleHalfHeight;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	float CapsuleRadius;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	float MeshZLocation;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	float DefaultDamage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	float DefaultMaxHP;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	float AttackRange;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	int32 DefaultDropMoney;
 };

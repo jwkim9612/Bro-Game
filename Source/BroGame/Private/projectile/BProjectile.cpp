@@ -19,6 +19,8 @@ ABProjectile::ABProjectile()
 	ProjectileMovementComponent->MaxSpeed = 3000.0f;
 	ProjectileMovementComponent->bRotationFollowsVelocity = false;
 	ProjectileMovementComponent->Bounciness = 0.3f;
+
+	CollisionComponent->SetCollisionProfileName(TEXT("Projectile"));
 }
 
 void ABProjectile::BeginPlay()
@@ -80,6 +82,7 @@ void ABProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor
 		ACharacter* Character = Cast<ACharacter>(OtherActor);
 		if (Character != nullptr)
 		{
+			BLOG(Warning, TEXT("Hit Character!"));
 			FDamageEvent DamageEvent;
 			OtherActor->TakeDamage(ProjectileDamage, DamageEvent, ProjectileInstingator, ProjectileCauser);
 		}
