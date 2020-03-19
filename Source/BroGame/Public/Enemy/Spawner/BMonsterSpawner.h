@@ -32,23 +32,11 @@ private:
 	void SetSpawnData(int32 CurrentWave);
 
 private:
-	//UPROPERTY(VisibleAnywhere, Category = "Box", meta = (AllowPrivateAccess = true))
-	//UBoxComponent* SpawnVolume;
-
-	//UPROPERTY()
-	//TSoftClassPtr<ACharacter> MonsterClassPtr;
-
-	//UPROPERTY()
-	//UClass* BMonsterClass;
-
 	UPROPERTY()
 	class ABMonster* BMonster;
 
-	//UPROPERTY()
-	//class ABGameStateBase* BGameStateBase;
-
-	//UPROPERTY()
-	//class UBGameInstance* BGameInstance;
+	UPROPERTY()
+	TMap<FName, class ABMonster*> MonsterTable;
 
 	struct FBSpawnInfo CurrentSpawnData;
 };

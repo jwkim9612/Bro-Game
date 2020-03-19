@@ -31,23 +31,11 @@ private:
 	void SetBossSpawnData(int32 CurrentBossWave);
 
 private:
-	//UPROPERTY(VisibleAnywhere, Category = "Box", meta = (AllowPrivateAccess = true))
-	//UBoxComponent* SpawnVolume;
-
-	//UPROPERTY()
-	//TSoftClassPtr<ACharacter> BossClassPtr;
-
-	//UPROPERTY()
-	//UClass* BBossClass;
-
 	UPROPERTY()
 	class ABBoss* BBoss;
 
-	//UPROPERTY()
-	//class ABGameStateBase* BGameStateBase;
-
-	//UPROPERTY()
-	//class UBGameInstance* BGameInstance;
+	UPROPERTY()
+	TMap<FName, class ABBoss*> BossTable;
 
 	struct FBBossSpawnInfo CurrentBossSpawnData;
 };

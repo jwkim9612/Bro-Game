@@ -8,7 +8,6 @@
 
 ABBossSpawner::ABBossSpawner()
 {
- 	
 	PrimaryActorTick.bCanEverTick = false;
 
 	SpawnVolume->SetBoxExtent(FVector(100.0f, 100.0f, 32.0f));
@@ -17,7 +16,8 @@ ABBossSpawner::ABBossSpawner()
 void ABBossSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	BossTable = BGameInstance->GetBossTable();
 }
 
 void ABBossSpawner::PostInitializeComponents()
@@ -48,18 +48,14 @@ void ABBossSpawner::InitBossData()
 
 	SetBossSpawnData(CurrentBossWave);
 
-	EnemyClassPtr = TSoftClassPtr<ABBoss>(FSoftObjectPath(CurrentBossSpawnData.BossClassPath));
-	BCHECK(EnemyClassPtr != nullptr);
-
-	BEnmeyClass = EnemyClassPtr.LoadSynchronous();
-	BCHECK(BEnmeyClass != nullptr);
-
-	BBoss = BEnmeyClass->GetDefaultObject<ABBoss>();
+	BBoss = *BossTable.Find(CurrentBossSpawnData.BossName);
 	BCHECK(BBoss != nullptr);
 }
 
 void ABBossSpawner::Spawn()
 {
+	BLOG(Warning, TEXT("Boss Spawn"));
+
 	FVector Vec = GetActorLocation();
 	FRotator Rot = FRotator::ZeroRotator;
 

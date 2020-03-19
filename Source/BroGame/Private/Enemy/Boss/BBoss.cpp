@@ -64,6 +64,26 @@ UBBossAnimInstance * ABBoss::GetAnimInstance() const
 	return BBossAnimInstance;
 }
 
+void ABBoss::SetWantedPhoto(UTexture2D * NewWantedPhoto)
+{
+	WantedPhoto = NewWantedPhoto;
+}
+
+void ABBoss::SetHitParticle(UParticleSystem * NewHitParticle)
+{
+	HitParticle = NewHitParticle;
+}
+
+void ABBoss::SetStat(FBBossInfo BossInfo)
+{
+	SetDamage(BossInfo.Damage);
+	SetMaxHP(BossInfo.MaxHP);
+	SetAttackRange(BossInfo.AttackRange);
+	SetDropMoney(BossInfo.DropMoney);
+	SetWantedPhoto(BossInfo.WantedPhoto);
+	SetHitParticle(BossInfo.HitParticle);
+}
+
 void ABBoss::Attack()
 {
 	if (!IsAttacking())

@@ -18,7 +18,8 @@ ABMonsterSpawner::ABMonsterSpawner()
 void ABMonsterSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	MonsterTable = BGameInstance->GetMonsterTable();
 }
 
 void ABMonsterSpawner::PostInitializeComponents()
@@ -54,8 +55,6 @@ void ABMonsterSpawner::Spawn()
 
 	for (int32 MonsterIndex = 0; MonsterIndex < CurrentSpawnData.MonsterName.Num(); ++MonsterIndex)
 	{
-		auto MonsterTable = BGameInstance->GetMonsterTable();
-
 		BMonster = *MonsterTable.Find(CurrentSpawnData.MonsterName[MonsterIndex]);
 		
 		BCHECK(nullptr != BMonster);
@@ -64,15 +63,6 @@ void ABMonsterSpawner::Spawn()
 		BMonster->SetSpeed(CurrentSpawnData.Speed[MonsterIndex]);
 		BMonster->SetSize(CurrentSpawnData.Size[MonsterIndex]);
 		BMonster->SetDropMoney(CurrentSpawnData.DropMoney[MonsterIndex]);
-
-		//EnemyClassPtr = TSoftClassPtr<ABMonster>(FSoftObjectPath(CurrentSpawnData.MonsterClassPath[MonsterIndex]));
-		//BCHECK(EnemyClassPtr != nullptr);
-
-		//BEnmeyClass = EnemyClassPtr.LoadSynchronous();
-		//BCHECK(BEnmeyClass != nullptr);
-
-		//BMonster = BEnmeyClass->GetDefaultObject<ABMonster>();
-		//BCHECK(BMonster != nullptr);
 
 		float MonsterSize = BMonster->GetCapsuleComponent()->GetUnscaledCapsuleRadius() * 2;
 

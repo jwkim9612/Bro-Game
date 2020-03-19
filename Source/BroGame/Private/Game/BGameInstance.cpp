@@ -4,6 +4,7 @@
 #include "BGameInstance.h"
 #include "BBonusManager.h"
 #include "BMonster.h"
+#include "BBoss.h"
 
 UBGameInstance::UBGameInstance()
 {
@@ -33,6 +34,11 @@ FBMonsterInfo UBGameInstance::GetMonsterData(FName MonsterName)
 	return *MonsterDataTable->FindRow<FBMonsterInfo>(MonsterName, TEXT(""));
 }
 
+FBBossInfo UBGameInstance::GetBossData(FName BossName)
+{
+	return *BossDataTable->FindRow<FBBossInfo>(BossName, TEXT(""));
+}
+
 UDataTable * UBGameInstance::GetBonusDataTable() const
 {
 	return BonusDataTable;
@@ -41,6 +47,11 @@ UDataTable * UBGameInstance::GetBonusDataTable() const
 TMap<FName, ABMonster*> UBGameInstance::GetMonsterTable() const
 {
 	return MonsterTable;
+}
+
+TMap<FName, class ABBoss*> UBGameInstance::GetBossTable() const
+{
+	return BossTable;
 }
 
 FVector UBGameInstance::GetSnailLocation(FVector CenterVec, int32 AreaIdx, float Size, int32 count)
@@ -139,6 +150,23 @@ void UBGameInstance::LoadMonster()
 			auto* Monster = Data->Class->GetDefaultObject<ABMonster>();
 			Monster->SetDefaultStat(*Data);
 			MonsterTable.Add(Name, Monster);
+		}
+	}
+}
+
+void UBGameInstance::LoadBoss()
+{
+	BCHECK(nullptr != BossDataTable);
+
+	TArray<FName> Names = BossDataTable->GetRowNames();
+	for (const auto& Name : Names)
+	{
+		FBBossInfo* Data = BossDataTable->FindRow<FBBossInfo>(Name, TEXT(""));
+		if (Data->Class != nullptr)
+		{
+			auto* Boss = Data->Class->GetDefaultObject<ABBoss>();
+			Boss->SetStat(*Data);
+			BossTable.Add(Name, Boss);
 		}
 	}
 }

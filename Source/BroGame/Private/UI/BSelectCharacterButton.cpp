@@ -43,6 +43,7 @@ void UBSelectCharacterButton::OnImageButtonClicked()
 	UBGameInstance* BGameInstance = Cast<UBGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	BCHECK(BGameInstance != nullptr);
 	BGameInstance->LoadMonster();
+	BGameInstance->LoadBoss();
 
 	UGameplayStatics::SaveGameToSlot(BSaveGame, BSaveGame->SaveSlotName, BSaveGame->SaveIndex);
 	UGameplayStatics::OpenLevel(GetWorld(), TEXT("test1"), true);

@@ -95,7 +95,7 @@ struct BROGAME_API FBBossSpawnInfo : public FTableRowBase
 
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	FString BossClassPath;
+	FName BossName;
 };
 
 USTRUCT()
@@ -146,4 +146,32 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Stat")
 	int32 DefaultDropMoney;
+};
+
+USTRUCT()
+struct BROGAME_API FBBossInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	TSubclassOf<class ABBoss> Class;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	float Damage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	float MaxHP;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	float AttackRange;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	int32 DropMoney;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	UTexture2D* WantedPhoto;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stat")
+	UParticleSystem* HitParticle;
 };

@@ -27,14 +27,17 @@ public:
 	struct FBSpawnInfo GetSpawnDataByWave(int32 Wave);
 	struct FBBossSpawnInfo GetBossSpawnDataWave(int32 Wave);
 	struct FBMonsterInfo GetMonsterData(FName MonsterName);
+	struct FBBossInfo GetBossData(FName BossName);
 	class UDataTable* GetBonusDataTable() const;
 
 	TMap<FName, class ABMonster*> GetMonsterTable() const;
+	TMap<FName, class ABBoss*> GetBossTable() const;
 
 	FVector GetSnailLocation(FVector CenterVec, int32 AreaIdx, float Size, int32 count);
 
 public:
 	void LoadMonster();
+	void LoadBoss();
 
 public:
 	FStreamableManager AssetLoader;
@@ -54,9 +57,15 @@ private:
 	class UDataTable* MonsterDataTable;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Data")
+	class UDataTable* BossDataTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Data")
 	class UDataTable* BonusDataTable;
 
 private:
 	UPROPERTY()
 	TMap<FName, class ABMonster*> MonsterTable;
+
+	UPROPERTY()
+	TMap<FName, class ABBoss*> BossTable;
 };

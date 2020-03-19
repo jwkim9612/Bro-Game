@@ -23,6 +23,9 @@ public:
 	FName GetBossName() const;
 	class UTexture2D* GetWantedPhoto() const;
 	class UBBossAnimInstance* GetAnimInstance() const;
+	void SetWantedPhoto(class UTexture2D* NewWantedPhoto);
+	void SetHitParticle(class UParticleSystem* NewHitParticle);
+	void SetStat(struct FBBossInfo BossInfo);
 
 	void virtual Attack() override;
 
