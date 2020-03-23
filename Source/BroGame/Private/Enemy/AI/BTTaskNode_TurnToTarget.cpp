@@ -25,10 +25,14 @@ EBTNodeResult::Type UBTTaskNode_TurnToTarget::ExecuteTask(UBehaviorTreeComponent
 	if (nullptr == Target)
 		return EBTNodeResult::Failed;
 
+	// Turn할때 Yaw만 바뀌면 되기때문에 Yaw를 받아옴.
+	float LookYaw = UKismetMathLibrary::FindLookAtRotation(ControllingPawn->GetActorLocation(), Target->GetActorLocation()).Yaw;
+	FRotator LookAtRotation(0.0f, LookYaw, 0.0f);
+
 	ControllingPawn->SetActorRotation(
 		FMath::RInterpTo(
 			ControllingPawn->GetActorRotation(),
-			UKismetMathLibrary::FindLookAtRotation(ControllingPawn->GetActorLocation(), Target->GetActorLocation()),
+			LookAtRotation,
 			GetWorld()->GetDeltaSeconds(),
 			2.0f
 		)

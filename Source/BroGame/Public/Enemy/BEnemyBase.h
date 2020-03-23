@@ -32,12 +32,14 @@ public:
 	float GetDamage() const;
 	float GetAttackRange() const;
 	int32 GetDropMoney() const;
+	class ABPlayer* GetTarget() const;
 	bool IsAttacking() const;
 	void SetDamage(float NewDamage);
 	void SetMaxHP(float NewHP);
 	void SetAttackRange(float NewAttackRange);
 	void SetSpeed(float NewSpeed);
 	void SetDropMoney(int32 NewDropMoney);
+	void SetTarget(class ABPlayer* Player);
 
 	class UBEnemyStatComponent* GetCurrentStat() const;
 
@@ -83,6 +85,9 @@ protected:
 
 	UPROPERTY()
 	class ABPlayerController* BPlayerController;
+
+	UPROPERTY()
+	class ABPlayer* Target;
 
 	UPROPERTY(BluePrintReadOnly, Category = "Dead")
 	bool bIsDead = false;

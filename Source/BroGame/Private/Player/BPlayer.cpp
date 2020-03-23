@@ -5,6 +5,9 @@
 #include "BPlayerAnimInstance.h"
 #include "BPlayerController.h"
 #include "BPlayerState.h"
+#include "BGameInstance.h"
+#include "BGameStateBase.h"
+#include "BLevelScriptActor.h"
 #include "BHUDWidget.h"
 #include "DrawDebugHelpers.h"
 
@@ -27,8 +30,11 @@ ABPlayer::ABPlayer()
 
 	DefaultCanCombo = 1;
 
-	SetControlMode();
+	SetControlMode(AttackMode::Default);
 	EndComboState();
+
+	ArmLengthSpeed = 3.0f;
+	ArmRotationSpeed = 10.0f;
 }
 
 // Called when the game starts or when spawned
@@ -37,11 +43,25 @@ void ABPlayer::BeginPlay()
 	Super::BeginPlay();
 
 	BPlayerState = Cast<ABPlayerState>(GetController()->PlayerState);
+	BPlayerController = Cast<ABPlayerController>(GetController());	
+	BGameInstance = Cast<UBGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+
 	BCHECK(BPlayerState != nullptr);
-	
-	BPlayerController = Cast<ABPlayerController>(GetController());
-	BCHECK(BPlayerController);
+	BCHECK(BPlayerController != nullptr);
+	BCHECK(BGameInstance != nullptr);
+	BCHECK(BGameStateBase != nullptr);
+
 	BPlayerController->GetHUDWidget()->UpdatePlayerHPWidget();
+	BGameInstance->GetCurrentLevelScriptActor()->OnEndCinematic.AddLambda([this]() -> void {
+		SetControlMode(AttackMode::Boss);
+	});
+
+	BGameStateBase->OnIsBossDead.AddLambda([this]() -> void {
+		GetWorld()->GetTimerManager().SetTimer(BackToDefaultAttackModeHandle, FTimerDelegate::CreateLambda([this]() -> void {
+			SetControlMode(AttackMode::Default);
+		}), BackToDefaultAttackModeTimer, false);
+	});
 }
 
 // Called every frame
@@ -49,11 +69,20 @@ void ABPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// 이유 적기.
-	if (DirectionToMove.SizeSquared() > 0.0f)
+	SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength, ArmLengthTo, DeltaTime, ArmLengthSpeed);
+
+	switch (CurrentAttackMode)
 	{
-		GetController()->SetControlRotation(FRotationMatrix::MakeFromX(DirectionToMove).Rotator());
-		AddMovementInput(DirectionToMove);
+		case AttackMode::Default:
+		{
+			// 이유 적기.
+			if (DirectionToMove.SizeSquared() > 0.0f)
+			{
+				GetController()->SetControlRotation(FRotationMatrix::MakeFromX(DirectionToMove).Rotator());
+				AddMovementInput(DirectionToMove);
+			}
+			break;
+		}
 	}
 }
 
@@ -93,8 +122,11 @@ void ABPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ABPlayer::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ABPlayer::MoveRight);
+	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ABPlayer::Turn);
+	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &ABPlayer::LookUp);
 
 	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &ABPlayer::Attack);
+	PlayerInputComponent->BindAction(TEXT("test"), EInputEvent::IE_Pressed, this, &ABPlayer::test);
 }
 
 UTexture2D * ABPlayer::GetTexture() const
@@ -132,42 +164,152 @@ int32 ABPlayer::GetMaxCombo() const
 	return MaxCombo;
 }
 
-void ABPlayer::SetControlMode()
+void ABPlayer::SetControlMode(AttackMode NewAttackMode)
 {
-	SpringArm->SetRelativeRotation(FRotator(-60.0f, 0.0f, 0.0f));
-	SpringArm->TargetArmLength = 1500.0f;
-	SpringArm->bUsePawnControlRotation = false;
-	SpringArm->bInheritPitch = false;
-	SpringArm->bInheritRoll = false;
-	SpringArm->bInheritYaw = false;
-	SpringArm->bDoCollisionTest = false;
-	bUseControllerRotationYaw = false;
-	GetCharacterMovement()->bOrientRotationToMovement = false;
-	GetCharacterMovement()->bUseControllerDesiredRotation = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
+	CurrentAttackMode = NewAttackMode;
+
+	switch (NewAttackMode)
+	{
+	case AttackMode::Default:
+		SpringArm->SetRelativeRotation(FRotator(-60.0f, 0.0f, 0.0f));
+		//SpringArm->TargetArmLength = 1500.0f;
+		ArmLengthTo = 1300.0f;
+		SpringArm->bUsePawnControlRotation = false;
+		SpringArm->bInheritPitch = false;
+		SpringArm->bInheritRoll = false;
+		SpringArm->bInheritYaw = false;
+		SpringArm->bDoCollisionTest = false;
+		bUseControllerRotationYaw = false;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		GetCharacterMovement()->bUseControllerDesiredRotation = true;
+		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
+		break;
+	case AttackMode::Boss:
+		ArmLengthTo = 600.0f;
+		ArmRotationTo = FRotator(-45.0f, 0.0f, 0.0f);
+		bUseControllerRotationYaw = false;	// 마우스에 따라 캐릭터가 움직일것인지.
+		SpringArm->bUsePawnControlRotation = true;
+		SpringArm->bInheritPitch = true;
+		SpringArm->bInheritYaw = true;
+		SpringArm->bInheritRoll = true;
+		SpringArm->bDoCollisionTest = true;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
+		//GetController()->SetControlRotation(FRotator(-30.0f, YawOfLookingDirection, 0.0f));
+		break;
+	}
+
+
 }
 
 void ABPlayer::MoveForward(float AxisValue)
 {
-	if (bIsAttacking)
+	switch (CurrentAttackMode)
 	{
-		DirectionToMove.X = 0;
-	}
-	else
-	{
-		DirectionToMove.X = AxisValue;
+	case AttackMode::Default:
+		if (bIsAttacking)
+		{
+			DirectionToMove.X = 0;
+		}
+		else
+		{
+			DirectionToMove.X = AxisValue;
+		}
+		break;
+
+	case AttackMode::Boss:
+		if (!bIsAttacking)
+		{
+			AddMovementInput(FRotationMatrix(FRotator(0.0f, GetControlRotation().Yaw, 0.0f)).GetUnitAxis(EAxis::X), AxisValue);
+		}
+		break;
 	}
 }
 
 void ABPlayer::MoveRight(float AxisValue)
 {
-	if (bIsAttacking)
+	switch (CurrentAttackMode)
 	{
-		DirectionToMove.Y = 0;
+	case AttackMode::Default:
+		if (bIsAttacking)
+		{
+			DirectionToMove.Y = 0;
+		}
+		else
+		{
+			DirectionToMove.Y = AxisValue;
+		}
+		break;
+
+	case AttackMode::Boss:
+		if (!bIsAttacking)
+		{
+			AddMovementInput(FRotationMatrix(FRotator(0.0f, GetControlRotation().Yaw, 0.0f)).GetUnitAxis(EAxis::Y), AxisValue);
+		}
+		break;
+	}
+}
+
+void ABPlayer::Turn(float AxisValue)
+{
+	switch (CurrentAttackMode)
+	{
+	case AttackMode::Boss:
+		AddControllerYawInput(AxisValue);
+		break;
+	}
+}
+
+void ABPlayer::LookUp(float AxisValue)
+{
+	switch (CurrentAttackMode)
+	{
+	case AttackMode::Boss:
+		AddControllerPitchInput(AxisValue);
+		break;
+	}
+}
+
+void ABPlayer::test()
+{
+	if (CurrentAttackMode == AttackMode::Default)
+	{
+		CurrentAttackMode = AttackMode::Boss;
 	}
 	else
 	{
-		DirectionToMove.Y = AxisValue;
+		CurrentAttackMode = AttackMode::Default;
+	}
+	
+	switch (CurrentAttackMode)
+	{
+	case AttackMode::Default:
+		SpringArm->SetRelativeRotation(FRotator(-60.0f, 0.0f, 0.0f));
+		//SpringArm->TargetArmLength = 1500.0f;
+		ArmLengthTo = 1300.0f;
+		SpringArm->bUsePawnControlRotation = false;
+		SpringArm->bInheritPitch = false;
+		SpringArm->bInheritRoll = false;
+		SpringArm->bInheritYaw = false;
+		SpringArm->bDoCollisionTest = false;
+		bUseControllerRotationYaw = false;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		GetCharacterMovement()->bUseControllerDesiredRotation = true;
+		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
+		break;
+	case AttackMode::Boss:
+		ArmLengthTo = 600.0f;
+		ArmRotationTo = FRotator(-45.0f, 0.0f, 0.0f);
+		bUseControllerRotationYaw = false;	// 마우스에 따라 캐릭터가 움직일것인지.
+		SpringArm->bUsePawnControlRotation = true;
+		SpringArm->bInheritPitch = true;
+		SpringArm->bInheritYaw = true;
+		SpringArm->bInheritRoll = true;
+		SpringArm->bDoCollisionTest = true;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
+		//GetController()->SetControlRotation(FRotator(-30.0f, YawOfLookingDirection, 0.0f));
+		break;
 	}
 }
 

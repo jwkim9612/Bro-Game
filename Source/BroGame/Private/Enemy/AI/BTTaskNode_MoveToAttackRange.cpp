@@ -45,7 +45,15 @@ void UBTTaskNode_MoveToAttackRange::TickTask(UBehaviorTreeComponent & OwnerComp,
 		return;
 	}
 
-	BLOG(Warning, TEXT("distance %f"), Enemy->GetDistanceTo(Target));
+	// 오차가 10정도 나서 -10을 해주었다.
+	float Distance = Enemy->GetDistanceTo(Target) - 10;
+	float CanAttackRange =
+		Enemy->GetCapsuleComponent()->GetUnscaledCapsuleRadius() +
+		Target->GetCapsuleComponent()->GetUnscaledCapsuleRadius() +
+		Enemy->GetAttackRange();
 
-	BLOG(Warning, TEXT("Test"));
+	if (Distance < CanAttackRange)
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
 }

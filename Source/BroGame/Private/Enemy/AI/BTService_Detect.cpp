@@ -48,11 +48,13 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 			if (Player && Player->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ABAIControllerBase::TargetKey, Player);
+				ControllingPawn->SetTarget(Player);
 			}
 		}
 	}
 	else
 	{
 		OwnerComp.GetBlackboardComponent()->SetValueAsObject(ABAIControllerBase::TargetKey, nullptr);
+		ControllingPawn->SetTarget(nullptr);
 	}
 }

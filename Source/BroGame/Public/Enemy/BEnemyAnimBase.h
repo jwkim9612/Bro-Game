@@ -31,8 +31,11 @@ public:
 	FOnHitAttackDelegate OnHitAttack;
 
 protected:
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	class ABEnemyBase* Monster;
+
+	UPROPERTY(BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
+	class ABPlayer* Target;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	float CurrentSpeed;

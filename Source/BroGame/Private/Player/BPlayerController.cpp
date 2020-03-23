@@ -34,6 +34,8 @@ void ABPlayerController::BeginPlay()
 	}
 
 	BHUDWidget->BindPlayerState(BPlayerState);
+
+	SetClickMode(false);
 }
 
 void ABPlayerController::SetupInputComponent()
@@ -71,6 +73,20 @@ void ABPlayerController::MonsterKill(ABEnemyBase * KilledMonster)
 	// 화면에 돈 출력.
 }
 
+void ABPlayerController::SetClickMode(bool IsClickMode)
+{
+	if (IsClickMode)
+	{
+		SetInputMode(FInputModeGameAndUI());
+		bShowMouseCursor = true;
+	}
+	else
+	{
+		SetInputMode(FInputModeGameOnly());
+		bShowMouseCursor = false;
+	}
+}
+
 void ABPlayerController::OnGamePuase()
 {
 	if (GamePauseWidget != nullptr)
@@ -85,4 +101,6 @@ void ABPlayerController::OnGamePuase()
 	{
 		BHUDWidget->PauseAllAnimation();
 	}
+
+	SetClickMode(true);
 }

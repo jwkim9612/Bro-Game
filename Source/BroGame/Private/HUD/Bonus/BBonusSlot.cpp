@@ -73,6 +73,7 @@ void UBBonusSlot::OnBonusButtonClicked()
 	OnBonusClicked.Broadcast();
 	BHUDWidget->PlayHideBonusAnimation();
 	BPlayerContoller->SetPause(false);
+	BPlayerContoller->SetClickMode(false);
 }
 
 void UBBonusSlot::UpdateBonusText()

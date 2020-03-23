@@ -44,6 +44,9 @@ private:
 	void OnCinemaEnded();
 
 private:
+	UPROPERTY()
+	class UBGameInstance* BGameInstance;
+
 	FTimerHandle SequenceTimerHandle;
 	float SequenceTimer;
 	

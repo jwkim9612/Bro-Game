@@ -105,6 +105,11 @@ bool ABGameStateBase::IsBossNextWave() const
 	return CurrentWave % 10 == 1 ? true : false;
 }
 
+bool ABGameStateBase::IsFinalWave() const
+{
+	return CurrentWave == FinalWave ? true : false;
+}
+
 void ABGameStateBase::SetIsClear(bool IsClear)
 {
 	bIsClear = IsClear;
@@ -204,8 +209,9 @@ void ABGameStateBase::TickPerSecond()
 
 	OnCountDown.Broadcast();
 
-	if (CurrentTimeSec == 5)
+	if (CurrentTimeSec == 5 && CurrentWaveType == EWaveType::Normal)
 	{
+
 		OnReadyToMonster.Broadcast();
 	}
 
@@ -221,6 +227,11 @@ void ABGameStateBase::TickPerSecond()
 		if (CurrentWaveType == EWaveType::Boss)
 		{
 			OnBossCountDownDone.Broadcast();
+		}
+
+		if (IsFinalWave())
+		{
+			OnStartFinalWave.Broadcast();
 		}
 
 		//OnCountDownDone.Broadcast();

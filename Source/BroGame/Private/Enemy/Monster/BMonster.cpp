@@ -43,6 +43,14 @@ ABMonster::ABMonster()
 	VisibleHPBox->SetBoxExtent(VisibleHPBarBoxSize);
 	VisibleHPBox->OnComponentBeginOverlap.AddDynamic(this, &ABMonster::OnVisibleHPBarBoxBeginOverlap);
 	VisibleHPBox->OnComponentEndOverlap.AddDynamic(this, &ABMonster::OnVisibleHPBarBoxEndOverlap);
+
+	static ConstructorHelpers::FClassFinder<AAIController>
+		MonsterAIControllerClass(TEXT("Blueprint'/Game/AI/Monster/BMonsterAIController_BP.BMonsterAIController_BP_C'"));
+
+	if (MonsterAIControllerClass.Succeeded())
+	{
+		AIControllerClass = MonsterAIControllerClass.Class;
+	}
 }
 
 void ABMonster::BeginPlay()

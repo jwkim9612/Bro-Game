@@ -24,6 +24,10 @@ public:
 	class UBGamePauseWidget* GetGamePauseWidget() const;
 	void MonsterKill(class ABEnemyBase* KilledMonster);
 
+	// false = SetInputMode(FInputModeGameOnly())
+	// true = SetInputMode(FInputModeGameAndUI());
+	void SetClickMode(bool IsClickMode);
+
 private:
 	void OnGamePuase();
 

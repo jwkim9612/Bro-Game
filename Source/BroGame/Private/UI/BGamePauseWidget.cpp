@@ -31,6 +31,7 @@ void UBGamePauseWidget::OnContinueClicked()
 	{
 		RemoveFromParent();
 		BPlayerController->SetPause(false);
+		BPlayerController->SetClickMode(false);
 	}
 
 	UBHUDWidget* BHUDWidget = Cast<UBHUDWidget>(BPlayerController->GetHUDWidget());

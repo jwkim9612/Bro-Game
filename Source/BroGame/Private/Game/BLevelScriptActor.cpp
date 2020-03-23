@@ -2,6 +2,7 @@
 
 
 #include "BLevelScriptActor.h"
+#include "BGameInstance.h"
 #include "LevelSequence.h"
 #include "LevelSequencePlayer.h"
 #include "LevelSequenceActor.h"
@@ -12,6 +13,10 @@ void ABLevelScriptActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	BGameInstance = Cast<UBGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	BCHECK(BGameInstance != nullptr);
+
+	BGameInstance->SetLevelScriptActor();
 }
 
 ULevelSequencePlayer * ABLevelScriptActor::GetLevelSequencePlayer() const

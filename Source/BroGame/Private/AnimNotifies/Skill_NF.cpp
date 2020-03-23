@@ -47,7 +47,7 @@ void USkill_NF::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Anim
 	FVector StartLocation = SpawnTransform.GetLocation();
 	FVector EndLocation = SpawnTransform.GetLocation() + FVector(0.1, 0, 0);
 
-	DrawDebugSphere(World, SpawnTransform.GetLocation(), DamagedSphere.GetSphereRadius(), 50, FColor::Purple, true);
+	//DrawDebugSphere(World, SpawnTransform.GetLocation(), DamagedSphere.GetSphereRadius(), 50, FColor::Purple, true);
 
 	bool bResult = World->SweepMultiByChannel(
 		HitResults,

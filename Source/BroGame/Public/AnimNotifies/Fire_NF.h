@@ -23,4 +23,10 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Projectile")
 	FName SocketName;
+
+	UPROPERTY(EditAnywhere, Category = "Projectile")
+	int32 Count;
+
+	UPROPERTY(EditAnywhere, Category = "Projectile", meta = (UIMax = 90.0f, UIMin = 0.0f))
+	float Angle;
 };

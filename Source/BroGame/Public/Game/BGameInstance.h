@@ -29,6 +29,7 @@ public:
 	struct FBMonsterInfo GetMonsterData(FName MonsterName);
 	struct FBBossInfo GetBossData(FName BossName);
 	class UDataTable* GetBonusDataTable() const;
+	class ABLevelScriptActor* GetCurrentLevelScriptActor() const;
 
 	TMap<FName, class ABMonster*> GetMonsterTable() const;
 	TMap<FName, class ABBoss*> GetBossTable() const;
@@ -38,6 +39,7 @@ public:
 public:
 	void LoadMonster();
 	void LoadBoss();
+	void SetLevelScriptActor();
 
 public:
 	FStreamableManager AssetLoader;
@@ -61,6 +63,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Data")
 	class UDataTable* BonusDataTable;
+
+	UPROPERTY()
+	class ABLevelScriptActor* CurrentLevelScriptActor;
 
 private:
 	UPROPERTY()

@@ -11,6 +11,7 @@ void UBEnemyAnimBase::NativeUpdateAnimation(float DeltaSeconds)
 	if (Monster != nullptr)
 	{
 		CurrentSpeed = Monster->GetVelocity().Size();
+		Target		 = Monster->GetTarget();
 	}
 
 	if (bIsDead)
@@ -18,6 +19,8 @@ void UBEnemyAnimBase::NativeUpdateAnimation(float DeltaSeconds)
 		//Stops the animation montage. If reference is NULL, it will stop ALL active montages.
 		Montage_Stop(0.0f);
 	}
+
+	
 }
 
 void UBEnemyAnimBase::NativeBeginPlay()

@@ -10,6 +10,7 @@ DECLARE_MULTICAST_DELEGATE(FOnReadyToBossDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnReadyToMonsterDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnBossCountDownDoneDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnIsBossDeadDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnStartFinalWaveDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnBonusWaveClearDelegate);
 
 #include "BroGame.h"
@@ -38,6 +39,7 @@ public:
 	bool IsBonusWaveClear() const;
 	bool IsBossWave() const;
 	bool IsBossNextWave() const;
+	bool IsFinalWave() const;
 	void SetIsClear(bool IsClear);
 	int32 GetCurrentTimeMin() const;
 	int32 GetCurrentTimeSec() const;
@@ -65,6 +67,7 @@ public:
 	FOnReadyToMonsterDelegate OnReadyToMonster;
 	FOnBossCountDownDoneDelegate OnBossCountDownDone;
 	FOnIsBossDeadDelegate OnIsBossDead;
+	FOnStartFinalWaveDelegate OnStartFinalWave;
 	FOnBonusWaveClearDelegate OnBonusWaveClear;
 
 private:
@@ -95,4 +98,6 @@ private:
 	EWaveType CurrentWaveType;
 
 	bool IsBossDead = true;
+
+	const int32 FinalWave = 50;
 };

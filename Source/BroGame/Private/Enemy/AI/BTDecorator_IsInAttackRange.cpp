@@ -37,8 +37,6 @@ bool UBTDecorator_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeCompo
 	// ¸ó½ºÅÍ¿Í ÇÃ·¹ÀÌ¾îÀÇ Ä¸½¶Å©±â¸¦ ¼­·Î ´õÇÑ °ªÀÌ ³ª¿Í¼­ µÎ Ä¸½¶Å©±â¸¦ »©ÁÖ¾ú´Ù.
 	float DistanceFromPawnToTarget = (Target->GetDistanceTo(ControllingPawn)) - (ControllingPawnCapsuleRadius + TargetCapsuleRadius);
 
-	BLOG(Warning, TEXT("DistanceFromPawnToTarget = %f, GetAttackRange = %f"), DistanceFromPawnToTarget, ControllingPawn->GetAttackRange());
-
 	bResult = (DistanceFromPawnToTarget <= ControllingPawn->GetAttackRange());
 	return bResult;
 }

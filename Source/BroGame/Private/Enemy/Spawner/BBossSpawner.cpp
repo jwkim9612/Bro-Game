@@ -27,6 +27,9 @@ void ABBossSpawner::PostInitializeComponents()
 	if (BGameStateBase != nullptr)
 	{
 		BGameStateBase->OnBossCountDownDone.AddUObject(this, &ABBossSpawner::Spawn);
+		BGameStateBase->OnStartFinalWave.AddLambda([this]() -> void {
+			Destroy();
+		});
 	}
 }
 
@@ -54,11 +57,10 @@ void ABBossSpawner::InitBossData()
 
 void ABBossSpawner::Spawn()
 {
-	BLOG(Warning, TEXT("Boss Spawn"));
-
 	FVector Vec = GetActorLocation();
-	FRotator Rot = FRotator::ZeroRotator;
-
+	// 보스가 뒤돌아보고있어서 180도 돌려줌
+	FRotator Rot = FRotator(0.0f, 180.0f, 0.0f);
+	
 	if (GetWorld()->SpawnActor<ABBoss>(BBoss->GetClass(), Vec, Rot))
 	{
 		// 보스 소환

@@ -17,6 +17,12 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	enum class AttackMode : uint8
+	{
+		Default,
+		Boss
+	};
+
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
@@ -33,10 +39,13 @@ public:
 	int32 GetMaxCombo() const;
 
 private:
-	void SetControlMode();
+	void SetControlMode(AttackMode NewAttackMode);
 
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
+	void Turn(float AxisValue);
+	void LookUp(float AxisValue);
+	void test();
 
 	void Attack();
 	void AttackCheck();
@@ -89,12 +98,27 @@ private:
 	class ABPlayerController* BPlayerController;
 
 	UPROPERTY()
+	class UBGameInstance* BGameInstance;
+
+	UPROPERTY()
+	class ABGameStateBase* BGameStateBase;
+
+	UPROPERTY()
 	class ABPlayerState* BPlayerState;
 
 	FVector DirectionToMove = FVector::ZeroVector;
+
+	float ArmLengthTo = 0.0f;
+	FRotator ArmRotationTo = FRotator::ZeroRotator;
+	float ArmLengthSpeed = 0.0f;
+	float ArmRotationSpeed = 0.0f;
 
 	bool bIsAttacking;
 	bool OnComboInput;
 	bool CanNextAttack;
 	int32 CurrentCombo;
+	AttackMode CurrentAttackMode;
+
+	FTimerHandle BackToDefaultAttackModeHandle;
+	float BackToDefaultAttackModeTimer = 2.0f;
 };

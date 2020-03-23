@@ -2,6 +2,7 @@
 
 
 #include "BHUDWidget.h"
+#include "BGameInstance.h"
 #include "BGameStateBase.h"
 #include "BPlayerState.h"
 #include "BTimerWidget.h"
@@ -25,10 +26,13 @@ void UBHUDWidget::NativeConstruct()
 
 	BPlayerController = Cast<ABPlayerController>(GetOwningPlayer());
 	BGameStateBase = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
-	BLevelScriptActor = Cast<ABLevelScriptActor>(GetWorld()->GetLevelScriptActor());
+	BGameInstance = Cast<UBGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 	BCHECK(BPlayerController != nullptr);
 	BCHECK(BGameStateBase != nullptr);
+	BCHECK(BGameInstance != nullptr);
+
+	BLevelScriptActor = BGameInstance->GetCurrentLevelScriptActor();
 	BCHECK(BLevelScriptActor != nullptr);
 
 	BGameStateBase->OnCountDownStart.AddLambda([this]() -> void {
@@ -39,7 +43,8 @@ void UBHUDWidget::NativeConstruct()
 		TimerWidget->SetVisibility(ESlateVisibility::Hidden);
 	});
 
-	BLevelScriptActor->OnEndCinematic.AddUObject(this, &UBHUDWidget::OnCinemaEnded);
+	BGameInstance->GetCurrentLevelScriptActor()->OnEndCinematic.AddUObject(this, &UBHUDWidget::OnCinemaEnded);
+
 
 	UWidgetBlueprintGeneratedClass* WidgetAni = Cast<UWidgetBlueprintGeneratedClass>(GetClass());
 
@@ -75,7 +80,6 @@ void UBHUDWidget::NativeConstruct()
 		}
 	}
 
-
 	BGameStateBase->OnReadyToBoss.AddLambda([this, BossSpawner]() -> void {
 		BossSpawner->InitBossData();
 		WantedWidget->Init(BossSpawner->GetCurrentBoss());
@@ -94,6 +98,7 @@ void UBHUDWidget::NativeConstruct()
 				BonusWidget->SlotsUpdate();
 			}
 
+			BPlayerController->SetClickMode(true);
 			PlayShowBonusAnimation();
 			BPlayerController->SetPause(true);
 		}), BonusTimer, false);
@@ -104,14 +109,10 @@ void UBHUDWidget::NativeConstruct()
 	});
 
 	BGameStateBase->OnBossCountDownDone.AddLambda([this]() -> void {
-		if (BLevelScriptActor != nullptr)
+		if (BLevelScriptActor->PlayBossCinematic(BGameStateBase->GetCurrentBossWave()))
 		{
-			if (BLevelScriptActor->PlayBossCinematic(BGameStateBase->GetCurrentBossWave()))
-			{
-				SetVisibility(ESlateVisibility::Hidden);
-			}
+			SetVisibility(ESlateVisibility::Hidden);
 		}
-
 		BossHPWidget->SetVisibility(ESlateVisibility::Visible);
 	});
 

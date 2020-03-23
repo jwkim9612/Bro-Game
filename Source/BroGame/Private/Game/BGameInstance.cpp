@@ -5,6 +5,7 @@
 #include "BBonusManager.h"
 #include "BMonster.h"
 #include "BBoss.h"
+#include "BLevelScriptActor.h"
 
 UBGameInstance::UBGameInstance()
 {
@@ -42,6 +43,11 @@ FBBossInfo UBGameInstance::GetBossData(FName BossName)
 UDataTable * UBGameInstance::GetBonusDataTable() const
 {
 	return BonusDataTable;
+}
+
+ABLevelScriptActor * UBGameInstance::GetCurrentLevelScriptActor() const
+{
+	return CurrentLevelScriptActor;
 }
 
 TMap<FName, ABMonster*> UBGameInstance::GetMonsterTable() const
@@ -169,4 +175,9 @@ void UBGameInstance::LoadBoss()
 			BossTable.Add(Name, Boss);
 		}
 	}
+}
+
+void UBGameInstance::SetLevelScriptActor()
+{
+	CurrentLevelScriptActor = Cast<ABLevelScriptActor>(GetWorld()->GetLevelScriptActor());
 }

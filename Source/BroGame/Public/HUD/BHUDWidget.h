@@ -81,13 +81,16 @@ private:
 	TMap<class UWidgetAnimation*, float> Animations;
 
 	UPROPERTY()
+	class UBGameInstance* BGameInstance;
+
+	UPROPERTY()
 	class ABGameStateBase* BGameStateBase;
 
 	UPROPERTY()
 	class ABPlayerController* BPlayerController;
 
 	FTimerHandle BonusTimerHandle;
-	float BonusTimer = 1.0f;
+	float BonusTimer = 3.0f;
 
 	// ½Ã³×¸¶Æ½
 	UPROPERTY()

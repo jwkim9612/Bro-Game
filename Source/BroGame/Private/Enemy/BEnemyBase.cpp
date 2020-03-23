@@ -7,6 +7,7 @@
 #include "BEnemyStatComponent.h"
 #include "BGameStateBase.h"
 #include "BPlayerController.h"
+#include "BPlayer.h"
 #include "DrawDebugHelpers.h"
 
 ABEnemyBase::ABEnemyBase()
@@ -138,6 +139,11 @@ int32 ABEnemyBase::GetDropMoney() const
 	return DropMoney;
 }
 
+ABPlayer * ABEnemyBase::GetTarget() const
+{
+	return Target;
+}
+
 bool ABEnemyBase::IsAttacking() const
 {
 	return bIsAttacking == true ? true : false;
@@ -186,6 +192,11 @@ void ABEnemyBase::SetDropMoney(int32 NewDropMoney)
 	}
 
 	DropMoney = NewDropMoney;
+}
+
+void ABEnemyBase::SetTarget(ABPlayer * Player)
+{
+	Target = Player;
 }
 
 UBEnemyStatComponent * ABEnemyBase::GetCurrentStat() const
