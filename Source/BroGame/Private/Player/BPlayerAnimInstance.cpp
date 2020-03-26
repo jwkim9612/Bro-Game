@@ -20,11 +20,12 @@ void UBPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	//PlayerCharacter = Cast<ABPlayer>(TryGetPawnOwner());
 	if (PlayerCharacter != nullptr)
 	{
 		CurrentSpeed	= PlayerCharacter->GetVelocity().Size();
 		IsInAir			= PlayerCharacter->GetMovementComponent()->IsFalling();
+		IsFocusMode		= PlayerCharacter->IsFocusing();
+		PressKey		= PlayerCharacter->GetPressed();
 	}
 }
 

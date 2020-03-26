@@ -35,8 +35,6 @@ class BROGAME_API UBUpgradeWindow : public UBWindowBase
 	
 public:
 	void Init(class UBInterfaceWidgetBase* InterfaceWidget) override;
-	
-	void OnCloseButtonClicked() override;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Info")

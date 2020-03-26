@@ -15,7 +15,7 @@ class BROGAME_API UBShowButton : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	void Init(class UTexture2D* Texture, class UBInterfaceWidgetBase* InterfaceWidget);
+	void Init(class UTexture2D* Texture, class UBInterfaceWidgetBase* InterfaceWidget, FName NewKeyName);
 	
 public:
 	UFUNCTION()
@@ -27,6 +27,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UImage* ShowImage;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* MappingKeyText;
 
 	UPROPERTY()
 	class UBInterfaceWidgetBase* BInterfaceWidget;

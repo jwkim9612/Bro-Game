@@ -30,11 +30,14 @@ ABPlayer::ABPlayer()
 
 	DefaultCanCombo = 1;
 
-	SetControlMode(AttackMode::Default);
+	SetAttackMode(AttackMode::Default);
 	EndComboState();
 
 	ArmLengthSpeed = 3.0f;
 	ArmRotationSpeed = 10.0f;
+	
+	bFocus = false;
+	PressKey = Pressed::Press_None;
 }
 
 // Called when the game starts or when spawned
@@ -54,12 +57,12 @@ void ABPlayer::BeginPlay()
 
 	BPlayerController->GetHUDWidget()->UpdatePlayerHPWidget();
 	BGameInstance->GetCurrentLevelScriptActor()->OnEndCinematic.AddLambda([this]() -> void {
-		SetControlMode(AttackMode::Boss);
+		SetAttackMode(AttackMode::Boss);
 	});
 
 	BGameStateBase->OnIsBossDead.AddLambda([this]() -> void {
 		GetWorld()->GetTimerManager().SetTimer(BackToDefaultAttackModeHandle, FTimerDelegate::CreateLambda([this]() -> void {
-			SetControlMode(AttackMode::Default);
+			SetAttackMode(AttackMode::Default);
 		}), BackToDefaultAttackModeTimer, false);
 	});
 }
@@ -68,6 +71,9 @@ void ABPlayer::BeginPlay()
 void ABPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// 액터가 바라보는 방향 Yaw값
+	YawOfLookingDirection = GetCapsuleComponent()->GetRelativeTransform().Rotator().Yaw;
 
 	SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength, ArmLengthTo, DeltaTime, ArmLengthSpeed);
 
@@ -81,6 +87,22 @@ void ABPlayer::Tick(float DeltaTime)
 				GetController()->SetControlRotation(FRotationMatrix::MakeFromX(DirectionToMove).Rotator());
 				AddMovementInput(DirectionToMove);
 			}
+			break;
+		}
+		case AttackMode::Boss:
+		{
+			// Default모드는 SpringArm의 회전값을 사용하지 않고 컨트롤러의 회전값을 사용중이고, Focus모드에서는 SpringArm의 회전값을 이용한다.
+			// Focus모드로 변경했을 때 Focus시점으로 부드럽게 화면을 전환시키기 위해 Default모드일 때의 회전값을 SpringArm회전값에 대입해둔다.
+			SpringArm->SetRelativeRotation(GetControlRotation());
+			break;
+		}
+		case AttackMode::Focus:
+		{
+			// 카메라의 정면으로 캐릭터를 부드럽게 회전
+			GetCapsuleComponent()->SetRelativeRotation(FMath::RInterpTo(GetActorRotation(), FRotator(0.0f, GetControlRotation().Yaw, 0.0f), DeltaTime, /*IterpSpeed =*/20.0f));
+
+			// 위 Default에서 대입해둔 회전값부터 Focus시점까지 화면을 부드럽게 전환
+			SpringArm->SetRelativeRotation(FMath::RInterpTo(SpringArm->GetRelativeTransform().Rotator(), FocusingRotation, DeltaTime, 5.0f));
 			break;
 		}
 	}
@@ -120,13 +142,15 @@ void ABPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ABPlayer::MoveForward);
-	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ABPlayer::MoveRight);
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ABPlayer::MoveUpDown);
+	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ABPlayer::MoveRightLeft);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ABPlayer::Turn);
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &ABPlayer::LookUp);
 
 	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &ABPlayer::Attack);
 	PlayerInputComponent->BindAction(TEXT("test"), EInputEvent::IE_Pressed, this, &ABPlayer::test);
+	PlayerInputComponent->BindAction("Focus", EInputEvent::IE_Pressed, this, &ABPlayer::OnFocus);
+	PlayerInputComponent->BindAction("Focus", EInputEvent::IE_Released, this, &ABPlayer::OffFocus);
 }
 
 UTexture2D * ABPlayer::GetTexture() const
@@ -164,7 +188,17 @@ int32 ABPlayer::GetMaxCombo() const
 	return MaxCombo;
 }
 
-void ABPlayer::SetControlMode(AttackMode NewAttackMode)
+Pressed ABPlayer::GetPressed() const
+{
+	return PressKey;
+}
+
+bool ABPlayer::IsFocusing() const
+{
+	return bFocus;
+}
+
+void ABPlayer::SetAttackMode(AttackMode NewAttackMode)
 {
 	CurrentAttackMode = NewAttackMode;
 
@@ -195,14 +229,25 @@ void ABPlayer::SetControlMode(AttackMode NewAttackMode)
 		SpringArm->bDoCollisionTest = true;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
-		//GetController()->SetControlRotation(FRotator(-30.0f, YawOfLookingDirection, 0.0f));
+		GetController()->SetControlRotation(FRotator(-30.0f, YawOfLookingDirection, 0.0f));
+		break;
+	case AttackMode::Focus:
+		ArmLengthTo = 450.0f;
+		bUseControllerRotationYaw = true;
+		//SpringArm->SetRelativeRotation(FRotator(-30.0f, 0.0f, 0.0f));
+		SpringArm->bUsePawnControlRotation = true;
+		SpringArm->bInheritPitch = false;
+		SpringArm->bInheritYaw = true;
+		SpringArm->bInheritRoll = false;
+		SpringArm->bDoCollisionTest = false;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
 		break;
 	}
 
 
 }
 
-void ABPlayer::MoveForward(float AxisValue)
+void ABPlayer::MoveUpDown(float AxisValue)
 {
 	switch (CurrentAttackMode)
 	{
@@ -218,6 +263,10 @@ void ABPlayer::MoveForward(float AxisValue)
 		break;
 
 	case AttackMode::Boss:
+	case AttackMode::Focus:
+
+		SetForwardBackwardPressedByValue(AxisValue);
+
 		if (!bIsAttacking)
 		{
 			AddMovementInput(FRotationMatrix(FRotator(0.0f, GetControlRotation().Yaw, 0.0f)).GetUnitAxis(EAxis::X), AxisValue);
@@ -226,7 +275,7 @@ void ABPlayer::MoveForward(float AxisValue)
 	}
 }
 
-void ABPlayer::MoveRight(float AxisValue)
+void ABPlayer::MoveRightLeft(float AxisValue)
 {
 	switch (CurrentAttackMode)
 	{
@@ -242,6 +291,10 @@ void ABPlayer::MoveRight(float AxisValue)
 		break;
 
 	case AttackMode::Boss:
+	case AttackMode::Focus:
+
+		SetLeftRightPressedByValue(AxisValue);
+
 		if (!bIsAttacking)
 		{
 			AddMovementInput(FRotationMatrix(FRotator(0.0f, GetControlRotation().Yaw, 0.0f)).GetUnitAxis(EAxis::Y), AxisValue);
@@ -255,6 +308,7 @@ void ABPlayer::Turn(float AxisValue)
 	switch (CurrentAttackMode)
 	{
 	case AttackMode::Boss:
+	case AttackMode::Focus: 
 		AddControllerYawInput(AxisValue);
 		break;
 	}
@@ -267,6 +321,34 @@ void ABPlayer::LookUp(float AxisValue)
 	case AttackMode::Boss:
 		AddControllerPitchInput(AxisValue);
 		break;
+	}
+}
+
+void ABPlayer::SetForwardBackwardPressedByValue(float AxisValue)
+{
+	if (AxisValue == 0)
+	{
+		PressKey = Pressed::Press_None;
+	}
+	else if (AxisValue > 0)
+	{
+		PressKey = Pressed::Press_Up;
+	}
+	else if (AxisValue < 0)
+	{
+		PressKey = Pressed::Press_Down;
+	}
+}
+
+void ABPlayer::SetLeftRightPressedByValue(float AxisValue)
+{
+	if (AxisValue > 0)
+	{
+		PressKey = Pressed::Press_Right;
+	}
+	else if (AxisValue < 0)
+	{
+		PressKey = Pressed::Press_Left;
 	}
 }
 
@@ -308,7 +390,19 @@ void ABPlayer::test()
 		SpringArm->bDoCollisionTest = true;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
-		//GetController()->SetControlRotation(FRotator(-30.0f, YawOfLookingDirection, 0.0f));
+		GetController()->SetControlRotation(FRotator(-30.0f, YawOfLookingDirection, 0.0f));
+		break;
+	case AttackMode::Focus:
+		ArmLengthTo = 450.0f;
+		//bUseControllerRotationYaw = false;
+		bUseControllerRotationYaw = true;
+		//SpringArm->SetRelativeRotation(FRotator(-30.0f, 0.0f, 0.0f));
+		SpringArm->bUsePawnControlRotation = true;
+		SpringArm->bInheritPitch = false;
+		SpringArm->bInheritYaw = true;
+		SpringArm->bInheritRoll = false;
+		SpringArm->bDoCollisionTest = false;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
 		break;
 	}
 }
@@ -406,6 +500,28 @@ void ABPlayer::EndComboState()
 	OnComboInput = false;
 	CanNextAttack = false;
 	CurrentCombo = 0;
+}
+
+void ABPlayer::OnFocus()
+{
+	if (bIsAttacking || CurrentAttackMode == AttackMode::Default)
+	{
+		return;
+	}
+
+	bFocus = true;
+	SetAttackMode(AttackMode::Focus);
+}
+
+void ABPlayer::OffFocus()
+{
+	if (CurrentAttackMode == AttackMode::Default || CurrentAttackMode == AttackMode::Boss)
+	{
+		return;
+	}
+
+	bFocus = false;
+	SetAttackMode(AttackMode::Boss);
 }
 
 void ABPlayer::PlayParticle(UParticleSystem * ParticleSystem) const

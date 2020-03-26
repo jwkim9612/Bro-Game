@@ -2,6 +2,7 @@
 
 
 #include "BWindowBase.h"
+#include "BInterfaceWidgetBase.h"
 
 void UBWindowBase::Init(class UBInterfaceWidgetBase* InterfaceWidget)
 {
@@ -10,5 +11,5 @@ void UBWindowBase::Init(class UBInterfaceWidgetBase* InterfaceWidget)
 
 void UBWindowBase::OnCloseButtonClicked()
 {
-
+	BInterfaceWidget->OnInterface();
 }

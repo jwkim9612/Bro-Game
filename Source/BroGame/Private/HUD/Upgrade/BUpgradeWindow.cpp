@@ -42,8 +42,3 @@ void UBUpgradeWindow::Init(class UBInterfaceWidgetBase* InterfaceWidget)
 		CloseButton->OnClicked.AddDynamic(this, &UBUpgradeWindow::OnCloseButtonClicked);
 	}
 }
-
-void UBUpgradeWindow::OnCloseButtonClicked()
-{
-	BInterfaceWidget->HideInterface();
-}

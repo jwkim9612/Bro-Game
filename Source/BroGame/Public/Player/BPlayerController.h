@@ -30,6 +30,8 @@ public:
 
 private:
 	void OnGamePuase();
+	void OnStatWindow();
+	void OnUpgradeWindow();
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "UI")

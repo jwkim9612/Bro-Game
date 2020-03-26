@@ -50,5 +50,11 @@ private:
 	bool IsInAir = false;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
+	bool IsFocusMode = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
+	Pressed PressKey;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	UAnimMontage* GroundAttackMontage;
 };

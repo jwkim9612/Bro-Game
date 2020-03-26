@@ -195,6 +195,31 @@ void UBHUDWidget::ResumeAnimation(TPair<class UWidgetAnimation*, float> Animatio
 	PlayAnimation(Animation.Key, Animation.Value, 1, EUMGSequencePlayMode::Forward, 1.0f);
 }
 
+UBUpgradeWidget * UBHUDWidget::GetUpgradeWidget() const
+{
+	return UpgradeWidget;
+}
+
+UBStatWidget * UBHUDWidget::GetStatWidget() const
+{
+	return StatWidget;
+}
+
+bool UBHUDWidget::IsOpendedInterface() const
+{
+	return CountOfOpenedInterface > 0 ? true : false;
+}
+
+void UBHUDWidget::AddCountOfOpenedInterface()
+{
+	++CountOfOpenedInterface;
+}
+
+void UBHUDWidget::MinCountOfOpenedInterface()
+{
+	--CountOfOpenedInterface;
+}
+
 void UBHUDWidget::SetCanNotClickButton()
 {
 	StatWidget->SetVisibility(ESlateVisibility::HitTestInvisible);

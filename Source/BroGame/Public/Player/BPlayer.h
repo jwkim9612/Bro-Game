@@ -20,7 +20,8 @@ protected:
 	enum class AttackMode : uint8
 	{
 		Default,
-		Boss
+		Boss,
+		Focus
 	};
 
 public:
@@ -37,20 +38,29 @@ public:
 	float GetDefaultMaxHP() const;
 	int32 GetDefaultCanCombo() const;
 	int32 GetMaxCombo() const;
+	Pressed GetPressed() const;
+
+	bool IsFocusing() const;
 
 private:
-	void SetControlMode(AttackMode NewAttackMode);
+	void SetAttackMode(AttackMode NewAttackMode);
 
-	void MoveForward(float AxisValue);
-	void MoveRight(float AxisValue);
+	void MoveUpDown(float AxisValue);
+	void MoveRightLeft(float AxisValue);
 	void Turn(float AxisValue);
 	void LookUp(float AxisValue);
+
+	void SetForwardBackwardPressedByValue(float AxisValue);
+	void SetLeftRightPressedByValue(float AxisValue);
 	void test();
 
 	void Attack();
 	void AttackCheck();
 	void StartComboState();
 	void EndComboState();
+
+	void OnFocus();
+	void OffFocus();
 
 	void PlayParticle(UParticleSystem* ParticleSystem) const;
 
@@ -108,11 +118,16 @@ private:
 
 	FVector DirectionToMove = FVector::ZeroVector;
 
+	float YawOfLookingDirection;
 	float ArmLengthTo = 0.0f;
 	FRotator ArmRotationTo = FRotator::ZeroRotator;
 	float ArmLengthSpeed = 0.0f;
 	float ArmRotationSpeed = 0.0f;
 
+	Pressed PressKey;
+	FRotator FocusingRotation = FRotator(-30.0f, 0.0f, 0.0f);
+
+	bool bFocus;
 	bool bIsAttacking;
 	bool OnComboInput;
 	bool CanNextAttack;

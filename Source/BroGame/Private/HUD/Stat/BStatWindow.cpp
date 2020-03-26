@@ -43,8 +43,3 @@ void UBStatWindow::Init(class UBInterfaceWidgetBase* InterfaceWidget)
 		CloseButton->OnClicked.AddDynamic(this, &UBStatWindow::OnCloseButtonClicked);
 	}
 }
-
-void UBStatWindow::OnCloseButtonClicked()
-{
-	BInterfaceWidget->HideInterface();
-}

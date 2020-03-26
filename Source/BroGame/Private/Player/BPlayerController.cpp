@@ -10,6 +10,8 @@
 #include "BHUDWidget.h"
 #include "BMonster.h"
 #include "BEnemyStatComponent.h"
+#include "BStatWidget.h"
+#include "BUpgradeWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Math/RandomStream.h"
@@ -42,6 +44,8 @@ void ABPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 	InputComponent->BindAction(TEXT("GamePause"), EInputEvent::IE_Pressed, this, &ABPlayerController::OnGamePuase);
+	InputComponent->BindAction(TEXT("Stat"), EInputEvent::IE_Pressed, this, &ABPlayerController::OnStatWindow);
+	InputComponent->BindAction(TEXT("Upgrade"), EInputEvent::IE_Pressed, this, &ABPlayerController::OnUpgradeWindow);
 }
 
 void ABPlayerController::OnPossess(APawn * aPawn)
@@ -77,11 +81,21 @@ void ABPlayerController::SetClickMode(bool IsClickMode)
 {
 	if (IsClickMode)
 	{
+		if (BHUDWidget->IsOpendedInterface())
+		{
+			return;
+		}
+
 		SetInputMode(FInputModeGameAndUI());
 		bShowMouseCursor = true;
 	}
 	else
 	{
+		if (BHUDWidget->IsOpendedInterface())
+		{
+			return;
+		}
+
 		SetInputMode(FInputModeGameOnly());
 		bShowMouseCursor = false;
 	}
@@ -103,4 +117,14 @@ void ABPlayerController::OnGamePuase()
 	}
 
 	SetClickMode(true);
+}
+
+void ABPlayerController::OnStatWindow()
+{
+	BHUDWidget->GetStatWidget()->OnInterface();
+}
+
+void ABPlayerController::OnUpgradeWindow()
+{
+	BHUDWidget->GetUpgradeWidget()->OnInterface();
 }

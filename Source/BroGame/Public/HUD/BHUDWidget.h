@@ -28,6 +28,13 @@ public:
 	void PauseAllAnimation();
 	void ResumeAllAnimation();
 	void ResumeAnimation(TPair<class UWidgetAnimation*, float> Animation);
+	
+	class UBUpgradeWidget* GetUpgradeWidget() const;
+	class UBStatWidget* GetStatWidget() const;
+
+	bool IsOpendedInterface() const;
+	void AddCountOfOpenedInterface();
+	void MinCountOfOpenedInterface();
 
 	// 스텟과 업그레이드 버튼 클릭관련
 	void SetCanNotClickButton();
@@ -75,6 +82,9 @@ private:
 
 	UPROPERTY()
 	class UWidgetAnimation* HideBonusAnimation;
+
+	// 인터페이스 열려있는지.
+	int32 CountOfOpenedInterface;
 
 	// 애니메이션과 시간
 	UPROPERTY()

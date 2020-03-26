@@ -5,11 +5,13 @@
 #include "BInterfaceWidgetBase.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
+#include "Components/TextBlock.h"
 
-void UBShowButton::Init(UTexture2D* Texture, UBInterfaceWidgetBase* InterfaceWidget)
+void UBShowButton::Init(UTexture2D* Texture, UBInterfaceWidgetBase* InterfaceWidget, FName NewKeyName)
 {
 	BInterfaceWidget = InterfaceWidget;
 	ShowImage->SetBrushFromTexture(Texture);
+	MappingKeyText->SetText(FText::FromName(NewKeyName));
 
 	if (ShowButton != nullptr)
 	{

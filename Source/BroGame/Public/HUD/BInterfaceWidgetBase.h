@@ -19,8 +19,11 @@ public:
 
 public:
 	void Init();
+	void OnInterface();
+
 	void ShowInterface();
 	void HideInterface();
+	bool IsOpened() const;
 
 private:
 	UPROPERTY(meta = (BindWidget))
@@ -32,6 +35,17 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	class UTexture2D* MenuImage;
 
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	FName MappingKey;
+
 	UPROPERTY()
 	class UWidgetAnimation* InterfaceAnimation;
+
+	UPROPERTY()
+	class ABPlayerController* BPlayerContoller;
+
+	UPROPERTY()
+	class UBHUDWidget* BHUDWidget;
+
+	bool bIsOpened = false;
 };

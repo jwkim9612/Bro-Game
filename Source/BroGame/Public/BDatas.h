@@ -17,6 +17,16 @@ class BROGAME_API UBDatas : public UObject
 	
 };
 
+UENUM(BlueprintType)
+enum class Pressed : uint8
+{
+	Press_None	UMETA(DisplayName = "None"),
+	Press_Up	UMETA(DisplayName = "Up"),
+	Press_Down	UMETA(DisplayName = "Down"),
+	Press_Left	UMETA(DisplayName = "Left"),
+	Press_Right	UMETA(DisplayName = "Right")
+};
+
 UENUM()
 enum class EWaveState : uint8
 {
