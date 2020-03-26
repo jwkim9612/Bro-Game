@@ -11,6 +11,7 @@
 UBTTaskNode_TurnToTarget::UBTTaskNode_TurnToTarget()
 {
 	NodeName = TEXT("Turn");
+	bCreateNodeInstance = true;
 }
 
 EBTNodeResult::Type UBTTaskNode_TurnToTarget::ExecuteTask(UBehaviorTreeComponent & OwnerComp, uint8 * NodeMemory)

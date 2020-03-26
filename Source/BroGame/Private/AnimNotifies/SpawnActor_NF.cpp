@@ -2,7 +2,6 @@
 
 
 #include "SpawnActor_NF.h"
-#include "BSkillActor.h"
 #include "BGameInstance.h"
 
 void USpawnActor_NF::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)

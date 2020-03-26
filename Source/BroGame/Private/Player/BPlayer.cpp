@@ -37,6 +37,7 @@ ABPlayer::ABPlayer()
 	ArmRotationSpeed = 10.0f;
 	
 	bFocus = false;
+	bIsDead = false;
 	PressKey = Pressed::Press_None;
 }
 
@@ -65,6 +66,8 @@ void ABPlayer::BeginPlay()
 			SetAttackMode(AttackMode::Default);
 		}), BackToDefaultAttackModeTimer, false);
 	});
+
+	BPlayerState->OnHPIsZero.AddUObject(this, &ABPlayer::Dead);
 }
 
 // Called every frame
@@ -134,7 +137,7 @@ float ABPlayer::TakeDamage(float Damage, FDamageEvent const & DamageEvent, ACont
 
 	PlayParticle(HitParticle);
 	BPlayerState->SetHPToDamage(FMath::Clamp<int32>(Damage - BPlayerState->GetCurrentDefense(), 1, Damage));
-
+		
 	return FinalDamage;
 }
 
@@ -198,6 +201,11 @@ bool ABPlayer::IsFocusing() const
 	return bFocus;
 }
 
+bool ABPlayer::IsDead() const
+{
+	return bIsDead;
+}
+
 void ABPlayer::SetAttackMode(AttackMode NewAttackMode)
 {
 	CurrentAttackMode = NewAttackMode;
@@ -226,7 +234,7 @@ void ABPlayer::SetAttackMode(AttackMode NewAttackMode)
 		SpringArm->bInheritPitch = true;
 		SpringArm->bInheritYaw = true;
 		SpringArm->bInheritRoll = true;
-		SpringArm->bDoCollisionTest = true;
+		SpringArm->bDoCollisionTest = false;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
 		GetController()->SetControlRotation(FRotator(-30.0f, YawOfLookingDirection, 0.0f));
@@ -249,6 +257,11 @@ void ABPlayer::SetAttackMode(AttackMode NewAttackMode)
 
 void ABPlayer::MoveUpDown(float AxisValue)
 {
+	if (IsDead())
+	{
+		return;
+	}
+
 	switch (CurrentAttackMode)
 	{
 	case AttackMode::Default:
@@ -277,6 +290,11 @@ void ABPlayer::MoveUpDown(float AxisValue)
 
 void ABPlayer::MoveRightLeft(float AxisValue)
 {
+	if (IsDead())
+	{
+		return;
+	}
+
 	switch (CurrentAttackMode)
 	{
 	case AttackMode::Default:
@@ -305,6 +323,11 @@ void ABPlayer::MoveRightLeft(float AxisValue)
 
 void ABPlayer::Turn(float AxisValue)
 {
+	if (IsDead())
+	{
+		return;
+	}
+
 	switch (CurrentAttackMode)
 	{
 	case AttackMode::Boss:
@@ -316,6 +339,11 @@ void ABPlayer::Turn(float AxisValue)
 
 void ABPlayer::LookUp(float AxisValue)
 {
+	if (IsDead())
+	{
+		return;
+	}
+
 	switch (CurrentAttackMode)
 	{
 	case AttackMode::Boss:
@@ -387,7 +415,7 @@ void ABPlayer::test()
 		SpringArm->bInheritPitch = true;
 		SpringArm->bInheritYaw = true;
 		SpringArm->bInheritRoll = true;
-		SpringArm->bDoCollisionTest = true;
+		SpringArm->bDoCollisionTest = false;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
 		GetController()->SetControlRotation(FRotator(-30.0f, YawOfLookingDirection, 0.0f));
@@ -409,6 +437,11 @@ void ABPlayer::test()
 
 void ABPlayer::Attack()
 {
+	if (IsDead())
+	{
+		return;
+	}
+
 	if (!bIsAttacking)
 	{
 		bIsAttacking = true;
@@ -528,6 +561,13 @@ void ABPlayer::PlayParticle(UParticleSystem * ParticleSystem) const
 {
 	BCHECK(ParticleSystem != nullptr);
 	UGameplayStatics::SpawnEmitterAttached(ParticleSystem, RootComponent, NAME_None);
+}
+
+void ABPlayer::Dead()
+{
+	bIsDead = true;
+	SetActorEnableCollision(false);
+	BAnimInstance->SetIsDead(true);
 }
 
 void ABPlayer::OnAttackMontageEnded(UAnimMontage * AnimMontage, bool Interrupted)

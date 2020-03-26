@@ -35,6 +35,11 @@ void ABPlayerState::SetHP(int32 NewHP)
 {
 	CurrentHP = NewHP;
 	OnHPChanged.Broadcast();
+
+	if (CurrentHP == 0)
+	{
+		OnHPIsZero.Broadcast();
+	}
 }
 
 void ABPlayerState::SetHPToDamage(int32 Damage)

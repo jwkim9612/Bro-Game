@@ -55,3 +55,8 @@ FName UBPlayerAnimInstance::GetAttackMontageSectionName(int32 Section)
 {
 	return FName(*FString::Printf(TEXT("Attack%d"), Section));
 }
+
+void UBPlayerAnimInstance::SetIsDead(bool IsDead)
+{
+	bIsDead = IsDead;
+}

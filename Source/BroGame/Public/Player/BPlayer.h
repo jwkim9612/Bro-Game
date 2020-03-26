@@ -41,6 +41,7 @@ public:
 	Pressed GetPressed() const;
 
 	bool IsFocusing() const;
+	bool IsDead() const;
 
 private:
 	void SetAttackMode(AttackMode NewAttackMode);
@@ -63,6 +64,7 @@ private:
 	void OffFocus();
 
 	void PlayParticle(UParticleSystem* ParticleSystem) const;
+	void Dead();
 
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* AnimMontage, bool Interrupted);
@@ -129,6 +131,7 @@ private:
 
 	bool bFocus;
 	bool bIsAttacking;
+	bool bIsDead;
 	bool OnComboInput;
 	bool CanNextAttack;
 	int32 CurrentCombo;

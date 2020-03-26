@@ -29,6 +29,8 @@ public:
 	void JumptoNextAttackSection(int32 NewSection);
 	FName GetAttackMontageSectionName(int32 Section);
 
+	void SetIsDead(bool IsDead);
+
 	FOnCanNextAttackDelegate OnCanNextAttack;
 	FOnHitAttackDelegate OnHitAttack;
 
@@ -48,6 +50,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	bool IsInAir = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
+	bool bIsDead;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = true))
 	bool IsFocusMode = false;

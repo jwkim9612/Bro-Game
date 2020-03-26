@@ -14,6 +14,7 @@ DECLARE_MULTICAST_DELEGATE(FOnSpeedChangedDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnCanComboChangedDelegate);
 
 DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnHPIsZeroDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnMoneyChangedDelegate);
 
 // PlayerState 는 네트워크 게임에서 매우 유용한 클래스이다. 
@@ -64,6 +65,7 @@ public:
 	FOnCanComboChangedDelegate OnCanComboChanged;
 
 	FOnHPChangedDelegate OnHPChanged;
+	FOnHPIsZeroDelegate OnHPIsZero;
 	FOnMoneyChangedDelegate OnMoneyChanged;
 
 private:
