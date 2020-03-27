@@ -28,6 +28,8 @@ public:
 	// true = SetInputMode(FInputModeGameAndUI());
 	void SetClickMode(bool IsClickMode);
 
+	void OnGameOver();
+
 private:
 	void OnGamePuase();
 	void OnStatWindow();
@@ -40,6 +42,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UUserWidget> GamePauseWidgetClass;
 
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<class UBGameOverWidget> GameOverWidgetClass;
+
 private:
 	UPROPERTY()
 	class UBGamePauseWidget* GamePauseWidget;
@@ -48,5 +53,11 @@ private:
 	class UBHUDWidget* BHUDWidget;
 
 	UPROPERTY()
+	class UBGameOverWidget* GameOverWidget;
+
+	UPROPERTY()
 	class ABPlayerState* BPlayerState;
+
+	UPROPERTY()
+	class ABPlayer* BPlayer;
 };

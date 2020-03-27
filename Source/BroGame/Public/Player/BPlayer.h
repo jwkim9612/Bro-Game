@@ -131,12 +131,15 @@ private:
 
 	bool bFocus;
 	bool bIsAttacking;
-	bool bIsDead;
 	bool OnComboInput;
 	bool CanNextAttack;
 	int32 CurrentCombo;
 	AttackMode CurrentAttackMode;
 
-	FTimerHandle BackToDefaultAttackModeHandle;
+	FTimerHandle BackToDefaultAttackModeTimerHandle;
 	float BackToDefaultAttackModeTimer = 2.0f;
+
+	bool bIsDead;
+	FTimerHandle DeadTimerHandle;
+	float DeadTimer = 3.0f;
 };

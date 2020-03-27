@@ -62,7 +62,7 @@ void ABPlayer::BeginPlay()
 	});
 
 	BGameStateBase->OnIsBossDead.AddLambda([this]() -> void {
-		GetWorld()->GetTimerManager().SetTimer(BackToDefaultAttackModeHandle, FTimerDelegate::CreateLambda([this]() -> void {
+		GetWorld()->GetTimerManager().SetTimer(BackToDefaultAttackModeTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
 			SetAttackMode(AttackMode::Default);
 		}), BackToDefaultAttackModeTimer, false);
 	});
@@ -537,7 +537,7 @@ void ABPlayer::EndComboState()
 
 void ABPlayer::OnFocus()
 {
-	if (bIsAttacking || CurrentAttackMode == AttackMode::Default)
+	if (bIsAttacking || CurrentAttackMode == AttackMode::Default || IsDead())
 	{
 		return;
 	}
@@ -548,7 +548,7 @@ void ABPlayer::OnFocus()
 
 void ABPlayer::OffFocus()
 {
-	if (CurrentAttackMode == AttackMode::Default || CurrentAttackMode == AttackMode::Boss)
+	if (CurrentAttackMode == AttackMode::Default || CurrentAttackMode == AttackMode::Boss|| IsDead())
 	{
 		return;
 	}
@@ -568,6 +568,10 @@ void ABPlayer::Dead()
 	bIsDead = true;
 	SetActorEnableCollision(false);
 	BAnimInstance->SetIsDead(true);
+
+	GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
+		BPlayerController->OnGameOver();
+	}), DeadTimer, false);
 }
 
 void ABPlayer::OnAttackMontageEnded(UAnimMontage * AnimMontage, bool Interrupted)

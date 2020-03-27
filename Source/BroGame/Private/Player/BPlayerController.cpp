@@ -3,6 +3,7 @@
 
 #include "BPlayerController.h"
 #include "BGamePauseWidget.h"
+#include "BGameOverWidget.h"
 #include "BGameStateBase.h"
 #include "BPlayer.h"
 #include "BSaveGame.h"
@@ -35,6 +36,11 @@ void ABPlayerController::BeginPlay()
 		GamePauseWidget = CreateWidget<UBGamePauseWidget>(this, GamePauseWidgetClass);
 	}
 
+	if (GameOverWidgetClass)
+	{
+		GameOverWidget = CreateWidget<UBGameOverWidget>(this, GameOverWidgetClass);
+	}
+
 	BHUDWidget->BindPlayerState(BPlayerState);
 
 	SetClickMode(false);
@@ -52,8 +58,11 @@ void ABPlayerController::OnPossess(APawn * aPawn)
 {
 	Super::OnPossess(aPawn);
 	
+	BPlayer = Cast<ABPlayer>(aPawn);
 	BPlayerState = Cast<ABPlayerState>(PlayerState);
-	BCHECK(BPlayerState);
+
+	BCHECK(nullptr != BPlayer);
+	BCHECK(nullptr != BPlayerState);
 	BPlayerState->InitPlayerData(aPawn);
 }
 
@@ -103,9 +112,34 @@ void ABPlayerController::SetClickMode(bool IsClickMode)
 
 void ABPlayerController::OnGamePuase()
 {
+	if (BPlayer->IsDead())
+	{
+		return;
+	}
+
 	if (GamePauseWidget != nullptr)
 	{
 		GamePauseWidget->AddToViewport(3);
+	}
+
+	BHUDWidget->SetCanNotClickButton();
+	SetPause(true);
+
+	if (BHUDWidget->IsPlayingAnimation())
+	{
+		BHUDWidget->PauseAllAnimation();
+	}
+
+	SetClickMode(true);
+}
+
+void ABPlayerController::OnGameOver()
+{
+	BLOG(Warning, TEXT("Game Over"));
+
+	if (GameOverWidget != nullptr)
+	{
+		GameOverWidget->AddToViewport(3);
 	}
 
 	BHUDWidget->SetCanNotClickButton();
