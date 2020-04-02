@@ -67,7 +67,8 @@ enum class  EBonusType : uint8
 	Money,
 	Speed,
 	MaxHP,
-	Combo
+	Combo,
+	HPRecovery
 };
 
 USTRUCT()

@@ -26,11 +26,22 @@ EBTNodeResult::Type UBTTaskNode_PlayMontage::ExecuteTask(UBehaviorTreeComponent 
 	BBoss->GetCharacterMovement()->MaxWalkSpeed = 0.0f;
 	
 	float MontagePlayTime = BBoss->GetAnimInstance()->Montage_Play(Montage);
+	int32 PlayCount = 0;
 
-	GetWorld()->GetTimerManager().SetTimer(MontageEndTimerHandle, FTimerDelegate::CreateLambda([this, BBoss, DefaultCharacterSpeed]() -> void {
+	GetWorld()->GetTimerManager().SetTimer(MontageEndTimerHandle, FTimerDelegate::CreateLambda([this, BBoss, DefaultCharacterSpeed, PlayCount]() mutable {
 		BBoss->GetCharacterMovement()->MaxWalkSpeed = DefaultCharacterSpeed;
-		bIsDone = true;
-	}), MontagePlayTime, false);
+		++PlayCount;
+
+		if (PlayCount == Count)
+		{
+			GetWorld()->GetTimerManager().ClearTimer(MontageEndTimerHandle);
+			bIsDone = true;
+		}
+		else
+		{
+			BBoss->GetAnimInstance()->Montage_Play(Montage);
+		}
+	}), MontagePlayTime, true);
 
 	return EBTNodeResult::InProgress;
 }

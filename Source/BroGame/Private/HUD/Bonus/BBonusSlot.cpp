@@ -65,6 +65,9 @@ void UBBonusSlot::OnBonusButtonClicked()
 	case EBonusType::Combo:
 		BPlayerState->ComboUp(BonusInfo.BonusValue);
 		break;
+	case EBonusType::HPRecovery:
+		BPlayerState->SetHPToRecoveryValue(BonusInfo.BonusValue);
+		break;
 	default:
 		BLOG(Warning, TEXT("Error!"));
 		break;
@@ -101,6 +104,8 @@ void UBBonusSlot::UpdateBonusImage()
 	case EBonusType::Combo:
 		BonusTexture = BGameInstance->BBonusManager->GetComboTexture();
 		break;
+	case EBonusType::HPRecovery:
+		BonusTexture = BGameInstance->BBonusManager->GetHPRecoveryTexture();
 	}
 
 	BCHECK(BonusTexture != nullptr);

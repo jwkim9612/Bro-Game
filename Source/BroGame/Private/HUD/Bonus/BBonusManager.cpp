@@ -39,6 +39,14 @@ UBBonusManager::UBBonusManager()
 	{
 		ComboTexture = Combo_Texture.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UTexture2D>
+		HPRecovery_Texture(TEXT("Texture2D'/Game/GameData/Interface/HPRecovery.HPRecovery'"));
+
+	if (HPRecovery_Texture.Succeeded())
+	{
+		HPRecoveryTexture = HPRecovery_Texture.Object;
+	}
 }
 
 void UBBonusManager::Init()
@@ -117,6 +125,11 @@ UTexture2D * UBBonusManager::GetMoneyTexture() const
 UTexture2D * UBBonusManager::GetComboTexture() const
 {
 	return ComboTexture;
+}
+
+UTexture2D * UBBonusManager::GetHPRecoveryTexture() const
+{
+	return HPRecoveryTexture;
 }
 
 bool UBBonusManager::IsInNormalRange(float Num)

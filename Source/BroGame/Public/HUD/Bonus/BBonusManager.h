@@ -28,6 +28,7 @@ public:
 	class UTexture2D* GetSpeedTexture() const;
 	class UTexture2D* GetMoneyTexture() const;
 	class UTexture2D* GetComboTexture() const;
+	class UTexture2D* GetHPRecoveryTexture() const;
 
 private:
 	bool IsInNormalRange(float Num);
@@ -63,4 +64,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Image")
 	class UTexture2D* ComboTexture;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Image")
+	class UTexture2D* HPRecoveryTexture;
 };

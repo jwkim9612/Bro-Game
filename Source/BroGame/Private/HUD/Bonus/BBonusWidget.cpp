@@ -48,7 +48,7 @@ void UBBonusWidget::SlotsUpdateOnBossWave()
 
 	ABGameStateBase* BGameState = Cast<ABGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
 	// 인덱스는 0부터 시작이기때문에 1을 뺌
-	int32 BossIndex = BGameState->GetCurrentWave() / 10 - 1;
+	int32 BossIndex = BGameState->GetCurrentWave() / 5 - 1;
 
 	for (auto& Bonus : Bonuses)
 	{

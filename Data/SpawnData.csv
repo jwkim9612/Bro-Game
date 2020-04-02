@@ -1,51 +1,51 @@
 ﻿Wave,MonsterName,Num,Damage,MaxHP,Speed,Size,DropMoney,,,
-1,"(""SmallWhiteMinion"")",(1),(1),(10),(300),(1),(1),,,능력치에 0을 넣으면 기본값으로 초기화
-2,"(""SmallWhiteMinion"")",(9),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/SmallWhiteMinion/BSmallWhiteMinion_BP.BSmallWhiteMinion_BP_C"")"
-3,"(""SmallWhiteMinion"")",(27),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/SmallWhiteMinion/BSmallWhiteMinion_BP.BSmallWhiteMinion_BP_C"")"
-4,"(""WhiteMinion"")",(1),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/SmallWhiteMinion/BSmallWhiteMinion_BP.BSmallWhiteMinion_BP_C"")"
-5,"(""WhiteMinion"")",(9),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/WhiteMinion/BWhiteMinion_BP.BWhiteMinion_BP_C"")"
-6,"(""WhiteMinion"")",(27),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/WhiteMinion/BWhiteMinion_BP.BWhiteMinion_BP_C"")"
-7,"(""SmallWhiteMinion"", ""WhiteMinion"")","(1, 1)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,"(""/Game/Character/Monster/WhiteMinion/BWhiteMinion_BP.BWhiteMinion_BP_C"")"
-8,"(""SmallWhiteMinion"", ""WhiteMinion"")","(9, 9)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,"(""/Game/Character/Monster/SmallWhiteMinion/BSmallWhiteMinion_BP.BSmallWhiteMinion_BP_C"", ""/Game/Character/Monster/WhiteMinion/BWhiteMinion_BP.BWhiteMinion_BP_C"")"
-9,"(""SmallWhiteMinion"", ""WhiteMinion"")","(27, 27)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,"(""/Game/Character/Monster/SmallWhiteMinion/BSmallWhiteMinion_BP.BSmallWhiteMinion_BP_C"", ""/Game/Character/Monster/WhiteMinion/BWhiteMinion_BP.BWhiteMinion_BP_C"")"
-10,,,,,,,,,,"(""/Game/Character/Monster/SmallWhiteMinion/BSmallWhiteMinion_BP.BSmallWhiteMinion_BP_C"", ""/Game/Character/Monster/WhiteMinion/BWhiteMinion_BP.BWhiteMinion_BP_C"")"
-11,"(""BlackMinion"")",(1),(1),(10),(300),(1),(1),,,
-12,"(""BlackMinion"")",(9),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/BlackMinion/BBlackMinion_BP.BBlackMinion_BP_C"")"
-13,"(""BlackMinion"")",(27),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/BlackMinion/BBlackMinion_BP.BBlackMinion_BP_C"")"
-14,"(""SuperMinion"")",(1),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/BlackMinion/BBlackMinion_BP.BBlackMinion_BP_C"")"
-15,"(""SuperMinion"")",(9),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/SuperMinion/BSuperMinion_BP.BSuperMinion_BP_C"")"
-16,"(""SuperMinion"")",(27),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/SuperMinion/BSuperMinion_BP.BSuperMinion_BP_C"")"
-17,"(""BlackMinion"", ""SuperMinion"")","(1, 1)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,"(""/Game/Character/Monster/SuperMinion/BSuperMinion_BP.BSuperMinion_BP_C"")"
-18,"(""BlackMinion"", ""SuperMinion"")","(9, 9)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,"(""/Game/Character/Monster/BlackMinion/BBlackMinion_BP.BBlackMinion_BP_C"", ""/Game/Character/Monster/SuperMinion/BSuperMinion_BP.BSuperMinion_BP_C"")"
-19,"(""BlackMinion"", ""SuperMinion"")","(27, 27)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,"(""/Game/Character/Monster/BlackMinion/BBlackMinion_BP.BBlackMinion_BP_C"", ""/Game/Character/Monster/SuperMinion/BSuperMinion_BP.BSuperMinion_BP_C"")"
-20,,,,,,,,,,"(""/Game/Character/Monster/BlackMinion/BBlackMinion_BP.BBlackMinion_BP_C"", ""/Game/Character/Monster/SuperMinion/BSuperMinion_BP.BSuperMinion_BP_C"")"
-21,"(""ForestWhiteMinion"")",(1),(1),(10),(300),(1),(1),,,
-22,"(""ForestWhiteMinion"")",(9),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/ForestWhiteMinion/BForestWhiteMinion_BP.BForestWhiteMinion_BP_C"")"
-23,"(""ForestWhiteMinion"")",(27),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/ForestWhiteMinion/BForestWhiteMinion_BP.BForestWhiteMinion_BP_C"")"
-24,"(""Raptor"")",(1),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/ForestWhiteMinion/BForestWhiteMinion_BP.BForestWhiteMinion_BP_C"")"
-25,"(""Raptor"")",(9),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/Rapter/BRapter_BP.BRapter_BP_C"")"
-26,"(""Raptor"")",(27),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/Rapter/BRapter_BP.BRapter_BP_C"")"
-27,"(""ForestWhiteMinion"", ""Raptor"")","(1, 1)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,"(""/Game/Character/Monster/Rapter/BRapter_BP.BRapter_BP_C"")"
-28,"(""ForestWhiteMinion"", ""Raptor"")","(9, 9)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,"(""/Game/Character/Monster/ForestWhiteMinion/BForestWhiteMinion_BP.BForestWhiteMinion_BP_C"", ""/Game/Character/Monster/Rapter/BRapter_BP.BRapter_BP_C"")"
-29,"(""ForestWhiteMinion"", ""Raptor"")","(27, 27)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,"(""/Game/Character/Monster/ForestWhiteMinion/BForestWhiteMinion_BP.BForestWhiteMinion_BP_C"", ""/Game/Character/Monster/Rapter/BRapter_BP.BRapter_BP_C"")"
-30,,,,,,,,,,"(""/Game/Character/Monster/ForestWhiteMinion/BForestWhiteMinion_BP.BForestWhiteMinion_BP_C"", ""/Game/Character/Monster/Rapter/BRapter_BP.BRapter_BP_C"")"
-31,"(""BlueFly"")",(1),(1),(10),(300),(1),(1),,,
-32,"(""BlueFly"")",(9),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/BlueFly/BBlueFly_BP.BBlueFly_BP_C"")"
-33,"(""BlueFly"")",(27),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/BlueFly/BBlueFly_BP.BBlueFly_BP_C"")"
-34,"(""RangeMinion"")",(1),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/BlueFly/BBlueFly_BP.BBlueFly_BP_C"")"
-35,"(""RangeMinion"")",(9),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/RangeMinion/BRangeMinion_BP.BRangeMinion_BP_C"")"
-36,"(""RangeMinion"")",(27),(1),(10),(300),(1),(1),,,"(""/Game/Character/Monster/RangeMinion/BRangeMinion_BP.BRangeMinion_BP_C"")"
-37,"(""BlueFly"", ""RangeMinion"")","(1, 1)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,"(""/Game/Character/Monster/RangeMinion/BRangeMinion_BP.BRangeMinion_BP_C"")"
-38,"(""BlueFly"", ""RangeMinion"")","(9, 9)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,"(""/Game/Character/Monster/BlueFly/BBlueFly_BP.BBlueFly_BP_C"", ""/Game/Character/Monster/RangeMinion/BRangeMinion_BP.BRangeMinion_BP_C"")"
-39,"(""BlueFly"", ""RangeMinion"")","(27, 27)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,"(""/Game/Character/Monster/BlueFly/BBlueFly_BP.BBlueFly_BP_C"", ""/Game/Character/Monster/RangeMinion/BRangeMinion_BP.BRangeMinion_BP_C"")"
-40,,,,,,,,,,"(""/Game/Character/Monster/BlueFly/BBlueFly_BP.BBlueFly_BP_C"", ""/Game/Character/Monster/RangeMinion/BRangeMinion_BP.BRangeMinion_BP_C"")"
-41,"(""SuperWhiteMinion"")",(1),(1),(10),(300),(1),(1),,,
-42,"(""SuperWhiteMinion"")",(9),(1),(10),(300),(1),(1),,,
-43,"(""SuperWhiteMinion"")",(27),(1),(10),(300),(1),(1),,,
-44,"(""SuperBlackMinion"")",(1),(1),(10),(300),(1),(1),,,
-45,"(""SuperBlackMinion"")",(9),(1),(10),(300),(1),(1),,,
-46,"(""SuperBlackMinion"")",(27),(1),(10),(300),(1),(1),,,
-47,"(""SuperWhiteMinion"", ""SuperBlackMinion"")","(1, 1)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,
-48,"(""SuperWhiteMinion"", ""SuperBlackMinion"")","(9, 9)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,
-49,"(""SuperWhiteMinion"", ""SuperBlackMinion"")","(27, 27)","(1, 1)","(10, 10)","(300, 300)","(1, 1)","(1, 1)",,,
-50,,,,,,,,,,
+1,"(""SmallWhiteMinion"")",(3),(1),(2),(300),(1),(1),,,능력치에 0을 넣으면 기본값으로 초기화
+2,"(""SmallWhiteMinion"")",(27),(2),(5),(300),(0.5),(2),,,
+3,"(""SmallWhiteMinion"", ""SmallWhiteMinion"")","(3, 3)","(1, 2)","(2, 5)","(300, 300)","(1, 2)","(1, 3)",,,
+4,"(""WhiteMinion"", SmallWhiteMinion)","(3 , 3)","(2, 2)","(5, 2)","(300, 300)","(1, 1)","(2, 2)",,,
+5,,,,,,,,,,
+6,"(""BlackMinion"")",(3),(3),(7),(300),(1),(3),,,
+7,"(""SuperMinion"")",(3),(4),(8),(300),(1),(4),,,
+8,"(""BlackMinion"", ""SuperMinion"")","(3, 3)","(3, 4)","(7, 8)","(300, 300)","(1, 1)","(3, 4)",,,
+9,"(""BlackMinion"", ""SuperMinion"")","(9, 9)","(3, 4)","(7, 8)","(300, 300)","(1, 1)","(3, 4)",,,
+10,,,,,,,,,,
+11,"(""ForestWhiteMinion"")",(3),(5),(9),(300),(1),(5),,,
+12,"(""Raptor"")",(3),(6),(10),(300),(1),(6),,,
+13,"(""ForestWhiteMinion"", ""Raptor"")","(3, 3)","(5, 6)","(9, 10)","(300, 300)","(1, 1)","(5, 6)",,,
+14,"(""ForestWhiteMinion"", ""Raptor"")","(9, 9)","(5, 6)","(9, 10)","(300, 300)","(1, 1)","(5, 6)",,,
+15,,,,,,,,,,
+16,"(""BlueFly"")",(1),(3),(5),(300),(1),(10),,,
+17,"(""RangeMinion"")",(3),(6),(10),(300),(1),(20),,,
+18,"(""BlueFly"", ""RangeMinion"")","(1, 3)","(3, 6)","(5, 10)","(300, 300)","(1, 1)","(10, 20)",,,
+19,"(""BlueFly"", ""RangeMinion"")","(2, 6)","(3, 6)","(5, 10)","(300, 300)","(1, 1)","(10, 20)",,,
+20,,,,,,,,,,
+21,"(""SuperWhiteMinion"")",(3),(10),(20),(300),(1),(20),,,
+22,"(""SuperBlackMinion"")",(3),(15),(30),(300),(1),(30),,,
+23,"(""SuperWhiteMinion"", ""SuperBlackMinion"")","(3, 3)","(10, 15)","(20, 30)","(300, 300)","(1, 1)","(20, 30)",,,
+24,"(""SuperWhiteMinion"", ""SuperBlackMinion"")","(9, 9)","(10, 15)","(20, 30)","(300, 300)","(1, 1)","(20, 30)",,,
+25,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,

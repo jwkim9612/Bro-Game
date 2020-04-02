@@ -47,6 +47,11 @@ void ABPlayerState::SetHPToDamage(int32 Damage)
 	SetHP(FMath::Clamp(CurrentHP - Damage, 0, CurrentMaxHP));
 }
 
+void ABPlayerState::SetHPToRecoveryValue(int32 RecoveryValue)
+{
+	SetHP(FMath::Clamp(CurrentHP + RecoveryValue, CurrentHP + RecoveryValue, CurrentMaxHP));
+}
+
 float ABPlayerState::GetHPRatio() const
 {
 	return static_cast<float>(CurrentHP) / static_cast<float>(CurrentMaxHP);

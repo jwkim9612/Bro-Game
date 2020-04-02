@@ -3,6 +3,7 @@
 
 #include "SpawnActor_NF.h"
 #include "BGameInstance.h"
+#include "BLazer.h"
 
 void USpawnActor_NF::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
@@ -25,6 +26,14 @@ void USpawnActor_NF::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase*
 
 	for (int32 i = 0; i < SpawnNum; ++i)
 	{
+		if (Actor->IsA<ABLazer>())
+		{
+			ABLazer* Lazer = World->SpawnActor<ABLazer>(Actor->GetClass(), SpawnTransform);
+			Lazer->SetContoller(MeshComp->GetOwner()->GetInstigatorController());
+			Lazer->SetActor(Actor);
+			continue;
+		}
+
 		FVector vec = BGameInstance->GetSnailLocation(ControllingCharacter->GetActorLocation(), 0, ControllingCharacter->GetCapsuleComponent()->GetUnscaledCapsuleRadius() * 2, i + 1);
 		SpawnTransform.SetLocation(vec);
 

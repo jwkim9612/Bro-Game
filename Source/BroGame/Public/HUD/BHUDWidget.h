@@ -25,6 +25,7 @@ public:
 	void PlayWantedAnimation();
 	void PlayShowBonusAnimation();
 	void PlayHideBonusAnimation();
+	void PlayGameClearAnimation();
 	void PauseAllAnimation();
 	void ResumeAllAnimation();
 	void ResumeAnimation(TPair<class UWidgetAnimation*, float> Animation);
@@ -83,6 +84,9 @@ private:
 	UPROPERTY()
 	class UWidgetAnimation* HideBonusAnimation;
 
+	UPROPERTY()
+	class UWidgetAnimation* GameClearAnimation;
+
 	// 인터페이스 열려있는지.
 	int32 CountOfOpenedInterface;
 
@@ -108,4 +112,7 @@ private:
 
 	FTimerHandle SequenceTimerHandle;
 	float SequenceTimer = 1.0f;
+
+	FTimerHandle GameClearTimerHandle;
+	float GameClearTimer;
 };

@@ -46,7 +46,7 @@ ABBoss* ABBossSpawner::GetCurrentBoss() const
 
 void ABBossSpawner::InitBossData()
 {
-	int32 CurrentBossWave = BGameStateBase->GetCurrentWave() / 10;
+	int32 CurrentBossWave = BGameStateBase->GetCurrentWave() / 5;
 	BCHECK(CurrentBossWave >= 0);
 
 	SetBossSpawnData(CurrentBossWave);

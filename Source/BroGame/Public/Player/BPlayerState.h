@@ -40,6 +40,7 @@ public:
 	void InitPlayerData(class APawn* Pawn);
 	void SetHP(int32 NewHP);
 	void SetHPToDamage(int32 Damage);
+	void SetHPToRecoveryValue(int32 RecoveryValue);
 	float GetHPRatio() const;
 	int32 GetCurrentAttack() const;
 	int32 GetCurrentDefense() const;

@@ -67,6 +67,12 @@ void UBHUDWidget::NativeConstruct()
 			HideBonusAnimation = Ani;
 			Animations.Add(HideBonusAnimation, 0.0f);
 		}
+
+		if (TEXT("GameClearAnim_INST") == Ani->GetName())
+		{
+			GameClearAnimation = Ani;
+			Animations.Add(GameClearAnimation, 0.0f);
+		}
 	}
 
 	ABBossSpawner* BossSpawner;
@@ -114,6 +120,14 @@ void UBHUDWidget::NativeConstruct()
 			SetVisibility(ESlateVisibility::Hidden);
 		}
 		BossHPWidget->SetVisibility(ESlateVisibility::Visible);
+	});
+
+	BGameStateBase->OnGameClear.AddLambda([this]() -> void {
+		PlayGameClearAnimation();
+		GameClearTimer = GameClearAnimation->GetEndTime();
+		GetWorld()->GetTimerManager().SetTimer(GameClearTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
+			UGameplayStatics::OpenLevel(GetWorld(), TEXT("Main"), true);
+		}), GameClearTimer, false);
 	});
 
 	UpgradeWidget->Init();
@@ -166,6 +180,11 @@ void UBHUDWidget::PlayShowBonusAnimation()
 void UBHUDWidget::PlayHideBonusAnimation()
 {
 	PlayAnimation(HideBonusAnimation, 0.0f, 1, EUMGSequencePlayMode::Forward, 1.0f);
+}
+
+void UBHUDWidget::PlayGameClearAnimation()
+{
+	PlayAnimation(GameClearAnimation, 0.0f, 1, EUMGSequencePlayMode::Forward, 1.0f);
 }
 
 void UBHUDWidget::PauseAllAnimation()
@@ -228,8 +247,8 @@ void UBHUDWidget::SetCanNotClickButton()
 
 void UBHUDWidget::SetCanClickButton()
 {
-	StatWidget->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
-	UpgradeWidget->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+	StatWidget->SetVisibility(ESlateVisibility::Visible);
+	UpgradeWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UBHUDWidget::OnCinemaEnded()

@@ -29,6 +29,8 @@ void ABProjectile::BeginPlay()
 	
 	//CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ABProjectile::OnProjectileOverlapBegin);
 	CollisionComponent->OnComponentHit.AddDynamic(this, &ABProjectile::OnHit);
+
+	BLOG(Warning, TEXT("Begin!"));
 }
 
 void ABProjectile::Tick(float DeltaTime)
@@ -77,8 +79,12 @@ void ABProjectile::SetActor(AActor * Actor)
 
 void ABProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit)
 {
+	BLOG(Warning, TEXT("Hit!"));
+
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComponent != nullptr))
 	{
+		BLOG(Warning, TEXT("%s"), *OtherActor->GetName());
+
 		ACharacter* Character = Cast<ACharacter>(OtherActor);
 		if (Character != nullptr)
 		{

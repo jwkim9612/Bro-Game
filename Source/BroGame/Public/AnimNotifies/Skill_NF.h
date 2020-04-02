@@ -40,6 +40,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Particle")
 	float Radius;
 
+	UPROPERTY(EditAnywhere, Category = "Damage")
+	float Damage;
+
 	UPROPERTY()
 	class UBGameInstance* BGameInstance;
 

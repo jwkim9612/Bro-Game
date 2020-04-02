@@ -50,7 +50,7 @@ private:
 	struct FBMonsterInfo MonsterData;
 
 	FTimerHandle DeadTimerHandle;
-	float DeadTimer = 3.0f;
+	float DeadTimer = 1.5f;
 
 	FVector VisibleHPBarBoxSize = FVector(300.0f, 300.0f, 100.0f);
 

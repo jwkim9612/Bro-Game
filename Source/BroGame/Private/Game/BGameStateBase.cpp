@@ -49,6 +49,16 @@ void ABGameStateBase::Tick(float DeltaSeconds)
 	case EWaveType::Boss:
 		if (CurrentWaveState == EWaveState::PLAY && IsBossDead)
 		{
+			OnIsBossDead.Broadcast();
+			SetIsClear(true);
+
+			if (IsFinalWave())
+			{
+				OnGameClear.Broadcast();
+				CurrentWaveState = EWaveState::PREINIT;
+				return;
+			}
+
 			if (IsBonusWaveClear())
 			{
 				OnBonusWaveClear.Broadcast();
@@ -56,9 +66,8 @@ void ABGameStateBase::Tick(float DeltaSeconds)
 
 			++CurrentWave;
 			OnCurrentWaveChange.Broadcast();
-			OnIsBossDead.Broadcast();
-			SetIsClear(true);
 			StartTimer();
+
 		}
 		break;
 	}
@@ -83,9 +92,24 @@ bool ABGameStateBase::IsStageClear() const
 
 bool ABGameStateBase::IsBonusWaveClear() const
 {
+	//int32 CheckWave = CurrentWave % 10;
+
+	//if (CheckWave == 3 || CheckWave == 8 || IsBossWave())
+	if (IsBonusWave() || IsBossWave())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool ABGameStateBase::IsBonusWave() const
+{
 	int32 CheckWave = CurrentWave % 10;
 
-	if (CheckWave == 3 || CheckWave == 6 || CheckWave == 0)
+	if (CheckWave == 3 || CheckWave == 8)
 	{
 		return true;
 	}
@@ -97,12 +121,12 @@ bool ABGameStateBase::IsBonusWaveClear() const
 
 bool ABGameStateBase::IsBossWave() const
 {
-	return CurrentWave % 10 == 0 ? true : false;
+	return CurrentWave % 5 == 0 ? true : false;
 }
 
 bool ABGameStateBase::IsBossNextWave() const
 {
-	return CurrentWave % 10 == 1 ? true : false;
+	return CurrentWave % 5 == 1 ? true : false;
 }
 
 bool ABGameStateBase::IsFinalWave() const
@@ -132,10 +156,10 @@ int32 ABGameStateBase::GetCurrentWave() const
 
 int32 ABGameStateBase::GetCurrentBossWave() const
 {
-	if (CurrentWave < 10)
+	if (CurrentWave < 5)
 		return 0;
 
-	return CurrentWave / 10;
+	return CurrentWave / 5;
 }
 
 EWaveType ABGameStateBase::GetCurrentWaveType() const
@@ -241,7 +265,7 @@ void ABGameStateBase::TickPerSecond()
 
 void ABGameStateBase::ChangeWaveType(int32 Wave)
 {
-	if (Wave % 10 == 0)
+	if (Wave % 5 == 0)
 	{
 		CurrentWaveType = EWaveType::Boss;
 	}

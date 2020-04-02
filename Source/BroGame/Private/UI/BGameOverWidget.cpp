@@ -20,9 +20,10 @@ void UBGameOverWidget::NativeConstruct()
 void UBGameOverWidget::OnRetryClicked()
 {
 	BLOG(Warning, TEXT("Retry"));
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("test1"), true);
 }
 
 void UBGameOverWidget::OnBacktoTitleClicked()
 {
-	BLOG(Warning, TEXT("Backtotitle"));
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("Main"));
 }

@@ -11,8 +11,8 @@ void USkill_NF::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Anim
 	UWorld* World = MeshComp->GetWorld();
 	BCHECK(World != nullptr);
 
-	AActor* Actor = MeshComp->GetOwner();
-	BCHECK(Actor != nullptr);
+	AActor* Caster = MeshComp->GetOwner();
+	BCHECK(Caster != nullptr);
 
 	const FTransform MeshTransform = MeshComp->GetSocketTransform(SocketName);
 	FTransform SpawnTransform;
@@ -25,11 +25,11 @@ void USkill_NF::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Anim
 
 	ECollisionChannel TraceChannel;
 
-	if (Actor->IsA<ABEnemyBase>())
+	if (Caster->IsA<ABEnemyBase>())
 	{
 		TraceChannel = ECollisionChannel::ECC_GameTraceChannel6;
 	}
-	else if (Actor->IsA<ABPlayer>())
+	else if (Caster->IsA<ABPlayer>())
 	{
 		TraceChannel = ECollisionChannel::ECC_GameTraceChannel3;
 	}
@@ -40,7 +40,7 @@ void USkill_NF::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Anim
 	}
 
 	TArray<FHitResult> HitResults;
-	FCollisionQueryParams Param(NAME_None, false, Actor);
+	FCollisionQueryParams Param(NAME_None, false, Caster);
 	FCollisionShape DamagedSphere = FCollisionShape::MakeSphere(Radius);
 
 	// SweepMultiByChannel에서 시작과 끝지점이 같으면 false가 리턴되므로 FVector(0.1, 0, 0)을 더함
@@ -63,7 +63,8 @@ void USkill_NF::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Anim
 	{
 		for (auto& HitResult : HitResults)
 		{
-			BLOG(Warning, TEXT("Hit!"));
+			FDamageEvent DamageEvent;
+			HitResult.Actor->TakeDamage(Damage, DamageEvent, Caster->GetInstigatorController(), Caster);
 		}
 	}
 }

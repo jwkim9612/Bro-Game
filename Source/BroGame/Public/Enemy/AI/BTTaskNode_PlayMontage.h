@@ -27,6 +27,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	UAnimMontage* Montage;
 
+	UPROPERTY(EditAnywhere ,Category = "Montage")
+	int32 Count = 1;
+
 	FTimerHandle MontageEndTimerHandle;
 
 	bool bIsDone = false;

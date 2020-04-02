@@ -37,7 +37,7 @@ EBTNodeResult::Type UBTTaskNode_TurnToTarget::ExecuteTask(UBehaviorTreeComponent
 			GetWorld()->GetDeltaSeconds(),
 			2.0f
 		)
-	);
+	); 
 
 	return EBTNodeResult::Succeeded;
 }

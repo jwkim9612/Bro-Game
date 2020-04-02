@@ -506,14 +506,15 @@ void ABPlayer::AttackCheck()
 	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
 	float DebugLifeTime = 5.0f;
 
-	DrawDebugCapsule(GetWorld(),
-		Center,
-		HalfHeight,
-		HitScale,
-		CapsuleRot,
-		DrawColor,
-		false,
-		DebugLifeTime);
+	//DrawDebugCapsule(GetWorld(),
+	//	Center,
+	//	HalfHeight,
+	//	HitScale,
+	//	CapsuleRot,
+	//	DrawColor,
+	//	false,
+	//	DebugLifeTime
+	//);
 
 }
 
